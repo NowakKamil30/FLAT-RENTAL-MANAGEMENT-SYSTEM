@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.views;
+package pl.kamilnowak.flatrentalmanagementsystem.view;
 
 public class Views {
     public static class Public {}
