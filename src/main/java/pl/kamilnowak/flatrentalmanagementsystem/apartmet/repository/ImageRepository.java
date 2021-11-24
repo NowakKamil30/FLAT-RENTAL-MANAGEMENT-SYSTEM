@@ -1,2 +1,9 @@
-package pl.kamilnowak.flatrentalmanagementsystem.apartmet.repository;public interface ImageRepository {
+package pl.kamilnowak.flatrentalmanagementsystem.apartmet.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import pl.kamilnowak.flatrentalmanagementsystem.apartmet.entity.Image;
+
+@Repository
+public interface ImageRepository extends JpaRepository<Image, Long> {
 }
