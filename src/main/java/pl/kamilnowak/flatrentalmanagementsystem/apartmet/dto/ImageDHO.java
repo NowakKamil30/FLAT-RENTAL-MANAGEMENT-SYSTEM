@@ -18,4 +18,6 @@ public class ImageDHO {
     private String title;
     @JsonView(Views.Public.class)
     private LocalDate uploadDate;
+    @JsonView(Views.Private.class)
+    private Long apartmentId;
 }

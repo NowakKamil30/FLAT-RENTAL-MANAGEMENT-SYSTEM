@@ -14,4 +14,6 @@ public class DocumentDHO {
     private String name;
     @JsonView(Views.Private.class)
     private String document;
+    @JsonView(Views.Private.class)
+    private Long tenantId;
 }
