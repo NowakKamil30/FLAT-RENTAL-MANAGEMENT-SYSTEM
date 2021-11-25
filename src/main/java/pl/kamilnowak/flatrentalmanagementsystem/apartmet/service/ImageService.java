@@ -56,4 +56,9 @@ public class ImageService implements CRUDOperation<Image, Long> {
         image.setId(aLong);
         return imageRepository.save(image);
     }
+
+    public Page<Image> getObjectsByApartmentId(Long aLong, int page) {
+        log.debug("gets all images by apartment id: " + aLong);
+        return imageRepository.getImagesByApartment_Id(aLong, pageableHelper.countPageable(page));
+    }
 }

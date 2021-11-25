@@ -55,4 +55,9 @@ public class DocumentService implements CRUDOperation<Document, Long> {
         document.setId(aLong);
         return documentRepository.save(document);
     }
+
+    public Page<Document> getObjectsByTenantId(Long aLong, int page) {
+        log.debug("gets all documents by tenant id: " + aLong);
+        return documentRepository.getDocumentsByTenant_Id(aLong, pageableHelper.countPageable(page));
+    }
 }

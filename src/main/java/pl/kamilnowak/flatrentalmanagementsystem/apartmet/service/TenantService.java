@@ -55,4 +55,9 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
         tenant.setId(aLong);
         return tenantRepository.save(tenant);
     }
+
+    public Page<Tenant> getObjectsByApartmentId(Long aLong, int page) {
+        log.debug("gets all tenants by apartment id: " + aLong);
+        return tenantRepository.getTenantsByApartment_Id(aLong, pageableHelper.countPageable(page));
+    }
 }
