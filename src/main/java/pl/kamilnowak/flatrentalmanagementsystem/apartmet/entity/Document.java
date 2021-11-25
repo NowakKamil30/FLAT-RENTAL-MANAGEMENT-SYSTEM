@@ -17,6 +17,8 @@ public class Document {
     private String name;
     @Lob
     private String document;
+    @ManyToOne
+    private Tenant tenant;
 
     public Document() {
 
@@ -44,5 +46,13 @@ public class Document {
 
     public void setDocument(String document) {
         this.document = document;
+    }
+
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
     }
 }

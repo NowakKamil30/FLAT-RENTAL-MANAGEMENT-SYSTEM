@@ -21,6 +21,8 @@ public class Image {
     private String title;
     @NotNull
     private LocalDate uploadDate;
+    @ManyToOne
+    private Apartment apartment;
 
     public Image() {
     }
@@ -55,5 +57,13 @@ public class Image {
 
     public void setUploadDate(LocalDate uploadDate) {
         this.uploadDate = uploadDate;
+    }
+
+    public Apartment getApartment() {
+        return apartment;
+    }
+
+    public void setApartment(Apartment apartment) {
+        this.apartment = apartment;
     }
 }
