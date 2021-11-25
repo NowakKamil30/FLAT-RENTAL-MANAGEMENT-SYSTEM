@@ -22,6 +22,7 @@ public class MapperConfig {
                 map().setId(source.getId());
                 map().setDocument(source.getDocument());
                 map().setName(source.getName());
+                map().setTenantId(source.getTenant().getId());
             }
         });
         modelMapper.createTypeMap(Currency.class, CurrencyDHO.class)
@@ -40,6 +41,7 @@ public class MapperConfig {
                         map().setTitle(source.getTitle());
                         map().setUploadDate(source.getUploadDate());
                         map().setId(source.getId());
+                        map().setApartmentId(source.getApartment().getId());
                     }
                 });
         modelMapper.createTypeMap(Apartment.class, ApartmentDHO.class)
