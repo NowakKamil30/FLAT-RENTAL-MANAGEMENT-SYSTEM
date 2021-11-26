@@ -24,6 +24,14 @@ public class Document {
 
     }
 
+    @Builder
+    public Document(Long id, String name, String document, Tenant tenant) {
+        this.id = id;
+        this.name = name;
+        this.document = document;
+        this.tenant = tenant;
+    }
+
     public Long getId() {
         return id;
     }

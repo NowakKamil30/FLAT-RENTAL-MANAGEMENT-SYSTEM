@@ -27,6 +27,15 @@ public class Image {
     public Image() {
     }
 
+    @Builder
+    public Image(Long id, String photo, String title, LocalDate uploadDate, Apartment apartment) {
+        this.id = id;
+        this.photo = photo;
+        this.title = title;
+        this.uploadDate = uploadDate;
+        this.apartment = apartment;
+    }
+
     public Long getId() {
         return id;
     }
