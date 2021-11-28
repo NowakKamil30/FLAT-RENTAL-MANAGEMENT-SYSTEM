@@ -2,14 +2,12 @@ package pl.kamilnowak.flatrentalmanagementsystem.apartmet.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import pl.kamilnowak.flatrentalmanagementsystem.apartmet.dto.*;
 import pl.kamilnowak.flatrentalmanagementsystem.apartmet.entity.*;
 
-import java.util.stream.Collectors;
-
-@Configurable
+@Configuration
 public class MapperConfig {
 
     @Bean
@@ -53,14 +51,11 @@ public class MapperConfig {
                         map().setDescription(source.getDescription());
                         map().setLatitude(source.getLatitude());
                         map().setLongitude(source.getLongitude());
-                        map().setImageIds(source.getImages()
-                                .stream()
-                                .map(Image::getId)
-                                .collect(Collectors.toList()));
-                        map().setTenantIds(source.getTenants()
-                                .stream()
-                                .map(Tenant::getId)
-                                .collect(Collectors.toList()));
+                        map().setCity(source.getCity());
+                        map().setCountry(source.getCountry());
+                        map().setStreet(source.getStreet());
+                        map().setPostcode(source.getPostcode());
+                        map().setHouseNumber(source.getHouseNumber());
                     }
                 });
         modelMapper.createTypeMap(Tenant.class, TenantDHO.class)
@@ -80,10 +75,6 @@ public class MapperConfig {
                         map().setStartDate(source.getStartDate());
                         map().setPaidDate(source.getPaidDate());
                         map().setApartmentId(source.getApartment().getId());
-                        map().setDocuemntIds(source.getDocuments()
-                                .stream()
-                                .map(Document::getId)
-                                .collect(Collectors.toList()));
                         map().setCurrencyId(source.getCurrency().getId());
                     }
                 });
