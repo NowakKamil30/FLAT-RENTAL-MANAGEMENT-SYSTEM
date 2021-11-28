@@ -2,11 +2,12 @@ package pl.kamilnowak.flatrentalmanagementsystem.apartmet.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import pl.kamilnowak.flatrentalmanagementsystem.view.Views;
 
-@Data
-@Builder
+@Getter
+@Setter
 public class DocumentDHO {
     @JsonView(Views.Public.class)
     private Long id;
@@ -16,4 +17,15 @@ public class DocumentDHO {
     private String document;
     @JsonView(Views.Private.class)
     private Long tenantId;
+
+    public DocumentDHO() {
+    }
+
+    @Builder
+    public DocumentDHO(Long id, String name, String document, Long tenantId) {
+        this.id = id;
+        this.name = name;
+        this.document = document;
+        this.tenantId = tenantId;
+    }
 }
