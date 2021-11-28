@@ -42,6 +42,10 @@ public class DataLoader implements CommandLineRunner {
                 .description("test desc")
                 .latitude(123)
                 .longitude(33)
+                .street("a")
+                .city("b")
+                .houseNumber("11")
+                .postcode("55-444")
                 .build();
 
         Image image = Image.builder()

@@ -25,6 +25,16 @@ public class Apartment {
     private double latitude;
     @NotNull
     private double longitude;
+    @NotNull
+    private String country;
+    @NotNull
+    private String postcode;
+    @NotNull
+    private String city;
+    @NotNull
+    private String street;
+    @NotNull
+    private String houseNumber;
     @OneToMany(cascade  = CascadeType.ALL)
     private List<Tenant> tenants;
     @OneToMany(cascade = CascadeType.ALL)
@@ -34,12 +44,17 @@ public class Apartment {
     }
 
     @Builder
-    public Apartment(Long id, String name, String description, double latitude, double longitude, List<Tenant> tenants, List<Image> images) {
+    public Apartment(Long id, String name, String description, double latitude, double longitude, String country, String postcode, String city, String street, String houseNumber, List<Tenant> tenants, List<Image> images) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.country = country;
+        this.postcode = postcode;
+        this.city = city;
+        this.street = street;
+        this.houseNumber = houseNumber;
         this.tenants = tenants;
         this.images = images;
     }
@@ -98,5 +113,45 @@ public class Apartment {
 
     public void setImages(List<Image> images) {
         this.images = images;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getHouseNumber() {
+        return houseNumber;
+    }
+
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
     }
 }
