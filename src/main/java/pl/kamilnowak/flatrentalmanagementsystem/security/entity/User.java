@@ -17,8 +17,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotEmpty
-    private String email;
-    @NotEmpty
     @Column(name = "first_name")
     private String firstName;
     @NotEmpty
@@ -37,9 +35,8 @@ public class User {
     }
 
     @Builder
-    public User(Long id, String email, String firstName, String lastName, LocalDateTime activeAccountData, LocalDateTime createUserData, LoginUser loginUser, List<Apartment> apartments) {
+    public User(Long id, String firstName, String lastName, LocalDateTime activeAccountData, LocalDateTime createUserData, LoginUser loginUser, List<Apartment> apartments) {
         this.id = id;
-        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.activeAccountData = activeAccountData;
@@ -54,14 +51,6 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getFirstName() {
