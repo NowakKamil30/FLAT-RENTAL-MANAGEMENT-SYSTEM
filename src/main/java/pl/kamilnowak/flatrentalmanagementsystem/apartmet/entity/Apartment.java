@@ -2,6 +2,7 @@ package pl.kamilnowak.flatrentalmanagementsystem.apartmet.entity;
 
 import com.sun.istack.NotNull;
 import lombok.Builder;
+import pl.kamilnowak.flatrentalmanagementsystem.security.entity.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -39,12 +40,14 @@ public class Apartment {
     private List<Tenant> tenants;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Image> images;
+    @ManyToOne
+    private User user;
 
     public Apartment() {
     }
 
     @Builder
-    public Apartment(Long id, String name, String description, double latitude, double longitude, String country, String postcode, String city, String street, String houseNumber, List<Tenant> tenants, List<Image> images) {
+    public Apartment(Long id, String name, String description, double latitude, double longitude, String country, String postcode, String city, String street, String houseNumber, List<Tenant> tenants, List<Image> images, User user) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -57,6 +60,7 @@ public class Apartment {
         this.houseNumber = houseNumber;
         this.tenants = tenants;
         this.images = images;
+        this.user = user;
     }
 
     public Long getId() {
@@ -153,5 +157,13 @@ public class Apartment {
 
     public void setHouseNumber(String houseNumber) {
         this.houseNumber = houseNumber;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

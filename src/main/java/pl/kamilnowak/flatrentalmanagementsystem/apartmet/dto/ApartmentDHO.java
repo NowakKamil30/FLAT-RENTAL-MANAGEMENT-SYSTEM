@@ -27,12 +27,14 @@ public class ApartmentDHO {
     private String street;
     @JsonView(Views.Public.class)
     private String houseNumber;
+    @JsonView(Views.Public.class)
+    private Long userId;
 
     public ApartmentDHO() {
     }
 
     @Builder
-    public ApartmentDHO(Long id, String name, String description, double latitude, double longitude, String country, String postcode, String city, String street, String houseNumber) {
+    public ApartmentDHO(Long id, String name, String description, double latitude, double longitude, String country, String postcode, String city, String street, String houseNumber, Long userId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -43,5 +45,6 @@ public class ApartmentDHO {
         this.city = city;
         this.street = street;
         this.houseNumber = houseNumber;
+        this.userId = userId;
     }
 }

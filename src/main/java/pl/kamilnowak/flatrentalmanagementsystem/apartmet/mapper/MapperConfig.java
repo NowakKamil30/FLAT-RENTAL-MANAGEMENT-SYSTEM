@@ -56,6 +56,7 @@ public class MapperConfig {
                         map().setStreet(source.getStreet());
                         map().setPostcode(source.getPostcode());
                         map().setHouseNumber(source.getHouseNumber());
+                        map().setUserId(source.getUser().getId());
                     }
                 });
         modelMapper.createTypeMap(Tenant.class, TenantDHO.class)
