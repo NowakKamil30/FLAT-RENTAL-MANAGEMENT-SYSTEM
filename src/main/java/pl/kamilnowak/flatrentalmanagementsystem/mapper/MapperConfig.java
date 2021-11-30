@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.apartmet.mapper;
+package pl.kamilnowak.flatrentalmanagementsystem.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -6,6 +6,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.kamilnowak.flatrentalmanagementsystem.apartmet.dto.*;
 import pl.kamilnowak.flatrentalmanagementsystem.apartmet.entity.*;
+import pl.kamilnowak.flatrentalmanagementsystem.security.dho.AuthenticationTokenDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.security.dho.LoginUserDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.security.dho.UserDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.security.dho.VerificationTokenDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.security.entity.AuthenticationToken;
+import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
+import pl.kamilnowak.flatrentalmanagementsystem.security.entity.User;
+import pl.kamilnowak.flatrentalmanagementsystem.security.entity.VerificationToken;
 
 @Configuration
 public class MapperConfig {
@@ -77,6 +85,46 @@ public class MapperConfig {
                         map().setPaidDate(source.getPaidDate());
                         map().setApartmentId(source.getApartment().getId());
                         map().setCurrencyId(source.getCurrency().getId());
+                    }
+                });
+        modelMapper.createTypeMap(LoginUser.class, LoginUserDHO.class)
+                .addMappings(new PropertyMap<LoginUser, LoginUserDHO>() {
+                    @Override
+                    protected void configure() {
+                        map().setId(source.getId());
+                        map().setMail(source.getMail());
+                    }
+                });
+        modelMapper.createTypeMap(User.class, UserDHO.class)
+                .addMappings(new PropertyMap<User, UserDHO>() {
+                    @Override
+                    protected void configure() {
+                        map().setId(source.getId());
+                        map().setActiveAccountData(source.getActiveAccountData());
+                        map().setLastName(source.getLastName());
+                        map().setFirstName(source.getFirstName());
+                        map().setCreateUserData(source.getCreateUserData());
+                        map().setLoginUserId(source.getLoginUser().getId());
+                    }
+                });
+        modelMapper.createTypeMap(VerificationToken.class, VerificationTokenDHO.class)
+                .addMappings(new PropertyMap<VerificationToken, VerificationTokenDHO>() {
+                    @Override
+                    protected void configure() {
+                        map().setId(source.getId());
+                        map().setToken(source.getToken());
+                        map().setLoginUserId(source.getLoginUser().getId());
+                        map().setCreateTime(source.getCreateTime());
+                    }
+                });
+        modelMapper.createTypeMap(AuthenticationToken.class, AuthenticationTokenDHO.class)
+                .addMappings(new PropertyMap<AuthenticationToken, AuthenticationTokenDHO>() {
+                    @Override
+                    protected void configure() {
+                        map().setId(source.getId());
+                        map().setDevice(source.getDevice());
+                        map().setUserId(source.getUser().getId());
+                        map().setToken(source.getToken());
                     }
                 });
         return modelMapper;

@@ -5,6 +5,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import pl.kamilnowak.flatrentalmanagementsystem.apartmet.entity.*;
 import pl.kamilnowak.flatrentalmanagementsystem.apartmet.service.*;
+import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
+import pl.kamilnowak.flatrentalmanagementsystem.security.entity.User;
+import pl.kamilnowak.flatrentalmanagementsystem.security.service.LoginUserService;
+import pl.kamilnowak.flatrentalmanagementsystem.security.type.TypeAccount;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,12 +17,12 @@ import java.util.List;
 @Component
 public class DataLoader implements CommandLineRunner {
 
-    private final ApartmentService apartmentService;
+    private final LoginUserService loginUserService;
     private final CurrencyService currencyService;
 
     @Autowired
-    public DataLoader(ApartmentService apartmentService, CurrencyService currencyService) {
-        this.apartmentService = apartmentService;
+    public DataLoader(LoginUserService loginUserService, CurrencyService currencyService) {
+        this.loginUserService = loginUserService;
         this.currencyService = currencyService;
     }
 
@@ -82,6 +86,24 @@ public class DataLoader implements CommandLineRunner {
 
         apartment.setTenants(List.of(tenant));
 
-        apartmentService.createObject(apartment);
+        User user = User.builder()
+                .firstName("Admin")
+                .lastName("Admin")
+                .apartments(List.of(apartment))
+                .build();
+
+        apartment.setUser(user);
+
+        LoginUser loginUser = LoginUser.builder()
+                .user(user)
+                .mail("admin@gmail.com")
+                .password("aaaaaaaa")
+                .isEnable(true)
+                .role(TypeAccount.ADMIN)
+                .build();
+
+        user.setLoginUser(loginUser);
+
+        loginUserService.createLoginUser(loginUser);
     }
 }

@@ -6,4 +6,5 @@ import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
 
 @Repository
 public interface LoginUserRepository extends JpaRepository<LoginUser, Long> {
+    LoginUser findLoginUserByMail(String mail);
 }
