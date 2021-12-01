@@ -6,4 +6,5 @@ import pl.kamilnowak.flatrentalmanagementsystem.security.entity.VerificationToke
 
 @Repository
 public interface VerificationTokenRepository extends JpaRepository<VerificationToken, Long> {
+    VerificationToken findVerificationTokenByToken(String token);
 }

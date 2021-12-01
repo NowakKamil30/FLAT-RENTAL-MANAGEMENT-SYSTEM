@@ -2,7 +2,7 @@ package pl.kamilnowak.flatrentalmanagementsystem.apartmet.entity;
 
 import com.sun.istack.NotNull;
 import lombok.Builder;
-import pl.kamilnowak.flatrentalmanagementsystem.security.entity.User;
+import pl.kamilnowak.flatrentalmanagementsystem.security.entity.UserData;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -36,18 +36,18 @@ public class Apartment {
     private String street;
     @NotNull
     private String houseNumber;
-    @OneToMany(cascade  = CascadeType.ALL)
+    @OneToMany(cascade  = CascadeType.ALL, mappedBy = "apartment")
     private List<Tenant> tenants;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "apartment")
     private List<Image> images;
     @ManyToOne
-    private User user;
+    private UserData userData;
 
     public Apartment() {
     }
 
     @Builder
-    public Apartment(Long id, String name, String description, double latitude, double longitude, String country, String postcode, String city, String street, String houseNumber, List<Tenant> tenants, List<Image> images, User user) {
+    public Apartment(Long id, String name, String description, double latitude, double longitude, String country, String postcode, String city, String street, String houseNumber, List<Tenant> tenants, List<Image> images, UserData userData) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -60,7 +60,7 @@ public class Apartment {
         this.houseNumber = houseNumber;
         this.tenants = tenants;
         this.images = images;
-        this.user = user;
+        this.userData = userData;
     }
 
     public Long getId() {
@@ -159,11 +159,11 @@ public class Apartment {
         this.houseNumber = houseNumber;
     }
 
-    public User getUser() {
-        return user;
+    public UserData getUserData() {
+        return userData;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserData(UserData userData) {
+        this.userData = userData;
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import pl.kamilnowak.flatrentalmanagementsystem.apartmet.entity.*;
 import pl.kamilnowak.flatrentalmanagementsystem.apartmet.service.*;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
-import pl.kamilnowak.flatrentalmanagementsystem.security.entity.User;
+import pl.kamilnowak.flatrentalmanagementsystem.security.entity.UserData;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.LoginUserService;
 import pl.kamilnowak.flatrentalmanagementsystem.security.type.TypeAccount;
 
@@ -86,24 +86,24 @@ public class DataLoader implements CommandLineRunner {
 
         apartment.setTenants(List.of(tenant));
 
-        User user = User.builder()
+        UserData userData = UserData.builder()
                 .firstName("Admin")
                 .lastName("Admin")
                 .apartments(List.of(apartment))
                 .build();
 
-        apartment.setUser(user);
+        apartment.setUserData(userData);
 
         LoginUser loginUser = LoginUser.builder()
-                .user(user)
+                .userData(userData)
                 .mail("admin@gmail.com")
                 .password("aaaaaaaa")
                 .isEnable(true)
                 .role(TypeAccount.ADMIN)
                 .build();
 
-        user.setLoginUser(loginUser);
+        userData.setLoginUser(loginUser);
 
-        loginUserService.createLoginUser(loginUser);
+        loginUserService.createObject(loginUser);
     }
 }

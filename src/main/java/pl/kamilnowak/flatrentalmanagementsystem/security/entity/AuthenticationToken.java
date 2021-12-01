@@ -18,18 +18,18 @@ public class AuthenticationToken {
     @Column(name = "create_time")
     private LocalDateTime createTime = LocalDateTime.now();
     @ManyToOne
-    private User user;
+    private UserData userData;
 
     public AuthenticationToken() {
     }
 
     @Builder
-    public AuthenticationToken(Long id, String token, String device, LocalDateTime createTime, User user) {
+    public AuthenticationToken(Long id, String token, String device, LocalDateTime createTime, UserData userData) {
         this.id = id;
         this.token = token;
         this.device = device;
         this.createTime = createTime;
-        this.user = user;
+        this.userData = userData;
     }
 
     public Long getId() {
@@ -64,11 +64,11 @@ public class AuthenticationToken {
         this.createTime = createTime;
     }
 
-    public User getUser() {
-        return user;
+    public UserData getUserData() {
+        return userData;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserData(UserData userData) {
+        this.userData = userData;
     }
 }

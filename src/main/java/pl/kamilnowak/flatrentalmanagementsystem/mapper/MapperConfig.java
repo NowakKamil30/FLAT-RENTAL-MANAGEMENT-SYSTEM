@@ -12,7 +12,7 @@ import pl.kamilnowak.flatrentalmanagementsystem.security.dho.UserDHO;
 import pl.kamilnowak.flatrentalmanagementsystem.security.dho.VerificationTokenDHO;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.AuthenticationToken;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
-import pl.kamilnowak.flatrentalmanagementsystem.security.entity.User;
+import pl.kamilnowak.flatrentalmanagementsystem.security.entity.UserData;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.VerificationToken;
 
 @Configuration
@@ -64,7 +64,7 @@ public class MapperConfig {
                         map().setStreet(source.getStreet());
                         map().setPostcode(source.getPostcode());
                         map().setHouseNumber(source.getHouseNumber());
-                        map().setUserId(source.getUser().getId());
+                        map().setUserId(source.getUserData().getId());
                     }
                 });
         modelMapper.createTypeMap(Tenant.class, TenantDHO.class)
@@ -95,8 +95,8 @@ public class MapperConfig {
                         map().setMail(source.getMail());
                     }
                 });
-        modelMapper.createTypeMap(User.class, UserDHO.class)
-                .addMappings(new PropertyMap<User, UserDHO>() {
+        modelMapper.createTypeMap(UserData.class, UserDHO.class)
+                .addMappings(new PropertyMap<UserData, UserDHO>() {
                     @Override
                     protected void configure() {
                         map().setId(source.getId());
@@ -123,7 +123,7 @@ public class MapperConfig {
                     protected void configure() {
                         map().setId(source.getId());
                         map().setDevice(source.getDevice());
-                        map().setUserId(source.getUser().getId());
+                        map().setUserId(source.getUserData().getId());
                         map().setToken(source.getToken());
                     }
                 });

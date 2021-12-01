@@ -25,21 +25,24 @@ public class LoginUser implements UserDetails {
     private boolean isEnable = false;
     @Enumerated(value = EnumType.STRING)
     private TypeAccount role = TypeAccount.USER;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "loginUser")
     @NotNull
-    private User user;
+    private UserData userData;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "loginUser")
+    private VerificationToken verificationToken;
 
     public LoginUser() {
     }
 
     @Builder
-    public LoginUser(Long id, String mail, String password, boolean isEnable, TypeAccount role, User user) {
+    public LoginUser(Long id, String mail, String password, boolean isEnable, TypeAccount role, UserData userData, VerificationToken verificationToken) {
         this.id = id;
         this.mail = mail;
         this.password = password;
         this.isEnable = isEnable;
         this.role = role;
-        this.user = user;
+        this.userData = userData;
+        this.verificationToken = verificationToken;
     }
 
     public Long getId() {
@@ -113,11 +116,19 @@ public class LoginUser implements UserDetails {
         this.role = role;
     }
 
-    public User getUser() {
-        return user;
+    public UserData getUserData() {
+        return userData;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserData(UserData userData) {
+        this.userData = userData;
+    }
+
+    public VerificationToken getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(VerificationToken verificationToken) {
+        this.verificationToken = verificationToken;
     }
 }

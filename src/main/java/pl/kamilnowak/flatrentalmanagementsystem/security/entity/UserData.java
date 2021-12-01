@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = User.TABLE_NAME)
-public class User {
-    public static final String TABLE_NAME =  "users";
+@Table(name = UserData.TABLE_NAME)
+public class UserData {
+    public static final String TABLE_NAME =  "user_datas";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -28,14 +28,16 @@ public class User {
     private LocalDateTime createUserData = LocalDateTime.now();
     @OneToOne
     private LoginUser loginUser;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userData")
     private List<Apartment> apartments;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userData")
+    private List<AuthenticationToken> authenticationTokens;
 
-    public User() {
+    public UserData() {
     }
 
     @Builder
-    public User(Long id, String firstName, String lastName, LocalDateTime activeAccountData, LocalDateTime createUserData, LoginUser loginUser, List<Apartment> apartments) {
+    public UserData(Long id, String firstName, String lastName, LocalDateTime activeAccountData, LocalDateTime createUserData, LoginUser loginUser, List<Apartment> apartments, List<AuthenticationToken> authenticationTokens) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -43,6 +45,7 @@ public class User {
         this.createUserData = createUserData;
         this.loginUser = loginUser;
         this.apartments = apartments;
+        this.authenticationTokens = authenticationTokens;
     }
 
     public Long getId() {
@@ -99,5 +102,13 @@ public class User {
 
     public void setApartments(List<Apartment> apartments) {
         this.apartments = apartments;
+    }
+
+    public List<AuthenticationToken> getAuthenticationTokens() {
+        return authenticationTokens;
+    }
+
+    public void setAuthenticationTokens(List<AuthenticationToken> authenticationTokens) {
+        this.authenticationTokens = authenticationTokens;
     }
 }

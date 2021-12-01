@@ -51,7 +51,7 @@ public class Tenant {
     private LocalDate paidDate;
     @ManyToOne
     private Apartment apartment;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tenant")
     private List<Document> documents;
     @ManyToOne
     private Currency currency;
