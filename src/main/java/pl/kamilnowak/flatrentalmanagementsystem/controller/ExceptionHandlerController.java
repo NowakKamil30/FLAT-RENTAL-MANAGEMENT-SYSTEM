@@ -7,10 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.CannotCreateLoginUserException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.*;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.Entity.JsonError;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.TokenIsTooOldException;
+import pl.kamilnowak.flatrentalmanagementsystem.mail.exception.EmailSendException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -38,6 +37,30 @@ public class ExceptionHandlerController {
         log.error("cannot create login user:" + cannotCreateLoginUserException.getMessage());
         return new ResponseEntity<>(JsonError.builder()
                 .message(cannotCreateLoginUserException.getMessage())
+                .build(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {EmailSendException.class})
+    public ResponseEntity<JsonError> emailSendErrorHandler(EmailSendException emailSendException) {
+        log.error("cannot send mail:" + emailSendException.getMessage());
+        return new ResponseEntity<>(JsonError.builder()
+                .message(emailSendException.getMessage())
+                .build(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {TokenIsNotValidException.class})
+    public ResponseEntity<JsonError> tokenIsNotValidErrorHandler(TokenIsNotValidException tokenIsNotValidException) {
+        log.error("invalid token:" + tokenIsNotValidException.getMessage());
+        return new ResponseEntity<>(JsonError.builder()
+                .message(tokenIsNotValidException.getMessage())
+                .build(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {UserCannotBeCreatedException.class})
+    public ResponseEntity<JsonError> userCannotBeCreatedErrorHandler(UserCannotBeCreatedException userCannotBeCreatedException) {
+        log.error("cannot create user:" + userCannotBeCreatedException.getMessage());
+        return new ResponseEntity<>(JsonError.builder()
+                .message(userCannotBeCreatedException.getMessage())
                 .build(), HttpStatus.BAD_REQUEST);
     }
 }

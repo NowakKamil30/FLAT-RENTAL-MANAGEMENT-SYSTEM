@@ -3,8 +3,8 @@ package pl.kamilnowak.flatrentalmanagementsystem.bootstrap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import pl.kamilnowak.flatrentalmanagementsystem.apartmet.entity.*;
-import pl.kamilnowak.flatrentalmanagementsystem.apartmet.service.*;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.*;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.*;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.UserData;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.LoginUserService;
@@ -44,8 +44,6 @@ public class DataLoader implements CommandLineRunner {
         Apartment apartment = Apartment.builder()
                 .name("Test")
                 .description("test desc")
-                .latitude(123)
-                .longitude(33)
                 .street("a")
                 .city("b")
                 .houseNumber("11")

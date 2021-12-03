@@ -4,13 +4,11 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pl.kamilnowak.flatrentalmanagementsystem.apartmet.dto.*;
-import pl.kamilnowak.flatrentalmanagementsystem.apartmet.entity.*;
-import pl.kamilnowak.flatrentalmanagementsystem.security.dho.AuthenticationTokenDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.*;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.*;
 import pl.kamilnowak.flatrentalmanagementsystem.security.dho.LoginUserDHO;
-import pl.kamilnowak.flatrentalmanagementsystem.security.dho.UserDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.security.dho.UserDataDHO;
 import pl.kamilnowak.flatrentalmanagementsystem.security.dho.VerificationTokenDHO;
-import pl.kamilnowak.flatrentalmanagementsystem.security.entity.AuthenticationToken;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.UserData;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.VerificationToken;
@@ -57,8 +55,6 @@ public class MapperConfig {
                         map().setId(source.getId());
                         map().setName(source.getName());
                         map().setDescription(source.getDescription());
-                        map().setLatitude(source.getLatitude());
-                        map().setLongitude(source.getLongitude());
                         map().setCity(source.getCity());
                         map().setCountry(source.getCountry());
                         map().setStreet(source.getStreet());
@@ -95,8 +91,8 @@ public class MapperConfig {
                         map().setMail(source.getMail());
                     }
                 });
-        modelMapper.createTypeMap(UserData.class, UserDHO.class)
-                .addMappings(new PropertyMap<UserData, UserDHO>() {
+        modelMapper.createTypeMap(UserData.class, UserDataDHO.class)
+                .addMappings(new PropertyMap<UserData, UserDataDHO>() {
                     @Override
                     protected void configure() {
                         map().setId(source.getId());
@@ -117,16 +113,7 @@ public class MapperConfig {
                         map().setCreateTime(source.getCreateTime());
                     }
                 });
-        modelMapper.createTypeMap(AuthenticationToken.class, AuthenticationTokenDHO.class)
-                .addMappings(new PropertyMap<AuthenticationToken, AuthenticationTokenDHO>() {
-                    @Override
-                    protected void configure() {
-                        map().setId(source.getId());
-                        map().setDevice(source.getDevice());
-                        map().setUserId(source.getUserData().getId());
-                        map().setToken(source.getToken());
-                    }
-                });
+
         return modelMapper;
     }
 }
