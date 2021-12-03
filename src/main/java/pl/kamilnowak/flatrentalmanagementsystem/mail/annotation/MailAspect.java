@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.mail;
+package pl.kamilnowak.flatrentalmanagementsystem.mail.annotation;
 
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.JoinPoint;
