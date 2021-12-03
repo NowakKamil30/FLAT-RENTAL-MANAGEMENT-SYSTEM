@@ -38,9 +38,13 @@ public class LoginUserService implements UserDetailsService, CRUDOperation<Login
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public LoginUser loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("loadUserByUsername");
-        return loginUserRepository.findLoginUserByMail(username);
+        LoginUser loginUser = loginUserRepository.findLoginUserByMail(username);
+        if (loginUser == null) {
+            throw new UsernameNotFoundException(loginUser.getUsername());
+        }
+        return loginUser;
     }
 
     @Transactional

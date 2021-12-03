@@ -1,7 +1,7 @@
 package pl.kamilnowak.flatrentalmanagementsystem.security.entity;
 
 import lombok.Builder;
-import pl.kamilnowak.flatrentalmanagementsystem.apartmet.entity.Apartment;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Apartment;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -30,14 +30,12 @@ public class UserData {
     private LoginUser loginUser;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userData")
     private List<Apartment> apartments;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userData")
-    private List<AuthenticationToken> authenticationTokens;
 
     public UserData() {
     }
 
     @Builder
-    public UserData(Long id, String firstName, String lastName, LocalDateTime activeAccountData, LocalDateTime createUserData, LoginUser loginUser, List<Apartment> apartments, List<AuthenticationToken> authenticationTokens) {
+    public UserData(Long id, String firstName, String lastName, LocalDateTime activeAccountData, LocalDateTime createUserData, LoginUser loginUser, List<Apartment> apartments) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -45,7 +43,6 @@ public class UserData {
         this.createUserData = createUserData;
         this.loginUser = loginUser;
         this.apartments = apartments;
-        this.authenticationTokens = authenticationTokens;
     }
 
     public Long getId() {
@@ -102,13 +99,5 @@ public class UserData {
 
     public void setApartments(List<Apartment> apartments) {
         this.apartments = apartments;
-    }
-
-    public List<AuthenticationToken> getAuthenticationTokens() {
-        return authenticationTokens;
-    }
-
-    public void setAuthenticationTokens(List<AuthenticationToken> authenticationTokens) {
-        this.authenticationTokens = authenticationTokens;
     }
 }

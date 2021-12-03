@@ -8,6 +8,8 @@ import pl.kamilnowak.flatrentalmanagementsystem.security.repository.Verification
 import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
 import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
 
+import java.time.LocalDateTime;
+
 @Service
 @Log4j2
 public class VerificationTokenService implements CRUDOperation<VerificationToken, Long> {
@@ -28,6 +30,7 @@ public class VerificationTokenService implements CRUDOperation<VerificationToken
     @Override
     public VerificationToken createObject(VerificationToken verificationToken) {
         log.debug("create verification token");
+        verificationToken.setCreateTime(LocalDateTime.now());
         return verificationTokenRepository.save(verificationToken);
     }
 
@@ -57,5 +60,10 @@ public class VerificationTokenService implements CRUDOperation<VerificationToken
         }
         verificationToken.setId(aLong);
         return verificationTokenRepository.save(verificationToken);
+    }
+
+    public void deleteAllByCreateTimeIsBefore(LocalDateTime localDateTime) {
+        log.debug("delete all Token not valid");
+        verificationTokenRepository.deleteAllByCreateTimeIsBefore(localDateTime);
     }
 }

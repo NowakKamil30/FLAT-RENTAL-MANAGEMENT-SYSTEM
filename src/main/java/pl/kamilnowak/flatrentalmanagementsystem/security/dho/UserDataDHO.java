@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class UserDHO {
+public class UserDataDHO {
     @JsonView(Views.Public.class)
     private Long id;
     @JsonView(Views.Public.class)
@@ -24,11 +24,11 @@ public class UserDHO {
     @JsonView(Views.Private.class)
     private Long loginUserId;
 
-    public UserDHO() {
+    public UserDataDHO() {
     }
 
     @Builder
-    public UserDHO(Long id, String firstName, String lastName, LocalDateTime activeAccountData, LocalDateTime createUserData, Long loginUserId) {
+    public UserDataDHO(Long id, String firstName, String lastName, LocalDateTime activeAccountData, LocalDateTime createUserData, Long loginUserId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

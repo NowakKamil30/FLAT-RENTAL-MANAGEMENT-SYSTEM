@@ -1,5 +1,5 @@
 package pl.kamilnowak.flatrentalmanagementsystem.security.type;
 
 public enum TypeAccount {
-    USER, ADMIN, SYSTEM
+    USER, ADMIN
 }
