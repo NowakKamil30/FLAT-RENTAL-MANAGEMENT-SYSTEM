@@ -4,10 +4,12 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { ThemeProvider } from '@mui/system';
-import { createMuiTheme } from '@mui/material';
-import { blue, teal } from '@mui/material/colors';
+import { createTheme } from '@mui/material';
+import { red, teal } from '@mui/material/colors';
+import reducers from './store/reducer';
+import AppRouter from './router/AppRouter';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
       background : {
         paper: teal[300]
@@ -17,22 +19,19 @@ const theme = createMuiTheme({
           contrastText: '#000000'
       },
       secondary: {
-          main: blue[500],
+          main: red[500],
           contrastText: '#000000'
       }
   }
 });
 
 function App() {
-  const store = createStore(null, applyMiddleware(thunk));
+  const store = createStore(reducers, applyMiddleware(thunk));
 
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <div className="App">
-          <header className="App-header">
-          </header>
-        </div>
+          <AppRouter/>
       </ThemeProvider>
     </Provider>
   );
