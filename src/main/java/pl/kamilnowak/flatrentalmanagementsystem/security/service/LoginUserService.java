@@ -42,7 +42,7 @@ public class LoginUserService implements UserDetailsService, CRUDOperation<Login
         log.debug("loadUserByUsername");
         LoginUser loginUser = loginUserRepository.findLoginUserByMail(username);
         if (loginUser == null) {
-            throw new UsernameNotFoundException(loginUser.getUsername());
+            throw new UsernameNotFoundException("");
         }
         return loginUser;
     }

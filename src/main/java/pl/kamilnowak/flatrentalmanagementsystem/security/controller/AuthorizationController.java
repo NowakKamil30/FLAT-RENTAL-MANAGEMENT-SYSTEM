@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
@@ -51,7 +52,7 @@ public class AuthorizationController {
             throw new UsernameNotFoundException(e.getMessage());
         }
 
-        if (loginUser != null && passwordEncoder.encode(loginUserFrom.getPassword()).equals(loginUser.getPassword()) && loginUser.isEnable()) {
+        if (loginUser != null && BCrypt.checkpw(loginUserFrom.getPassword(),(loginUser.getPassword())) && loginUser.isEnable()) {
             String jwt = JWT.create()
                     .withClaim("mail", loginUser.getMail())
                     .withClaim("createDate", LocalDateTime.now().toEpochSecond(ZoneOffset.UTC))
