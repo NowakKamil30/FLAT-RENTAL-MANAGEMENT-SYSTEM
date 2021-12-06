@@ -1,0 +1,20 @@
+{
+    "setting": {
+        "url": {
+            "backendURL": "http://localhost:8080/v1",
+            "login": "/authorization/login",
+            "register": "/authorization/register",
+            "verifyToken": "/authorization/verifyToken",
+            "changePassword": "/authorization/changePassword",
+            "resetPassword": "/authorization/resetPassword"
+        },
+
+        "layout": {
+            "mobile": {
+                "size": {
+                    "width": 800
+                }
+            }
+        }
+    }
+}
