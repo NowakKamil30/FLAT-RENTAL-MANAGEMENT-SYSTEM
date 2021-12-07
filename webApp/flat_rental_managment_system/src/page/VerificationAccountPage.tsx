@@ -2,7 +2,6 @@ import { Backdrop, CircularProgress, Link, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { ActiveModel } from '../type/ActiveModel';
 import { setting } from '../setting/setting.json';
 import Axios from 'axios';
 import Snackbar from '../component/Snackbar';

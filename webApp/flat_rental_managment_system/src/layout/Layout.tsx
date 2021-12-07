@@ -1,15 +1,33 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
-import React from 'react';
+import { Dispatch } from 'redux';
+import React, { useEffect } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
+import { checkAuthLocalStorage } from '../store/action/AuthorizationAction';
+import { AuthorizationType } from '../store/type/AuthorizationType';
 import Footer from './Footer';
 import Header from './Header';
 import Main from './Main';
 
-const Layout = (): JSX.Element => {
+interface MapDispatcherToProps {
+    checkAuthLocalStorage: () => AuthorizationType;
+  }
+  
+  const mapDispatcherToProps = (dispatch: Dispatch): MapDispatcherToProps => ({
+    checkAuthLocalStorage: () => (
+        dispatch(checkAuthLocalStorage())
+    )
+  });
+  
+  const connector = connect(null, mapDispatcherToProps);
+  
+  type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const Layout: React.FC<PropsFromRedux> = (): JSX.Element => {
     const {root} = useStyles();
+    useEffect(() => { checkAuthLocalStorage(); });
+    
     return (
         <Box 
         component='div' 
@@ -33,4 +51,4 @@ const useStyles = makeStyles((theme: Theme) => {
     }
 })
 
-export default Layout;
+export default connector(Layout);

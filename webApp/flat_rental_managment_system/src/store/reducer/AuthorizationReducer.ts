@@ -17,7 +17,7 @@ const INITIAL_STATE: AuthorizationReducerState = {
 }
 
 export const AuthorizationReducer = (state: AuthorizationReducerState = INITIAL_STATE, action: AuthorizationType): AuthorizationReducerState => {    
-    console.log(action);
+    console.log(action)
     switch(action.type) {
         case CHECK_AUTH_LOCAL_STORAGE: {
             return checkAuthLocalStorage(state);
@@ -63,6 +63,7 @@ const checkAuthLocalStorage = (state: AuthorizationReducerState) => {
             if (id && id > 0) {
                 const mail = localStorage.getItem('mail');
                 if (mail && mail?.length > 0) {
+                    console.log(id);
                     return {...state, loginModel: {token, role, id, mail}}
                 }
             }

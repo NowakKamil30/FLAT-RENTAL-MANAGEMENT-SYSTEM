@@ -13,8 +13,6 @@ import {
 import { LoginUser } from '../../type/LoginUser';
 import { RegisterUser } from '../../type/RegisterUser';
 import { RegisterUserToSend } from '../../type/RegisterUserToSend';
-import { ChangePasswordModel } from '../../type/ChangePasswordModel';
-import { ChangePassword } from '../../type/ChangePassword';
 import { setting } from "../../setting/setting.json";
 
 const signInSend = async (user: LoginUser): Promise<LoginModel> => {
@@ -37,14 +35,6 @@ const registerSend = async (registerUser: RegisterUser): Promise<LoginModel> => 
     const response = await Axios.post(backendURL + register, registerUserToService);
 
     return response.data as LoginModel;
-};
-
-const changePasswordSend = async (password: string, token: string): Promise<ChangePasswordModel> => {
-    const { backendURL, resetPassword } = setting.url;
-    const changePassword: ChangePassword = { password };
-    const response = await Axios.post(backendURL + resetPassword + '?token=' + token, changePassword);
-
-    return response.data as ChangePasswordModel;
 };
 
 export const  signIn = (

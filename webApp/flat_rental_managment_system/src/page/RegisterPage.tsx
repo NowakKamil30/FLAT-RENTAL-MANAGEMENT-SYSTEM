@@ -17,6 +17,7 @@ import { makeStyles } from "@mui/styles";
 import Checkbox from "../component/Checkbox";
 import HandlerButton from "../component/HandlerButton";
 import { useState } from "react";
+import MailSendInfo from "../component/MailSendInfo";
 
 interface IMapDispatcherToProps {
     register: (
@@ -64,7 +65,7 @@ const RegisterPage: React.FC<PropsFromRedux> = ({
     register,
     changeRegisterMessage
 }): JSX.Element => {
-  const { form, input, root, box } = useStyles();
+  const { form, input, root } = useStyles();
   const navigate = useNavigate();
   const [isShowSuccessPage, setIsShowSuccessPage] = useState<boolean>(false);
 
@@ -228,17 +229,7 @@ const RegisterPage: React.FC<PropsFromRedux> = ({
             />
           </Box>
           : 
-          <Box 
-          component='div'
-          className={root}>
-              <Box 
-              component='div'
-              className={box}>
-                <Box component='h2'>
-                    Check your mail!!
-                </Box>
-              </Box>
-          </Box>}
+          <MailSendInfo/>}
           </>
       );
   };
@@ -249,13 +240,6 @@ const RegisterPage: React.FC<PropsFromRedux> = ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
-      },
-      box: {
-        flexGrow: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column'
       },
       input: {
         height: 90

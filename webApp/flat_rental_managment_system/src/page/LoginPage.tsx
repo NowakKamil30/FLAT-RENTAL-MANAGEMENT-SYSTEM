@@ -150,7 +150,7 @@ const LoginPage: React.FC<PropsFromRedux> = ({
                 variant='subtitle2'
                 color='secondary'
                 disabled={ fetching }
-                onClick={() => navigate('/forgottenPassword')}
+                onClick={() => navigate('/forgotten-password')}
                 >
                     forgotten password?
                 </Link>

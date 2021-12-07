@@ -10,6 +10,11 @@ import LoginPage from '../page/LoginPage';
 import RegisterPage from '../page/RegisterPage';
 import StatutePage from '../page/StatutePage';
 import VerificationAccountPage from '../page/VerificationAccountPage';
+import ResetPasswordPage from '../page/ResetPasswordPage';
+import ChangePasswordPage from '../page/ChangePasswordPage';
+import NotFoundRoutePage from '../page/NotFoundRoutePage';
+import UserMainPage from '../page/UserMainPage';
+import EditUserDataPage from '../page/EditUserDataPage';
 
 interface IMapStateToProps {
     role: Role;
@@ -73,7 +78,53 @@ const MainRouter: React.FC<PropsFromRedux> = ({
                 </PrivateRoute>
             }
             />
+            <Route path='/forgotten-password' element={
+                <PrivateRoute
+                redirectPath='/home'
+                isAuth={!role || !localStorage.getItem('role') || role === Role.NO_AUTH}
+                >
+                    <ResetPasswordPage/>
+                </PrivateRoute>
+            }
+            />
+            <Route path='/change-password' element={
+                <PrivateRoute
+                redirectPath='/home'
+                isAuth={!role || !localStorage.getItem('role') || role === Role.NO_AUTH}
+                >
+                    <ChangePasswordPage/>
+                </PrivateRoute>
+            }
+            />
+            <Route path='/home' element={
+                <PrivateRoute
+                redirectPath='/login'
+                isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                >
+                    <UserMainPage/>
+                </PrivateRoute>
+            }
+            />
+            <Route path='/home' element={
+                <PrivateRoute
+                redirectPath='/login'
+                isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                >
+                    <UserMainPage/>
+                </PrivateRoute>
+            }
+            />
+            <Route path='/edit-user' element={
+                <PrivateRoute
+                redirectPath='/login'
+                isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                >
+                    <EditUserDataPage/>
+                </PrivateRoute>
+            }
+            />
             <Route path='/statute' element = {<StatutePage/>}/>
+            <Route path='*' element={<NotFoundRoutePage/>}/>
         </Routes>
     )
 };

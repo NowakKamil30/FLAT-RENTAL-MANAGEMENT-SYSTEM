@@ -6,7 +6,9 @@
             "register": "/authorization/register",
             "verifyToken": "/authorization/verifyToken",
             "changePassword": "/authorization/changePassword",
-            "resetPassword": "/authorization/resetPassword"
+            "resetPassword": "/authorization/resetPassword",
+            "userData": "/userData",
+            "apartmentsByUserData": "/apartment/userData"
         },
 
         "layout": {
