@@ -12,6 +12,7 @@ import pl.kamilnowak.flatrentalmanagementsystem.security.type.TypeAccount;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -87,6 +88,7 @@ public class DataLoader implements CommandLineRunner {
         UserData userData = UserData.builder()
                 .firstName("Admin")
                 .lastName("Admin")
+                .activeAccountData(LocalDateTime.now())
                 .apartments(List.of(apartment))
                 .build();
 
@@ -94,10 +96,10 @@ public class DataLoader implements CommandLineRunner {
 
         LoginUser loginUser = LoginUser.builder()
                 .userData(userData)
-                .mail("admin@gmail.com")
-                .password("aaaaaaaa")
+                .mail("kamilnowakx98@gmail.com")
+                .password("TestTest1")
                 .isEnable(true)
-                .role(TypeAccount.ADMIN)
+                .role(TypeAccount.USER)
                 .build();
 
         userData.setLoginUser(loginUser);

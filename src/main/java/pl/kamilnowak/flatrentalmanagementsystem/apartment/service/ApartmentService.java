@@ -55,4 +55,9 @@ public class ApartmentService implements CRUDOperation<Apartment, Long> {
         apartment.setId(aLong);
         return apartmentRepository.save(apartment);
     }
+
+    public Page<Apartment> getApartmentsByUserDataId(Long aLong, int page) {
+        log.debug("read apartments by user id: " + aLong);
+        return apartmentRepository.getApartmentsByUserData_Id(aLong, pageableHelper.countPageable(page));
+    }
 }

@@ -56,8 +56,10 @@ public class MailActionService {
 
     public void sendResetPasswordEmail(String mail) throws EmailSendException {
         log.debug("sendResetPasswordEmail");
-        LoginUser loginUser = (LoginUser) loginUserService.loadUserByUsername(mail);
-        verificationTokenService.deleteById(loginUser.getId());
+        LoginUser loginUser = loginUserService.loadUserByUsername(mail);
+        if (loginUser.getVerificationToken() != null) {
+            verificationTokenService.deleteById(loginUser.getVerificationToken().getId());
+        }
         VerificationToken verificationToken = tokenGenerationHelper.generateVerificationToken(loginUser);
         verificationToken = verificationTokenService.createObject(verificationToken);
         try {

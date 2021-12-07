@@ -61,4 +61,10 @@ public class ApartmentController {
     public ResponseEntity<ApartmentDHO> updateApartment(@PathVariable Long id, @RequestBody Apartment apartment) {
         return ResponseEntity.ok(modelMapper.map(apartmentService.updateObject(apartment, id), ApartmentDHO.class));
     }
+
+    @GetMapping("/userData/{id}")
+    public ResponseEntity<Page<ApartmentDHO>> getApartmentByUserDataId(@PathVariable Long id, @RequestParam(defaultValue = "1") int page) {
+        return ResponseEntity.ok(apartmentService.getApartmentsByUserDataId(id, page)
+                .map(apartment -> modelMapper.map(apartment, ApartmentDHO.class)));
+    }
 }

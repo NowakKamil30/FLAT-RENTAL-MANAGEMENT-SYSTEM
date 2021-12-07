@@ -9,6 +9,8 @@ import pl.kamilnowak.flatrentalmanagementsystem.security.repository.UserDataRepo
 import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
 import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
 
+import java.util.Optional;
+
 @Service
 @Log4j2
 public class UserDataService implements CRUDOperation<UserData, Long> {
@@ -49,10 +51,13 @@ public class UserDataService implements CRUDOperation<UserData, Long> {
     @Override
     public UserData updateObject(UserData userData, Long aLong) {
         log.debug("update user data id: " + aLong);
-        if(userDataRepository.findById(aLong).isEmpty()) {
+        Optional<UserData> userDataOptional = userDataRepository.findById(aLong);
+        if(userDataOptional.isEmpty()) {
             return userDataRepository.save(userData);
         }
-        userData.setId(aLong);
-        return userDataRepository.save(userData);
+        UserData userDataFromDatabase = userDataOptional.get();
+        userDataFromDatabase.setFirstName(userData.getFirstName());
+        userDataFromDatabase.setLastName(userData.getLastName());
+        return userDataRepository.save(userDataFromDatabase);
     }
 }

@@ -66,6 +66,7 @@ public class LoginUserService implements UserDetailsService, CRUDOperation<Login
         LoginUser loginUser = verificationToken.getLoginUser();
         verificationTokenService.deleteById(verificationToken.getId());
         loginUser.setPassword(passwordEncoder.encode(password));
+        loginUser.setVerificationToken(null);
         return loginUserRepository.save(loginUser);
     }
 
