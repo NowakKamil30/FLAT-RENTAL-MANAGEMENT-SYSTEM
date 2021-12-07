@@ -7,14 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.TokenIsNotValidException;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.TokenIsTooOldException;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.UserCannotBeCreatedException;
-import pl.kamilnowak.flatrentalmanagementsystem.mail.annotation.SendActiveAccountMail;
-import pl.kamilnowak.flatrentalmanagementsystem.mail.annotation.SendResetPasswordMail;
+import pl.kamilnowak.flatrentalmanagementsystem.mail.annotation.MailActionService;
+import pl.kamilnowak.flatrentalmanagementsystem.mail.exception.EmailSendException;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
 import pl.kamilnowak.flatrentalmanagementsystem.security.model.ActiveModel;
 import pl.kamilnowak.flatrentalmanagementsystem.security.model.ChangePasswordModel;
@@ -23,6 +22,7 @@ import pl.kamilnowak.flatrentalmanagementsystem.security.model.MailSendModel;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.LoginUserService;
 import pl.kamilnowak.flatrentalmanagementsystem.util.ConfigInfo;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -32,14 +32,14 @@ import java.time.ZoneOffset;
 public class AuthorizationController {
 
     private final LoginUserService loginUserService;
-    private final PasswordEncoder passwordEncoder;
     private final ConfigInfo configInfo;
+    private final MailActionService mailActionService;
 
     @Autowired
-    public AuthorizationController(LoginUserService loginUserService, PasswordEncoder passwordEncoder, ConfigInfo configInfo) {
+    public AuthorizationController(LoginUserService loginUserService, ConfigInfo configInfo, MailActionService mailActionService) {
         this.loginUserService = loginUserService;
-        this.passwordEncoder = passwordEncoder;
         this.configInfo = configInfo;
+        this.mailActionService = mailActionService;
     }
 
     @PostMapping("/login")
@@ -72,16 +72,23 @@ public class AuthorizationController {
     }
 
     @PostMapping("/register")
-    @SendActiveAccountMail
-    public ResponseEntity<LoginModel> register(@RequestBody LoginUser loginUser) throws UserCannotBeCreatedException {
-        LoginUser loginUserSaved = loginUserService.loadUserByUsername(loginUser.getMail());
-        if (loginUserSaved != null && !loginUserSaved.isEnable()) {
-            loginUserService.deleteById(loginUserSaved.getId());
+    @Transactional
+    public ResponseEntity<LoginModel> register(@RequestBody LoginUser loginUser) throws UserCannotBeCreatedException, EmailSendException {
+        log.debug("register " + loginUser);
+        LoginUser loginUserSaved;
+        try {
+            loginUserSaved = loginUserService.loadUserByUsername(loginUser.getMail());
+            if (!loginUserSaved.isEnable()) {
+                loginUserService.deleteById(loginUserSaved.getId());
+                loginUser.getUserData().setLoginUser(loginUser);
+                LoginUser loginUserNewSaved = loginUserService.createObject(loginUser);
+                mailActionService.sendActivityAccountEmail(loginUserNewSaved);
+                return ResponseEntity.ok().build();
+            }
+        } catch(UsernameNotFoundException e) {
             loginUser.getUserData().setLoginUser(loginUser);
-            return ResponseEntity.ok().build();
-        } else if (loginUserSaved == null) {
-            loginUser.getUserData().setLoginUser(loginUser);
-            loginUserService.createObject(loginUser);
+            LoginUser loginUserNewSaved = loginUserService.createObject(loginUser);
+            mailActionService.sendActivityAccountEmail(loginUserNewSaved);
             return ResponseEntity.ok().build();
         }
 
@@ -101,10 +108,10 @@ public class AuthorizationController {
     }
 
     @PostMapping("/changePassword")
-    @SendResetPasswordMail
-    public ResponseEntity<MailSendModel> changePasswordToken(@RequestBody LoginUser loginUser) {
+    public ResponseEntity<MailSendModel> changePasswordToken(@RequestBody LoginUser loginUser) throws EmailSendException {
         LoginUser loginUserSaved = loginUserService.loadUserByUsername(loginUser.getMail());
         if (loginUserSaved != null && loginUserSaved.isEnable()) {
+            mailActionService.sendResetPasswordEmail(loginUserSaved.getMail());
             return ResponseEntity.ok(MailSendModel.builder()
                     .isSend(true)
                     .build());

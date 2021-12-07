@@ -27,7 +27,7 @@ public class MailService {
         mimeMessageHelper.setTo(to);
         mimeMessageHelper.setSubject(subject);
         mimeMessageHelper.setText(text);
-        mimeMessage.setContent(text,"text/html");
+        mimeMessage.setContent(text,"text/plain");
         javaMailSender.send(mimeMessage);
     }
 }
