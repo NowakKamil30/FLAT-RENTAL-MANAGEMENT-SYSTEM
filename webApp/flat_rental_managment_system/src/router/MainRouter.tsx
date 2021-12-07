@@ -7,6 +7,9 @@ import { checkAuthLocalStorage } from '../store/action/AuthorizationAction';
 import { connect, ConnectedProps } from 'react-redux';
 import { AuthorizationType } from '../store/type/AuthorizationType';
 import LoginPage from '../page/LoginPage';
+import RegisterPage from '../page/RegisterPage';
+import StatutePage from '../page/StatutePage';
+import VerificationAccountPage from '../page/VerificationAccountPage';
 
 interface IMapStateToProps {
     role: Role;
@@ -52,6 +55,25 @@ const MainRouter: React.FC<PropsFromRedux> = ({
                 </PrivateRoute>
             }
             />
+            <Route path='/register' element={
+                <PrivateRoute
+                redirectPath='/home'
+                isAuth={!role || !localStorage.getItem('role') || role === Role.NO_AUTH}
+                >
+                    <RegisterPage/>
+                </PrivateRoute>
+            }
+            />
+            <Route path='/verification-account' element={
+                <PrivateRoute
+                redirectPath='/home'
+                isAuth={!role || !localStorage.getItem('role') || role === Role.NO_AUTH}
+                >
+                    <VerificationAccountPage/>
+                </PrivateRoute>
+            }
+            />
+            <Route path='/statute' element = {<StatutePage/>}/>
         </Routes>
     )
 };

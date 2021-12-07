@@ -1,13 +1,13 @@
 import { ErrorModel } from '../../type/ErrorModel';
 import { LoginModel } from '../../type/LoginModel';
 import { Role } from '../../type/Role';
-import { AuthorizationType, CHECK_AUTH_LOCAL_STORAGE, SIGN_IN, SIGN_IN_ERROR, SIGN_IN_FETCHING } from '../type/AuthorizationType';
+import { AuthorizationType, CHECK_AUTH_LOCAL_STORAGE, REGISTER_ERROR, REGISTER_FETCHING, SIGN_IN, SIGN_IN_ERROR, SIGN_IN_FETCHING, SIGN_OUT } from '../type/AuthorizationType';
 
 
 export interface AuthorizationReducerState {
     loginModel: LoginModel;
     error: ErrorModel;
-    fetching: boolean
+    fetching: boolean;
 }
 
 const INITIAL_STATE: AuthorizationReducerState = {
@@ -16,8 +16,8 @@ const INITIAL_STATE: AuthorizationReducerState = {
     fetching: false
 }
 
-export const AuthorizationReducer = (state: AuthorizationReducerState = INITIAL_STATE, action: AuthorizationType): AuthorizationReducerState => {
-    console.log(action.type);
+export const AuthorizationReducer = (state: AuthorizationReducerState = INITIAL_STATE, action: AuthorizationType): AuthorizationReducerState => {    
+    console.log(action);
     switch(action.type) {
         case CHECK_AUTH_LOCAL_STORAGE: {
             return checkAuthLocalStorage(state);
@@ -28,14 +28,23 @@ export const AuthorizationReducer = (state: AuthorizationReducerState = INITIAL_
         }
 
         case SIGN_IN_FETCHING: {
-            console.log("fetch");
-            
             return { ...state, fetching: action.payload };
         }
 
         case SIGN_IN_ERROR: {
-            console.log(action.payload);
-            
+            return { ...state, error: action.payload };
+        }
+
+        case SIGN_OUT: {
+            removeLoginDataFromLocalStorage();
+            return INITIAL_STATE;
+        }
+
+        case REGISTER_FETCHING: {
+            return { ...state, fetching: action.payload };
+        }
+
+        case REGISTER_ERROR: {
             return { ...state, error: action.payload };
         }
 

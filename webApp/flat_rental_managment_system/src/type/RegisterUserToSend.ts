@@ -1,7 +1,7 @@
 export interface RegisterUserToSend {
     mail: string;
     password: string;
-    user: {
+    userData: {
         firstName: string;
         lastName: string;
     }

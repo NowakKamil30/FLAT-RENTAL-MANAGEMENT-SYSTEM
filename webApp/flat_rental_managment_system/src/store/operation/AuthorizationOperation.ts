@@ -11,12 +11,8 @@ import {
     signInToReducer
  } from '../action/AuthorizationAction';
 import { LoginUser } from '../../type/LoginUser';
-import { LoginUserWithSaveOption } from '../../type/LoginUserWithSaveOption';
 import { RegisterUser } from '../../type/RegisterUser';
 import { RegisterUserToSend } from '../../type/RegisterUserToSend';
-import { ActiveModel } from '../../type/ActiveModel';
-import { MailSendModel } from '../../type/MailSendModel';
-import { ResetPassword } from '../../type/ResetPassword';
 import { ChangePasswordModel } from '../../type/ChangePasswordModel';
 import { ChangePassword } from '../../type/ChangePassword';
 import { setting } from "../../setting/setting.json";
@@ -33,7 +29,7 @@ const registerSend = async (registerUser: RegisterUser): Promise<LoginModel> => 
     const registerUserToService: RegisterUserToSend = {
         mail: registerUser.mail,
         password: registerUser.password,
-        user: {
+        userData: {
             firstName: registerUser.firstName,
             lastName: registerUser.lastName
         },
@@ -41,21 +37,6 @@ const registerSend = async (registerUser: RegisterUser): Promise<LoginModel> => 
     const response = await Axios.post(backendURL + register, registerUserToService);
 
     return response.data as LoginModel;
-};
-
-const activeAccountSend = async (token: string): Promise<ActiveModel> => {
-    const { backendURL, verifyToken } = setting.url;
-    const response = await Axios.get(backendURL + verifyToken + '?token=' + token);
-
-    return response.data as ActiveModel;
-};
-
-const resetPasswordSend = async (mail: string): Promise<MailSendModel> => {
-    const { backendURL, changePassword } = setting.url;
-    const resetPasswordToServer: ResetPassword = { mail };
-    const response = await Axios.post(backendURL + changePassword, resetPasswordToServer);
-
-    return response.data as MailSendModel;
 };
 
 const changePasswordSend = async (password: string, token: string): Promise<ChangePasswordModel> => {
@@ -74,7 +55,6 @@ export const  signIn = (
     async dispatch => {
         dispatch(signInFetching(true));
         try {
-            console.log("aaa");
             const loginModel = await signInSend(user);
             localStorage.setItem('token', loginModel.token);
             localStorage.setItem('role', loginModel.role);

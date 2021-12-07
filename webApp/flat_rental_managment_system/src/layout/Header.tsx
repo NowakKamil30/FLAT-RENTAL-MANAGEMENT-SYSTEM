@@ -9,6 +9,8 @@ import { ReduceType } from '../store/reducer';
 import { LoginModel } from '../type/LoginModel';
 import { Dispatch } from 'redux';
 import { connect, ConnectedProps } from 'react-redux';
+import { AuthorizationType } from '../store/type/AuthorizationType';
+import { signOut } from '../store/action/AuthorizationAction';
 
 interface IMapStateToProps {
   loginModel: LoginModel;
@@ -19,11 +21,14 @@ const mapStateToProps = (state: ReduceType): IMapStateToProps => ({
 });
 
 interface IMapDispatcherToProps {
-
+  signOut: () => AuthorizationType;
 }
 
 const mapDispatcherToProps = (dispatch: Dispatch): IMapDispatcherToProps => (
   {
+    signOut: () => (
+      dispatch(signOut())
+    )
   }
 );
 
@@ -32,7 +37,8 @@ const connector = connect(mapStateToProps, mapDispatcherToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const Header: React.FC<PropsFromRedux> = ({
-  loginModel
+  loginModel,
+  signOut
 }): JSX.Element => {
   const navigate = useNavigate();
 
@@ -57,7 +63,10 @@ const Header: React.FC<PropsFromRedux> = ({
           <>
             <Button 
             color='inherit'
-            onClick={() => null}
+            onClick={() => {
+              signOut();
+              navigate('/')
+            }}
             >sign out</Button>
           </>
         }

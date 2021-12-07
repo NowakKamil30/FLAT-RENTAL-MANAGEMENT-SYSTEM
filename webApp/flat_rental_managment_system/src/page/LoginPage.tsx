@@ -13,7 +13,6 @@ import { DialogActions, Link, TextField, Theme } from '@mui/material';
 import { useNavigate } from 'react-router';
 import HandlerButton from '../component/HandlerButton';
 import InputPassword from '../component/InputPassword';
-import Checkbox from '../component/Checkbox';
 import { makeStyles } from '@mui/styles';
 import { LoginUser } from '../type/LoginUser';
 import Snackbar from '../component/Snackbar';
@@ -89,6 +88,7 @@ const LoginPage: React.FC<PropsFromRedux> = ({
         mail: Yup
                   .string()
                   .strict(true)
+                  .email("it is not a valid mail adress")
                   .required('this field is required')
                   .min(2, 'min lenght(2)')
                   .max(60, 'max lenght(60)')
@@ -187,7 +187,7 @@ const useStyles = makeStyles((theme: Theme) =>({
         height: 90,
       },
       form: {
-        maxWidth: 600,
+        maxWidth: 800,
         display: 'flex',
         flexDirection: 'column',
         minHeight: '30vh'
