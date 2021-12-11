@@ -21,6 +21,8 @@ import { ListType } from '../component/List/ListType';
 import { title } from 'process';
 import CustomList from '../component/List/CustomList';
 import CustomListComponent from '../component/List/CustomListComponent';
+import { ImageModel } from '../type/ImageModel';
+import ImageGallery from '../component/ImagesGallery';
 
 interface IMapDispatcherToProps {}
 
@@ -41,12 +43,16 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 const ApartamentPage: React.FC<PropsFromRedux> = ({
     loginModel
 }): JSX.Element => {
-    const {root, title} = useStyles();
+    const {root} = useStyles();
     const {apartmentId} = useParams();
     const [maxPage, setMaxPage] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
+    const [maxPageForImages, setMaxPageForImages] = useState<number>(0);
+    const [pageForImages, setPageForImages] = useState<number>(0);
     const [errorApartment, setErrorApartment] = useState<ErrorModel>({message: ''});
+    const [errorForImages, setErrorForImages] = useState<ErrorModel>({message: ''});
     const [fetchingApartment, setFetchingApartment] = useState<boolean>(false);
+    const [fetchingForImages, setFetchingForImages] = useState<boolean>(false);
     const [apartment, setApartment] = useState<Apartment>({
         name: '',
         description: '',
@@ -57,6 +63,7 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
         postcode: '',
         country: ''
     });
+    const [images, setImages] = useState<ImageModel[]>([]);
     const [errorTenants, setErrorTenants] = useState<ErrorModel>({message: ''});
     const [fetchingTenants, setFetchingTenants] = useState<boolean>(false);
     const [tenants, setTenants] = useState<TenantModel[]>([]);
@@ -104,6 +111,30 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
         }
     };
 
+    const getImages = async (): Promise<void> => {
+        const { backendURL, imageByApartment } = setting.url;
+        setFetchingForImages(true);
+        try {
+            if (!!apartmentId) {
+                let config = {
+                    headers: {
+                        Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
+                    }
+                  }
+                const response = await Axios.get(backendURL + imageByApartment + '/' + apartmentId + "?page=" + page, config);
+                const images = response.data.content as ImageModel[];
+                console.log(images);
+                setImages(images);
+                setMaxPageForImages(response.data.totalPages);
+                setPageForImages(response.data.pageable.pageNumber + 1);
+            }
+        } catch (e) {
+            setErrorForImages({message: (e as Error).message});
+        } finally {
+            setFetchingForImages(false);
+        }
+    };
+
     useEffect(() => {
         getApartment();
     }, [loginModel, apartmentId]);
@@ -111,6 +142,10 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
     useEffect(() => {
         getTenents();
     }, [loginModel, apartmentId, page]);
+
+    useEffect(() => {
+        getImages();
+    }, [loginModel, apartmentId, pageForImages]);
 
     return (
         <>
@@ -137,11 +172,22 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
                     path: '/tenant/' + tenant.id,
                     icon: <PersonIcon color="primary" />
                 })) as ListType[]}
-                title='my apartments'
+                title='my tenents'
                 maxPage={maxPage}
                 page={page}
                 onCreactItemClick={() => {}}
                 onPageChange={(event, value) => setPage(value)}
+                />
+                }
+                {fetchingForImages ?
+                 <CircularProgress color='secondary' size={80} />
+                :
+                <ImageGallery
+                    onPageChange={(event, value) => setPageForImages(value)}
+                    title='gallery'
+                    images={images}
+                    page={page}
+                    maxPage={maxPageForImages}
                 />
                 }
             
@@ -159,6 +205,13 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
             title={errorTenants.message}
             onClose={() => {setErrorTenants({...errorTenants, message: ''})}}
             />
+            <Snackbar
+            open={ errorForImages.message.length > 0 }
+            autoHideDuration={ 5000 }
+            severity='error'
+            title={errorForImages.message}
+            onClose={() => {setErrorForImages({...errorForImages, message: ''})}}
+            />
             </Box>
             :
             <SuccessMessage
@@ -173,16 +226,6 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
 
 const useStyles = makeStyles((theme: Theme) =>({
     root: {
-        flexGrow: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column'
-      },
-      title: {
-        fontSize: 30
-      },
-      box: {
         flexGrow: 1,
         display: 'flex',
         justifyContent: 'center',

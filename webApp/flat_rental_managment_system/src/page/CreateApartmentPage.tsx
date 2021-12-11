@@ -9,13 +9,13 @@ import { ReduceType } from '../store/reducer';
 import { LoginModel } from '../type/LoginModel';
 import Axios from 'axios';
 import * as Yup from 'yup';
+import { setting } from '../setting/setting.json';
 import { ApartmentToServer } from '../type/ApartmentToServer';
 import { ErrorModel } from '../type/ErrorModel';
 import SuccessMessage from '../component/SuccessMessage';
 import HandlerButton from '../component/HandlerButton';
 import Snackbar from '../component/Snackbar';
-import ImageInput from '../component/ImageInput';
-import ImageInputController from '../component/ImageInputController';
+import ImageInputController from '../component/imageInput/ImageInputController';
 import { ImageModel } from '../type/ImageModel';
 
 interface IMapDispatcherToProps {}
@@ -42,6 +42,28 @@ const CreateApartmentPage: React.FC<PropsFromRedux> = ({
     const [isSuccessMessage, setIsSuccessMessage] = useState<boolean>(false);
     const [error, setError] = useState<ErrorModel>({message: ''});
     const [images, setImages] = React.useState<ImageModel[]>([]);
+    const [description, setDescription] = useState<string>('');
+
+    const createApartment = async (apartmentToSend: ApartmentToServer) => {
+        const { backendURL, apartment } = setting.url;
+        setFetching(true);
+        try {
+            if (loginModel.id !== -1) {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
+                    }
+                  }
+                await Axios.post(backendURL + apartment, apartmentToSend, config);
+                setIsSuccessMessage(true);
+            }
+        } catch (e) {
+            setError({message: (e as Error).message});
+        } finally {
+            setFetching(false);
+        }
+        
+    }
 
     const initialValues: ApartmentToServer = {
         name: '',
@@ -112,15 +134,27 @@ const CreateApartmentPage: React.FC<PropsFromRedux> = ({
                     .required('this field is required')
                     .min(2, 'min lenght(2)')
                     .max(30, 'max lenght(30)')
-                    .trim('no start or end with space'),
-            description: Yup
-                    .string()
-                    .strict(true)
-                    .max(300, 'max lenght(300)')
                     .trim('no start or end with space')
         }),
         onSubmit: (values: ApartmentToServer) => {
-          
+          console.log(values, images);
+          const imagesToSend = images.map((image: ImageModel) => (
+            {
+                photo: image.photo,
+                title: image.title
+          }));
+          if(imagesToSend[imagesToSend.length - 1].photo.length < 1) {
+            imagesToSend.splice(imagesToSend.length - 1, 1);
+          }
+          const apartment: ApartmentToServer = {
+              ...values, 
+              userData: {
+                id: loginModel.id
+              }, 
+              description, 
+              images: imagesToSend
+          }
+          createApartment(apartment);
         }    
       });
 
@@ -219,6 +253,8 @@ const CreateApartmentPage: React.FC<PropsFromRedux> = ({
                 name='description'
                 aria-label='description'
                 minRows={3}
+                value={description}
+                onChange={(e)=>setDescription(e.target.value)}
                 placeholder="description"
                 />
                 <ImageInputController

@@ -1,7 +1,7 @@
 import { Box, Button } from '@mui/material';
 import React from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import { ImageModel } from '../type/ImageModel';
+import { ImageModel } from '../../type/ImageModel';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 export interface ImageInputProps {

@@ -10,7 +10,8 @@
             "userData": "/userData",
             "apartmentsByUserData": "/apartment/userData",
             "apartment": "/apartment",
-            "tenantByApartment": "/tenant/apartment"
+            "tenantByApartment": "/tenant/apartment",
+            "imageByApartment": "/image/apartment"
         },
 
         "layout": {

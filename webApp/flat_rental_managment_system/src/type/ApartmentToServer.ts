@@ -1,4 +1,5 @@
 import { ImageModel } from './ImageModel';
+import { ImageToSend } from './ImageToSend';
 
 export interface ApartmentToServer {
     name: string;
@@ -8,7 +9,7 @@ export interface ApartmentToServer {
     city: string;
     street: string;
     houseNumber: string;
-    images: ImageModel[];
+    images: ImageToSend[];
     userData: {
         id: number
     };
