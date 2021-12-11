@@ -8,7 +8,9 @@
             "changePassword": "/authorization/changePassword",
             "resetPassword": "/authorization/resetPassword",
             "userData": "/userData",
-            "apartmentsByUserData": "/apartment/userData"
+            "apartmentsByUserData": "/apartment/userData",
+            "apartment": "/apartment",
+            "tenantByApartment": "/tenant/apartment"
         },
 
         "layout": {

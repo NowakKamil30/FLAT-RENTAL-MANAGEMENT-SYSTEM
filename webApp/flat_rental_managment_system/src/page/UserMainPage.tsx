@@ -18,6 +18,7 @@ import { ListType } from '../component/List/ListType';
 import { Apartment } from '../type/Apartment';
 import { createAdress } from '../util/createAdress';
 import { useNavigate } from 'react-router';
+import CustomListComponent from '../component/List/CustomListComponent';
 
 interface IMapDispatcherToProps {}
 
@@ -38,8 +39,10 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 const UserMainPage: React.FC<PropsFromRedux> = ({
     loginModel
 }): JSX.Element => {
-    const {root, title} = useStyles();
+    const {root} = useStyles();
     const navigate = useNavigate();
+    const [maxPage, setMaxPage] = useState<number>(0);
+    const [page, setPage] = useState<number>(0);
     const [fetchingUserData, setFetchingUserData] = useState<boolean>(false);
     const [fetchingApartments, setFetchingApartments] = useState<boolean>(false);
     const [error, setError] = useState<ErrorModel>({message: ''});
@@ -76,8 +79,11 @@ const UserMainPage: React.FC<PropsFromRedux> = ({
                         Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
                     }
                   }
-                const response = await Axios.get(backendURL + apartmentsByUserData + '/' + loginModel.id, config);
+                const response = await Axios.get(backendURL + apartmentsByUserData + '/' + loginModel.id + "?page=" + page, config);
                 const apartments = response.data.content as Apartment[];
+                setMaxPage(response.data.totalPages);
+                setPage(response.data.pageable.pageNumber + 1);
+                
                 setListTypes(apartments.map((apartment: Apartment) => ({
                     title: apartment.name + ' ' + createAdress(apartment),
                     path: '/apartment/' + apartment.id,
@@ -93,8 +99,11 @@ const UserMainPage: React.FC<PropsFromRedux> = ({
 
     useEffect(() => {
         getUserData();
-        getApartments();
     }, [loginModel]);
+
+    useEffect(() =>{
+        getApartments();
+    }, [loginModel, page]);
     return (
         <Box
         component='div'
@@ -112,18 +121,15 @@ const UserMainPage: React.FC<PropsFromRedux> = ({
                 fetchingApartments ?
                 <CircularProgress color='secondary' size={80} />
                 :
-                <Box 
-                component='div'
-                >
-                    <Box
-                    component='h2'
-                    className={title}> 
-                        Your apartments
-                    </Box>
-                    <CustomList
-                    listTypes={listTypes}
-                    />
-                </Box>
+                <CustomListComponent
+                title='Your apartments'
+                listTypes={listTypes}
+                maxPage={maxPage}
+                page={page}
+                onCreactItemClick={() => navigate('/create-appartment')}
+                onPageChange={(event, value) => setPage(value)}
+                />
+
             }
 
             <Snackbar
@@ -146,16 +152,6 @@ const UserMainPage: React.FC<PropsFromRedux> = ({
 
 const useStyles = makeStyles((theme: Theme) =>({
     root: {
-        flexGrow: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column'
-      },
-      title: {
-        fontSize: 30
-      },
-      box: {
         flexGrow: 1,
         display: 'flex',
         justifyContent: 'center',

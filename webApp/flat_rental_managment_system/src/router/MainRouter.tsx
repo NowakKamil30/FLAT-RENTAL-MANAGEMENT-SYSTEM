@@ -15,6 +15,8 @@ import ChangePasswordPage from '../page/ChangePasswordPage';
 import NotFoundRoutePage from '../page/NotFoundRoutePage';
 import UserMainPage from '../page/UserMainPage';
 import EditUserDataPage from '../page/EditUserDataPage';
+import ApartamentPage from '../page/ApartamentPage';
+import CreateApartmentPage from '../page/CreateApartmentPage';
 
 interface IMapStateToProps {
     role: Role;
@@ -120,6 +122,34 @@ const MainRouter: React.FC<PropsFromRedux> = ({
                 isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
                 >
                     <EditUserDataPage/>
+                </PrivateRoute>
+            }
+            />
+            <Route path='/apartment' element={
+                <PrivateRoute
+                redirectPath='/login'
+                isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                >
+                    <ApartamentPage/>
+                </PrivateRoute>
+            }
+            > 
+                <Route path=':apartmentId' element={
+                    <PrivateRoute
+                    redirectPath='/login'
+                    isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                    >
+                        <ApartamentPage/>
+                    </PrivateRoute>
+                    }
+                />
+            </Route>
+            <Route path='/create-appartment' element={
+                <PrivateRoute
+                redirectPath='/login'
+                isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                >
+                    <CreateApartmentPage/>
                 </PrivateRoute>
             }
             />

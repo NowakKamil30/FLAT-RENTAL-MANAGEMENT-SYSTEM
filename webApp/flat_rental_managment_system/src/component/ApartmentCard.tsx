@@ -1,17 +1,18 @@
 import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import { User } from '../type/User';
+import { Apartment } from '../type/Apartment';
 
-interface UserCardProps {
-    user: User;
+
+interface ApartmentCardProps {
+    apartment: Apartment
     title: string;
     buttonTitle: string;
     onButtonClick: () => void;
 }
 
-const UserCard: React.FC<UserCardProps> = ({
-    user,
+const ApartmentCard: React.FC<ApartmentCardProps> = ({
+    apartment,
     title,
     buttonTitle,
     onButtonClick
@@ -22,22 +23,28 @@ const UserCard: React.FC<UserCardProps> = ({
     <Card className={classes.root}>
       <CardContent>
         <Typography variant='h4' color="textSecondary" gutterBottom>
-            {title}
+            {`${title}(${apartment?.name})`}
         </Typography>
-        <Typography variant="h5" component="h2">
+        <Typography variant="h3" component="h2">
         </Typography>
         <Typography variant="body2" component="p">
             <Typography className={classes.pos} color="textSecondary">
-                {`FIRST NAME: ${user?.firstName}`}
+                {`COUNTRY: ${apartment.country}`}
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
-                {`LAST NAME: ${user?.lastName}`}
+                {`CITY: ${apartment.city}`}
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
-                {`CREATE ACCOUNT: ${user?.createUserData}`}
+                {`POSTCODE: ${apartment.postcode}`}
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
-                {`ACTIVE ACCOUNT: ${user?.activeAccountData}`}
+                {`STREET: ${apartment.street}`}
+            </Typography>
+            <Typography className={classes.pos} color="textSecondary">
+                {`HOUSE NUMBER: ${apartment.houseNumber}`}
+            </Typography>
+            <Typography className={classes.pos} color="textSecondary">
+                {`DESCRIPTION: ${apartment.description}`}
             </Typography>
         </Typography>
         <CardActions>
@@ -52,7 +59,7 @@ const UserCard: React.FC<UserCardProps> = ({
   );
 }
 
-export default UserCard;
+export default ApartmentCard;
 
 const useStyles = makeStyles({
     root: {

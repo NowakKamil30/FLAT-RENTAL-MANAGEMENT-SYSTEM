@@ -46,9 +46,17 @@ const Header: React.FC<PropsFromRedux> = ({
     <Box component='header'>
       <AppBar>
         <Toolbar>
-          <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+          <Typography 
+          variant='h6' 
+          component='div' 
+          sx={{ flexGrow: 1 }}>
+            <Button
+            color='inherit'
+            onClick={() => navigate('/home')}>
             Flat Rental Managment System
+            </Button>
           </Typography>
+
           {loginModel?.token?.length < 1 ?
           <>
             <Button 
@@ -70,7 +78,6 @@ const Header: React.FC<PropsFromRedux> = ({
             >sign out</Button>
           </>
         }
-
         </Toolbar>
       </AppBar>
     </Box>
