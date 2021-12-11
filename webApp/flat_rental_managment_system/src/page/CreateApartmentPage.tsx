@@ -17,6 +17,7 @@ import HandlerButton from '../component/HandlerButton';
 import Snackbar from '../component/Snackbar';
 import ImageInputController from '../component/imageInput/ImageInputController';
 import { ImageModel } from '../type/ImageModel';
+import { ImageToSend } from '../type/ImageToSend';
 
 interface IMapDispatcherToProps {}
 
@@ -137,21 +138,24 @@ const CreateApartmentPage: React.FC<PropsFromRedux> = ({
                     .trim('no start or end with space')
         }),
         onSubmit: (values: ApartmentToServer) => {
-          console.log(values, images);
-          const imagesToSend = images.map((image: ImageModel) => (
-            {
-                photo: image.photo,
-                title: image.title
-          }));
-          if(imagesToSend[imagesToSend.length - 1].photo.length < 1) {
-            imagesToSend.splice(imagesToSend.length - 1, 1);
+          let imagesToSend: ImageToSend[] = [];
+          if (images.length > 0 && images[0].photo.length > 0) {
+            imagesToSend = images.map((image: ImageModel) => (
+                {
+                    photo: image.photo,
+                    title: image.title
+              }));
+
+              if(imagesToSend[imagesToSend.length - 1].photo.length < 1) {
+                imagesToSend.splice(imagesToSend.length - 1, 1);
+              }
           }
           const apartment: ApartmentToServer = {
               ...values, 
               userData: {
                 id: loginModel.id
               }, 
-              description, 
+              description: description, 
               images: imagesToSend
           }
           createApartment(apartment);

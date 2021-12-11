@@ -17,6 +17,7 @@ import UserMainPage from '../page/UserMainPage';
 import EditUserDataPage from '../page/EditUserDataPage';
 import ApartamentPage from '../page/ApartamentPage';
 import CreateApartmentPage from '../page/CreateApartmentPage';
+import UpdateApartmentPage from '../page/UpdateApartmentPage';
 
 interface IMapStateToProps {
     role: Role;
@@ -144,7 +145,7 @@ const MainRouter: React.FC<PropsFromRedux> = ({
                     }
                 />
             </Route>
-            <Route path='/create-appartment' element={
+            <Route path='/create-apartment' element={
                 <PrivateRoute
                 redirectPath='/login'
                 isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
@@ -153,6 +154,25 @@ const MainRouter: React.FC<PropsFromRedux> = ({
                 </PrivateRoute>
             }
             />
+            <Route path='/update-apartment' element={
+                <PrivateRoute
+                redirectPath='/login'
+                isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                >
+                    <UpdateApartmentPage/>
+                </PrivateRoute>
+            }
+            > 
+                <Route path=':apartmentId' element={
+                    <PrivateRoute
+                    redirectPath='/login'
+                    isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                    >
+                        <UpdateApartmentPage/>
+                    </PrivateRoute>
+                    }
+                />
+            </Route>
             <Route path='/statute' element = {<StatutePage/>}/>
             <Route path='*' element={<NotFoundRoutePage/>}/>
         </Routes>

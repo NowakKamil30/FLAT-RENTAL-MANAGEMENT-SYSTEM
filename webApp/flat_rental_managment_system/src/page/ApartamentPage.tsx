@@ -1,7 +1,7 @@
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { ThunkDispatch } from 'redux-thunk';
 import { ReduceType } from '../store/reducer';
 import { LoginModel } from '../type/LoginModel';
@@ -44,6 +44,7 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
     loginModel
 }): JSX.Element => {
     const {root} = useStyles();
+    const navigate = useNavigate();
     const {apartmentId} = useParams();
     const [maxPage, setMaxPage] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
@@ -123,7 +124,6 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
                   }
                 const response = await Axios.get(backendURL + imageByApartment + '/' + apartmentId + "?page=" + page, config);
                 const images = response.data.content as ImageModel[];
-                console.log(images);
                 setImages(images);
                 setMaxPageForImages(response.data.totalPages);
                 setPageForImages(response.data.pageable.pageNumber + 1);
@@ -159,7 +159,7 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
                 <ApartmentCard
                 title='APARTMENT'
                 buttonTitle='edit'
-                onButtonClick={()=>null}
+                onButtonClick={() => navigate('/update-apartment/' + apartmentId)}
                 apartment={apartment}
                 />
                 }

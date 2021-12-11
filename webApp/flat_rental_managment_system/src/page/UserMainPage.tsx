@@ -126,7 +126,7 @@ const UserMainPage: React.FC<PropsFromRedux> = ({
                 listTypes={listTypes}
                 maxPage={maxPage}
                 page={page}
-                onCreactItemClick={() => navigate('/create-appartment')}
+                onCreactItemClick={() => navigate('/create-apartment')}
                 onPageChange={(event, value) => setPage(value)}
                 />
 

@@ -1,6 +1,5 @@
-import { Box, ImageList, ImageListItem, ImageListItemBar, Pagination, Theme } from '@mui/material';
+import { Box, Card, Pagination, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { padding } from '@mui/system';
 import React from 'react';
 import { ImageModel } from '../type/ImageModel';
 
@@ -31,9 +30,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
             {title.toUpperCase()}
             </Box>
             {images.map((image) => (
-                <Box
-                className={styles.box}
-                component='div'>
+                <Card
+                className={styles.box}>
                     <Box
                     component='h4'
                     className={styles.imageTitle}>
@@ -46,7 +44,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
                         }}
                     >
                     </div>
-                </Box>
+                </Card>
             ))}
             {maxPage < 2 ? 
                 null 
@@ -65,7 +63,7 @@ const useStyles = makeStyles((theme: Theme) =>({
       fontSize: 30
     },
     imageTitle: {
-        color: theme.palette.primary.main,
+        color: theme.palette.secondary.main,
         fontSize: 20,
         textAlign: 'center'
     },
@@ -77,7 +75,6 @@ const useStyles = makeStyles((theme: Theme) =>({
         backgroundPosition: 'center',
     },
     box: {
-        backgroundColor: theme.palette.secondary.main,
         padding: 10,
         marginBottom: 5
     }
