@@ -9,6 +9,8 @@ import pl.kamilnowak.flatrentalmanagementsystem.apartment.repository.CurrencyRep
 import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
 import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
 
+import java.util.List;
+
 
 @Service
 @Log4j2
@@ -39,6 +41,11 @@ public class CurrencyService implements CRUDOperation<Currency, Long> {
     public Page<Currency> getAllObject(int page) {
         log.debug("read currencies page: " + page);
         return currencyRepository.findAll(pageableHelper.countPageable(page));
+    }
+
+    public List<Currency> getAllObject() {
+        log.debug("read currencies");
+        return currencyRepository.findAll();
     }
 
     @Override

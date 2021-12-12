@@ -33,11 +33,15 @@ public class ApartmentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApartmentDHO> getApartment(@PathVariable Long id) {
-        Apartment apartment = apartmentService.getObjectById(id);
-        if (apartment == null) {
+        try {
+            Apartment apartment = apartmentService.getObjectById(id);
+            if (apartment == null) {
+                throw new NotFoundException(id.toString());
+            }
+            return ResponseEntity.ok(modelMapper.map(apartment, ApartmentDHO.class));
+        } catch (Exception e) {
             throw new NotFoundException(id.toString());
         }
-        return ResponseEntity.ok(modelMapper.map(apartment, ApartmentDHO.class));
     }
 
     @PostMapping("")

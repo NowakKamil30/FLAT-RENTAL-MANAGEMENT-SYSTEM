@@ -11,6 +11,9 @@ import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Document;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.DocumentService;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/v1/document")
 public class DocumentController {
@@ -66,5 +69,12 @@ public class DocumentController {
     public ResponseEntity<Page<DocumentDHO>> getDocumentsByTenant(@PathVariable Long id, @RequestParam(defaultValue = "1") int page) {
         return ResponseEntity.ok(documentService.getObjectsByTenantId(id, page)
                 .map(document -> modelMapper.map(document, DocumentDHO.class)));
+    }
+
+    @GetMapping("/tenant/{id}/all")
+    public ResponseEntity<List<DocumentDHO>> getDocumentsByTenant(@PathVariable Long id) {
+        return ResponseEntity.ok(documentService.getObjectsByTenantId(id).stream()
+                .map(document -> modelMapper.map(document, DocumentDHO.class))
+                .collect(Collectors.toList()));
     }
 }

@@ -40,13 +40,11 @@ public class Tenant {
     @Column(name = "is_active")
     private boolean isActive;
     private String description;
-    @NotNull
     @Column(name = "end_date")
     private LocalDate endDate;
     @NotNull
     @Column(name = "start_date")
     private LocalDate startDate;
-    @NotNull
     @Column(name = "paid_date")
     private LocalDate paidDate;
     @ManyToOne
@@ -55,12 +53,14 @@ public class Tenant {
     private List<Document> documents;
     @ManyToOne
     private Currency currency;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tenant")
+    private List<ExtraCost> extraCosts;
 
     public Tenant() {
     }
 
     @Builder
-    public Tenant(Long id, String firstName, String lastName, String phoneNumber, String mail, BigDecimal fee, boolean isPaid, boolean isActive, String description, LocalDate endDate, LocalDate startDate, LocalDate paidDate, Apartment apartment, List<Document> documents, Currency currency) {
+    public Tenant(Long id, String firstName, String lastName, String phoneNumber, String mail, BigDecimal fee, boolean isPaid, boolean isActive, String description, LocalDate endDate, LocalDate startDate, LocalDate paidDate, Apartment apartment, List<Document> documents, Currency currency, List<ExtraCost> extraCosts) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -76,6 +76,7 @@ public class Tenant {
         this.apartment = apartment;
         this.documents = documents;
         this.currency = currency;
+        this.extraCosts = extraCosts;
     }
 
     public Long getId() {
@@ -196,5 +197,13 @@ public class Tenant {
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    public List<ExtraCost> getExtraCosts() {
+        return extraCosts;
+    }
+
+    public void setExtraCosts(List<ExtraCost> extraCosts) {
+        this.extraCosts = extraCosts;
     }
 }

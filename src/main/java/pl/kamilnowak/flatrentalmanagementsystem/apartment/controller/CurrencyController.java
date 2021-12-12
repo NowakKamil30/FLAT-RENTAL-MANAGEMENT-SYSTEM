@@ -11,6 +11,9 @@ import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Currency;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.CurrencyService;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/v1/currency")
 public class CurrencyController {
@@ -29,6 +32,14 @@ public class CurrencyController {
         Page<CurrencyDHO> currencyDHOPage = currencyService.getAllObject(page)
                 .map(currency -> modelMapper.map(currency, CurrencyDHO.class));
         return ResponseEntity.ok(currencyDHOPage);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<CurrencyDHO>> getCurrencies() {
+        List<CurrencyDHO> currencyDHOList = currencyService.getAllObject().stream()
+                .map(currency -> modelMapper.map(currency, CurrencyDHO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(currencyDHOList);
     }
 
     @GetMapping("/{id}")

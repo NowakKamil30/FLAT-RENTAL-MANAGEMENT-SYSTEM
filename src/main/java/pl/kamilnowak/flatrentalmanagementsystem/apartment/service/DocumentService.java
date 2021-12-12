@@ -9,6 +9,8 @@ import pl.kamilnowak.flatrentalmanagementsystem.apartment.repository.DocumentRep
 import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
 import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
 
+import java.util.List;
+
 @Service
 @Log4j2
 public class DocumentService implements CRUDOperation<Document, Long> {
@@ -59,5 +61,10 @@ public class DocumentService implements CRUDOperation<Document, Long> {
     public Page<Document> getObjectsByTenantId(Long aLong, int page) {
         log.debug("gets all documents by tenant id: " + aLong);
         return documentRepository.getDocumentsByTenant_Id(aLong, pageableHelper.countPageable(page));
+    }
+
+    public List<Document> getObjectsByTenantId(Long aLong) {
+        log.debug("gets all documents by tenant id: " + aLong);
+        return documentRepository.getDocumentsByTenant_Id(aLong);
     }
 }

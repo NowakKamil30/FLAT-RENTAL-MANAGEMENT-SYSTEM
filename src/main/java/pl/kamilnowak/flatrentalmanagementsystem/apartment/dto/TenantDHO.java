@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Currency;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.ExtraCost;
 import pl.kamilnowak.flatrentalmanagementsystem.view.Views;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -39,13 +42,15 @@ public class TenantDHO {
     @JsonView(Views.Private.class)
     private Long apartmentId;
     @JsonView(Views.Private.class)
-    private Long currencyId;
+    private Currency currency;
+    @JsonView(Views.Private.class)
+    private List<ExtraCost> extraCosts;
 
     public TenantDHO() {
     }
 
     @Builder
-    public TenantDHO(Long id, String firstName, String lastName, String phoneNumber, String mail, BigDecimal fee, boolean isPaid, boolean isActive, String description, LocalDate endDate, LocalDate startDate, LocalDate paidDate, Long apartmentId, Long currencyId) {
+    public TenantDHO(Long id, String firstName, String lastName, String phoneNumber, String mail, BigDecimal fee, boolean isPaid, boolean isActive, String description, LocalDate endDate, LocalDate startDate, LocalDate paidDate, Long apartmentId, Currency currency, List<ExtraCost> extraCosts) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -59,6 +64,7 @@ public class TenantDHO {
         this.startDate = startDate;
         this.paidDate = paidDate;
         this.apartmentId = apartmentId;
-        this.currencyId = currencyId;
+        this.currency = currency;
+        this.extraCosts = extraCosts;
     }
 }

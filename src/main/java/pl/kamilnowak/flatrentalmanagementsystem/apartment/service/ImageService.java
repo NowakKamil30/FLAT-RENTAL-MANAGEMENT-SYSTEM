@@ -9,6 +9,8 @@ import pl.kamilnowak.flatrentalmanagementsystem.apartment.repository.ImageReposi
 import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
 import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
 
+import java.util.List;
+
 @Service
 @Log4j2
 public class ImageService implements CRUDOperation<Image, Long> {
@@ -60,5 +62,15 @@ public class ImageService implements CRUDOperation<Image, Long> {
     public Page<Image> getObjectsByApartmentId(Long aLong, int page) {
         log.debug("gets all images by apartment id: " + aLong);
         return imageRepository.getImagesByApartment_Id(aLong, pageableHelper.countPageable(page));
+    }
+
+    public List<Image> getObjectsByApartmentId(Long aLong) {
+        log.debug("gets all images by apartment id: " + aLong);
+        return imageRepository.getImagesByApartment_Id(aLong);
+    }
+
+    public void deleteAllByApartmentId(Long id) {
+        log.debug("delete all photo for: " + id);
+        imageRepository.deleteAllByApartment_Id(id);
     }
 }

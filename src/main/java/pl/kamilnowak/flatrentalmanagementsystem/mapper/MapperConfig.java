@@ -80,7 +80,8 @@ public class MapperConfig {
                         map().setStartDate(source.getStartDate());
                         map().setPaidDate(source.getPaidDate());
                         map().setApartmentId(source.getApartment().getId());
-                        map().setCurrencyId(source.getCurrency().getId());
+                        map().setCurrency(source.getCurrency());
+                        map().setExtraCosts(source.getExtraCosts());
                     }
                 });
         modelMapper.createTypeMap(LoginUser.class, LoginUserDHO.class)
@@ -111,6 +112,15 @@ public class MapperConfig {
                         map().setToken(source.getToken());
                         map().setLoginUserId(source.getLoginUser().getId());
                         map().setCreateTime(source.getCreateTime());
+                    }
+                });
+        modelMapper.createTypeMap(ExtraCost.class, ExtraCostDHO.class)
+                .addMappings(new PropertyMap<ExtraCost, ExtraCostDHO>() {
+                    @Override
+                    protected void configure() {
+                        map().setId(source.getId());
+                        map().setName(source.getName());
+                        map().setExtraCost(source.getExtraCost());
                     }
                 });
 

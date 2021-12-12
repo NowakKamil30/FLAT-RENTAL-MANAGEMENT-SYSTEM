@@ -11,6 +11,9 @@ import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Image;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.ImageService;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/v1/image")
 public class ImageController {
@@ -66,5 +69,12 @@ public class ImageController {
     public ResponseEntity<Page<ImageDHO>> getImagesByApartment(@PathVariable Long id, @RequestParam(defaultValue = "1") int page) {
         return  ResponseEntity.ok(imageService.getObjectsByApartmentId(id, page)
                 .map(image -> modelMapper.map(image, ImageDHO.class)));
+    }
+
+    @GetMapping("/apartment/{id}/all")
+    public ResponseEntity<List<ImageDHO>> getImagesByApartment(@PathVariable Long id) {
+        return  ResponseEntity.ok(imageService.getObjectsByApartmentId(id).stream()
+                .map(image -> modelMapper.map(image, ImageDHO.class))
+                .collect(Collectors.toList()));
     }
 }

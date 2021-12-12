@@ -9,22 +9,33 @@ import pl.kamilnowak.flatrentalmanagementsystem.apartment.repository.ApartmentRe
 import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
 import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
 
+import javax.transaction.Transactional;
+import java.time.LocalDate;
+
 @Service
 @Log4j2
 public class ApartmentService implements CRUDOperation<Apartment, Long> {
 
     private final ApartmentRepository apartmentRepository;
+    private final ImageService imageService;
     private final PageableHelper pageableHelper;
 
     @Autowired
-    public ApartmentService(ApartmentRepository apartmentRepository, PageableHelper pageableHelper) {
+    public ApartmentService(ApartmentRepository apartmentRepository, ImageService imageService, PageableHelper pageableHelper) {
         this.apartmentRepository = apartmentRepository;
+        this.imageService = imageService;
         this.pageableHelper = pageableHelper;
     }
 
     @Override
     public Apartment createObject(Apartment apartment) {
         log.debug("create apartment");
+        apartment.getImages()
+                .stream()
+                .forEach(image -> {
+                    image.setApartment(apartment);
+                    image.setUploadDate(LocalDate.now());
+                });
         return apartmentRepository.save(apartment);
     }
 
@@ -47,12 +58,20 @@ public class ApartmentService implements CRUDOperation<Apartment, Long> {
     }
 
     @Override
+    @Transactional
     public Apartment updateObject(Apartment apartment, Long aLong) {
         log.debug("update apartment id: " + aLong);
         if(apartmentRepository.findById(aLong).isEmpty()) {
             return apartmentRepository.save(apartment);
         }
+        imageService.deleteAllByApartmentId(aLong);
         apartment.setId(aLong);
+        apartment.getImages()
+                .stream()
+                .forEach(image -> {
+                    image.setApartment(apartment);
+                    image.setUploadDate(LocalDate.now());
+                });
         return apartmentRepository.save(apartment);
     }
 

@@ -8,14 +8,14 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class PriceModel {
+public class ExtraCostSum {
     private BigDecimal price;
 
-    public PriceModel() {
+    public ExtraCostSum() {
     }
 
     @Builder
-    public PriceModel(BigDecimal price) {
+    public ExtraCostSum(BigDecimal price) {
         this.price = price;
     }
 }

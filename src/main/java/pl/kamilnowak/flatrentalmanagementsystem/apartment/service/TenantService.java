@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Tenant;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.repository.ExtraCostRepository;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.repository.TenantRepository;
 import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
 import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
+
+import javax.transaction.Transactional;
 
 @Service
 @Log4j2
@@ -15,16 +18,29 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
 
     private final TenantRepository tenantRepository;
     private final PageableHelper pageableHelper;
+    private final ExtraCostRepository extraCostRepository;
 
     @Autowired
-    public TenantService(TenantRepository tenantRepository, PageableHelper pageableHelper) {
+    public TenantService(TenantRepository tenantRepository, PageableHelper pageableHelper, ExtraCostRepository extraCostRepository) {
         this.tenantRepository = tenantRepository;
         this.pageableHelper = pageableHelper;
+        this.extraCostRepository = extraCostRepository;
     }
 
     @Override
+    @Transactional
     public Tenant createObject(Tenant tenant) {
         log.debug("create tenant");
+        tenant.setId(null);
+        tenant.setActive(true);
+        tenant.setPaid(false);
+        tenant.getDocuments()
+                .stream()
+                .forEach(document -> document.setTenant(tenant));
+        tenant.getExtraCosts()
+                .stream()
+                .forEach(extraCost -> extraCost.setTenant(tenant));
+        extraCostRepository.saveAll(tenant.getExtraCosts());
         return tenantRepository.save(tenant);
     }
 
