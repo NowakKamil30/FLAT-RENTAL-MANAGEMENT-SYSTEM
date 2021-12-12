@@ -57,10 +57,10 @@ const TenantCard: React.FC<TenantCardProps> = ({
                 {`END DATE: ${tenant?.endDate ? tenant?.endDate : "NOT KNOW"}`}
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
-                {`START DATE: ${tenant?.startDate}`}
+                {`START DATE: ${tenant?.startDate ? tenant?.startDate : "NOT KNOW"}`}
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
-                {`PAID DATE: ${tenant?.paidDate}`}
+                {`PAID DATE: ${tenant?.paidDate ? tenant?.paidDate : "NOT KNOW"}`}
             </Typography>
         </Typography>
         <CardActions>

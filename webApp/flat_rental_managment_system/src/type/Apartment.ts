@@ -8,5 +8,4 @@ export interface Apartment {
     street: string;
     houseNumber: string;
     userId?: string;
-    isActive?: boolean;
 }

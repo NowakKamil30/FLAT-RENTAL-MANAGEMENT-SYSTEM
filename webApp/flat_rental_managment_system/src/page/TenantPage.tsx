@@ -23,6 +23,7 @@ import TenantCard from '../component/TenantCard';
 import { createExtraCostLabel } from '../util/createExtraCostLabel';
 import { createDocumentLabel } from '../util/createDocumentLabel';
 import { ExtraCostSum } from '../type/ExtraCostSum';
+import CustomListDocumentComponent from '../component/List/CustomListDocumentComponent';
 
 interface IMapDispatcherToProps {}
 
@@ -188,10 +189,10 @@ const TenantPage: React.FC<PropsFromRedux> = ({
                 {fetchingDocuments ? 
                 <CircularProgress color='secondary' size={80} />
                 :
-                <CustomListComponent
+                <CustomListDocumentComponent
                 listTypes={docuemnts.map((document: Document) => ({
                     title: createDocumentLabel(document),
-                    path: '/tenant/' + document.id,
+                    path: document.document,
                     icon: <ArticleIcon color="primary" />
                 })) as ListType[]}
                 title='documents'
@@ -205,7 +206,7 @@ const TenantPage: React.FC<PropsFromRedux> = ({
                 :
                 <CustomListComponent
                 listTypes={extraCosts.map((extraCost: ExtraCost) => ({
-                    title: createExtraCostLabel(extraCost, tenant.currency?.name),
+                    title: createExtraCostLabel(extraCost, tenant.currency?.name ? tenant.currency?.name : ''),
                     path: '/tenant/' + extraCost.id,
                     icon: <AttachMoneyIcon color="primary" />
                 })) as ListType[]}

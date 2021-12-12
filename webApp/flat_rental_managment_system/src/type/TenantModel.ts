@@ -1,3 +1,6 @@
+import { ExtraCost } from "./ExtraCost";
+import { Document } from './Document';
+
 export interface TenantModel {
     id: number;
     firstName: string;
@@ -5,14 +8,19 @@ export interface TenantModel {
     phoneNumber: string;
     mail: string;
     fee: number;
-    isPaid: boolean;
-    isActive: boolean;
+    isPaid?: boolean;
+    isActive?: boolean;
     description: string;
-    endDate: string;
+    endDate?: string;
     startDate: string;
-    paidDate: string;
+    paidDate?: string;
+    documents?: Document[];
+    extraCosts?: ExtraCost[];
     currency: {
-        id: number;
-        name: string;
+        id: number | string;
+        name?: string;
+    },
+    apartment?: {
+        id: number | string;
     }
 }

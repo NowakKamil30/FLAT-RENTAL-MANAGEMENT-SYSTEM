@@ -1,62 +1,62 @@
 import React, { useState } from 'react';
-import ImageInput from './ImageInput';
-import { ImageModel } from '../../type/ImageModel';
 import { Box } from '@mui/system';
 import { Button } from '@mui/material';
 import Snackbar from '../Snackbar';
 import { ErrorModel } from '../../type/ErrorModel';
+import { Document } from '../../type/Document';
+import DocumentInput from './DocumentInput';
 
-export interface ImageInputControllerProps {
-    images: ImageModel[];
-    setImages: (images: ImageModel[]) => void;
+export interface DocumentInputControllerProps {
+    documents: Document[];
+    setDocuments: (documents: Document[]) => void;
 }
 
-const ImageInputController: React.FC<ImageInputControllerProps> = ({
-    images,
-    setImages
+const DocumentInputController: React.FC<DocumentInputControllerProps> = ({
+    documents,
+    setDocuments
 }): JSX.Element => {
     const [error, setError] = useState<ErrorModel>({message: ''});
     return (
         <>
         {
-            !!images ?
+            !!documents ?
             <Box
             component='div'>
                 <Button 
                 color='secondary'
-                disabled={images[images.length - 1]?.photo.length < 1}
+                disabled={documents[documents.length - 1]?.document.length < 1}
                 onClick={() => {
-                    setImages([...images, {photo: '', title: '', id: Math.random()}]);
+                    setDocuments([...documents, {document: '', name: '', id: Math.random()}]);
                 }}
                 >
-                    Add next image
+                    Add next Document
                 </Button>
-                {images?.map((image, i) => <ImageInput
-                    key={image.id}
-                    imageModel={image}
+                {documents?.map((document, i) => <DocumentInput
+                    key={document.id}
+                    document={document}
                     onChange={(e) => {
                         const fileReader = new FileReader();
                         if(e.target.files.length > 0) {
                             if (e.target.files[0].size > 4194304) {
-                                setError({...error, message: 'image is to big'})
+                                setError({...error, message: 'document is to big'})
                                 return null;
                             } else if (e.target.files[0].size <= 50) {
-                                setError({...error, message: 'image is to small'})
+                                setError({...error, message: 'document is to small'})
                                 return null;
-                            } else if (!String(e.target.files[0].type).startsWith('image')) {
-                                setError({...error, message: 'it is not image'})
-                                return null;
+                            } else if (!String(e.target.files[0].type).startsWith('application')) {
+                                 setError({...error, message: 'it is not document'})
+                                 return null;
                             }
                             fileReader.readAsDataURL(e.target.files[0]);
                             fileReader.onload = () => {
-                                images[images.findIndex(imageItem => image.id === imageItem.id)] = {photo: fileReader.result+'', title: e.target.files[0].name, id: image.id};
-                                setImages([...images]);
+                                documents[documents.findIndex(documentItem => document.id === documentItem.id)] = {document: fileReader.result+'', name: e.target.files[0].name, id: document.id}
+                                setDocuments([...documents]);
                             }
                         }
                     }}
                     onDeleteClick={() => {
-                        images.splice(images.findIndex(imageItem => image.id === imageItem.id), 1)
-                        setImages([...images])
+                        documents.splice(documents.findIndex(documentItem => documentItem.id === document.id), 1)
+                        setDocuments([...documents])
                     }}
                 />)}
                 <Snackbar
@@ -74,4 +74,4 @@ const ImageInputController: React.FC<ImageInputControllerProps> = ({
     )
 };
 
-export default ImageInputController;
+export default DocumentInputController;

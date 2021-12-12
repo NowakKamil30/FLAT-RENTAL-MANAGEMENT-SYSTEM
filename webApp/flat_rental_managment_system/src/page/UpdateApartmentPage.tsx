@@ -40,7 +40,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 const UpdateApartmentPage: React.FC<PropsFromRedux> = ({
     loginModel
 }): JSX.Element => {
-  const {apartmentId} = useParams();
+    const {apartmentId} = useParams();
     const {root, form, input} = useStyles();
     const [fetching, setFetching] = useState<boolean>(false);
     const [isSuccessMessage, setIsSuccessMessage] = useState<boolean>(false);

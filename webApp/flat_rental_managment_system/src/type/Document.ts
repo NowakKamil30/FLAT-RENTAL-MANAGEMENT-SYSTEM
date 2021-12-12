@@ -1,8 +1,8 @@
 import { TenantModel } from "./TenantModel";
 
 export interface Document {
-    id: number;
+    id?: number;
     name: string;
     document: string;
-    tenant: TenantModel;
+    tenant?: TenantModel;
 }

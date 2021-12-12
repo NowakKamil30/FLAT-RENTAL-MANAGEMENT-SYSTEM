@@ -14,7 +14,8 @@
             "imageByApartment": "/image/apartment",
             "tenant": "/tenant",
             "documentForTenant": "/document/tenant",
-            "extraCostsByTenant": "/extraCost/tenant"
+            "extraCostsByTenant": "/extraCost/tenant",
+            "getAllCurrency": "/currency/all"
         },
 
         "layout": {

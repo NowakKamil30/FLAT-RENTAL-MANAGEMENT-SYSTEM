@@ -175,7 +175,7 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
                 title='my tenents'
                 maxPage={maxPage}
                 page={page}
-                onCreactItemClick={() => {}}
+                onCreactItemClick={() => {navigate('/create-tenant/' + apartmentId)}}
                 onPageChange={(event, value) => setPage(value)}
                 />
                 }

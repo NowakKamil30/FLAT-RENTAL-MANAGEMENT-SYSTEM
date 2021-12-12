@@ -19,6 +19,7 @@ import ApartamentPage from '../page/ApartamentPage';
 import CreateApartmentPage from '../page/CreateApartmentPage';
 import UpdateApartmentPage from '../page/UpdateApartmentPage';
 import TenantPage from '../page/TenantPage';
+import CreateTenantPage from '../page/CreateTenantPage';
 
 interface IMapStateToProps {
     role: Role;
@@ -189,6 +190,25 @@ const MainRouter: React.FC<PropsFromRedux> = ({
                     isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
                     >
                         <TenantPage/>
+                    </PrivateRoute>
+                    }
+                />
+            </Route>
+            <Route path='/create-tenant' element={
+                <PrivateRoute
+                redirectPath='/login'
+                isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                >
+                    <CreateTenantPage/>
+                </PrivateRoute>
+            }
+            > 
+                <Route path=':apartmentId' element={
+                    <PrivateRoute
+                    redirectPath='/login'
+                    isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                    >
+                        <CreateTenantPage/>
                     </PrivateRoute>
                     }
                 />

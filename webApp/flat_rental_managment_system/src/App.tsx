@@ -8,6 +8,8 @@ import { createTheme } from '@mui/material';
 import { red, teal } from '@mui/material/colors';
 import reducers from './store/reducer';
 import AppRouter from './router/AppRouter';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 const theme = createTheme({
   palette: {
@@ -31,7 +33,9 @@ function App() {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
           <AppRouter/>
+        </LocalizationProvider>
       </ThemeProvider>
     </Provider>
   );
