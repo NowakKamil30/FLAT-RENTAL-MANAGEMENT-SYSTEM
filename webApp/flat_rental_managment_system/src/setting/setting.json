@@ -11,7 +11,10 @@
             "apartmentsByUserData": "/apartment/userData",
             "apartment": "/apartment",
             "tenantByApartment": "/tenant/apartment",
-            "imageByApartment": "/image/apartment"
+            "imageByApartment": "/image/apartment",
+            "tenant": "/tenant",
+            "documentForTenant": "/document/tenant",
+            "extraCostsByTenant": "/extraCost/tenant"
         },
 
         "layout": {

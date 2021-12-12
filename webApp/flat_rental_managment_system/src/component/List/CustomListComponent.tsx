@@ -12,7 +12,7 @@ export interface CustomListComponentProps {
     title: string;
     page: number;
     maxPage: number;
-    onCreactItemClick: () => void;
+    onCreactItemClick?: () => void;
     onPageChange: (event: any, value: any) => void;
 }
 
@@ -38,11 +38,16 @@ const CustomListComponent: React.FC<CustomListComponentProps> = ({
                 className={styles.title}> 
                     {title.toUpperCase()}
                 </Box>
+                {!!onCreactItemClick 
+                ?
                 <Button onClick={onCreactItemClick}>
                     <AddCircleOutlineIcon 
                     color='secondary'
                     fontSize='large'/>
                 </Button>
+                :
+                null
+                }
             </Box>
             <CustomList
             listTypes={listTypes}
@@ -65,6 +70,8 @@ const useStyles = makeStyles((theme: Theme) =>({
       },
       header: {
           display: 'flex',
+          alignContent: 'center',
+          justifyContent: 'center'
       }
 
     })

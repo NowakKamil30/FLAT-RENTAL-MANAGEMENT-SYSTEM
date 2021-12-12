@@ -19,7 +19,6 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
     onPageChange
 }): JSX.Element => {
     const styles = useStyles();
-    console.log(images);
     return (
         <Box
         component='div'
