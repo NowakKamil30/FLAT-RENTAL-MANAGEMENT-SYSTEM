@@ -82,6 +82,7 @@ public class MapperConfig {
                         map().setApartmentId(source.getApartment().getId());
                         map().setCurrency(source.getCurrency());
                         map().setExtraCosts(source.getExtraCosts());
+                        map().setDayToPay(source.getDayToPay());
                     }
                 });
         modelMapper.createTypeMap(LoginUser.class, LoginUserDHO.class)

@@ -45,12 +45,14 @@ public class TenantDHO {
     private Currency currency;
     @JsonView(Views.Private.class)
     private List<ExtraCost> extraCosts;
+    @JsonView(Views.Private.class)
+    private Integer dayToPay;
 
     public TenantDHO() {
     }
 
     @Builder
-    public TenantDHO(Long id, String firstName, String lastName, String phoneNumber, String mail, BigDecimal fee, boolean isPaid, boolean isActive, String description, LocalDate endDate, LocalDate startDate, LocalDate paidDate, Long apartmentId, Currency currency, List<ExtraCost> extraCosts) {
+    public TenantDHO(Long id, String firstName, String lastName, String phoneNumber, String mail, BigDecimal fee, boolean isPaid, boolean isActive, String description, LocalDate endDate, LocalDate startDate, LocalDate paidDate, Long apartmentId, Currency currency, List<ExtraCost> extraCosts, Integer dayToPay) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -66,5 +68,6 @@ public class TenantDHO {
         this.apartmentId = apartmentId;
         this.currency = currency;
         this.extraCosts = extraCosts;
+        this.dayToPay = dayToPay;
     }
 }

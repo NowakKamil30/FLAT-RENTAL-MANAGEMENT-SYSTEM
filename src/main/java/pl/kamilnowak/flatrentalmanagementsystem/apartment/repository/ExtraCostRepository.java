@@ -12,4 +12,5 @@ import java.util.List;
 public interface ExtraCostRepository extends JpaRepository<ExtraCost, Long> {
     List<ExtraCost> getAllByTenant_Id(Long id);
     Page<ExtraCost> getAllByTenant_Id(Long id, Pageable pageable);
+    void deleteAllByTenant_Id(Long id);
 }

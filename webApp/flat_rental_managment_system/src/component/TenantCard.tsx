@@ -62,6 +62,16 @@ const TenantCard: React.FC<TenantCardProps> = ({
             <Typography className={classes.pos} color="textSecondary">
                 {`PAID DATE: ${tenant?.paidDate ? tenant?.paidDate : "NOT KNOW"}`}
             </Typography>
+            {
+                !!tenant?.dayToPay 
+                ?
+                <Typography className={classes.pos} color="textSecondary">
+                    {`PAID DAY: ${tenant?.dayToPay}`}
+                </Typography>
+                :
+                null
+            }
+
         </Typography>
         <CardActions>
           <Button 
@@ -80,6 +90,7 @@ export default TenantCard;
 const useStyles = makeStyles({
     root: {
       minWidth: 500,
+      maxWidth: 1000
     },
     bullet: {
       display: 'inline-block',

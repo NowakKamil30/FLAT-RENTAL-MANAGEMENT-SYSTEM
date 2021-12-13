@@ -81,4 +81,9 @@ public class ExtraCostService implements CRUDOperation<ExtraCost, Long> {
                 .price(extraPriceSum)
                 .build();
     }
+
+    public void deleteAllByTenantId(Long aLong) {
+        log.debug("delete all extra costs by tenant: " + aLong);
+        extraCostRepository.deleteAllByTenant_Id(aLong);
+    }
 }

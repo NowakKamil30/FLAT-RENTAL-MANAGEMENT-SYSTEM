@@ -4,13 +4,19 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Currency;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.ExtraCost;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Tenant;
-import pl.kamilnowak.flatrentalmanagementsystem.apartment.repository.ExtraCostRepository;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.repository.TenantRepository;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
+import pl.kamilnowak.flatrentalmanagementsystem.mail.exception.EmailSendException;
+import pl.kamilnowak.flatrentalmanagementsystem.mail.service.MailActionService;
 import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
 import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Service
 @Log4j2
@@ -18,13 +24,19 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
 
     private final TenantRepository tenantRepository;
     private final PageableHelper pageableHelper;
-    private final ExtraCostRepository extraCostRepository;
+    private final MailActionService mailActionService;
+    private final CurrencyService currencyService;
+    private final ExtraCostService extraCostService;
+    private final DocumentService documentService;
 
     @Autowired
-    public TenantService(TenantRepository tenantRepository, PageableHelper pageableHelper, ExtraCostRepository extraCostRepository) {
+    public TenantService(TenantRepository tenantRepository, PageableHelper pageableHelper, MailActionService mailActionService, CurrencyService currencyService, ExtraCostService extraCostService, DocumentService documentService) {
         this.tenantRepository = tenantRepository;
         this.pageableHelper = pageableHelper;
-        this.extraCostRepository = extraCostRepository;
+        this.mailActionService = mailActionService;
+        this.currencyService = currencyService;
+        this.extraCostService = extraCostService;
+        this.documentService = documentService;
     }
 
     @Override
@@ -39,9 +51,27 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
                 .forEach(document -> document.setTenant(tenant));
         tenant.getExtraCosts()
                 .stream()
-                .forEach(extraCost -> extraCost.setTenant(tenant));
-        extraCostRepository.saveAll(tenant.getExtraCosts());
-        return tenantRepository.save(tenant);
+                .forEach(extraCost -> {
+                    extraCost.setTenant(tenant);
+                    extraCost.setExtraCost(extraCost.getExtraCost().setScale(2, RoundingMode.HALF_UP));
+                });
+        tenant.setFee(tenant.getFee().setScale(2, RoundingMode.HALF_UP));
+        Tenant tenantSaved = tenantRepository.save(tenant);
+        BigDecimal extraCostSum = BigDecimal.ZERO;
+        for (ExtraCost extraCost: tenant.getExtraCosts()) {
+            extraCostSum = extraCostSum.add(extraCost.getExtraCost());
+        }
+        Currency currency = currencyService.getObjectById(tenantSaved.getCurrency().getId());
+        try {
+            mailActionService.sendMail(
+                    tenant.getMail(),
+                    "welcome " + tenant.getFirstName() + "!",
+                    " Your fee (Basic: " + tenant.getFee() + ") (Extra costs: " + extraCostSum +")" + currency.getName()
+            );
+        } catch (EmailSendException e) {
+            throw new NotFoundException("");
+        }
+        return tenantSaved;
     }
 
     @Override
@@ -63,13 +93,41 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
     }
 
     @Override
+    @Transactional
     public Tenant updateObject(Tenant tenant, Long aLong) {
         log.debug("update tenant id: " + aLong);
         if(tenantRepository.findById(aLong).isEmpty()) {
-            return tenantRepository.save(tenant);
+            return createObject(tenant);
         }
+        documentService.deleteAllByTenantId(aLong);
+        extraCostService.deleteAllByTenantId(aLong);
         tenant.setId(aLong);
-        return tenantRepository.save(tenant);
+        tenant.getDocuments()
+                .stream()
+                .forEach(document -> document.setTenant(tenant));
+        tenant.getExtraCosts()
+                .stream()
+                .forEach(extraCost -> {
+                    extraCost.setTenant(tenant);
+                    extraCost.setExtraCost(extraCost.getExtraCost().setScale(2, RoundingMode.HALF_UP));
+                });
+        tenant.setFee(tenant.getFee().setScale(2, RoundingMode.HALF_UP));
+        Tenant tenantSaved = tenantRepository.save(tenant);
+        BigDecimal extraCostSum = BigDecimal.ZERO;
+        for (ExtraCost extraCost: tenant.getExtraCosts()) {
+            extraCostSum = extraCostSum.add(extraCost.getExtraCost());
+        }
+        Currency currency = currencyService.getObjectById(tenantSaved.getCurrency().getId());
+        try {
+            mailActionService.sendMail(
+                    tenant.getMail(),
+                    "welcome(change fee value)" + tenant.getFirstName() + "!",
+                    "your new fee (Basic: " + tenant.getFee() + ") (Extra costs: " + extraCostSum +")" + currency.getName()
+            );
+        } catch (EmailSendException e) {
+            throw new NotFoundException("");
+        }
+        return tenantSaved;
     }
 
     public Page<Tenant> getObjectsByApartmentId(Long aLong, int page) {

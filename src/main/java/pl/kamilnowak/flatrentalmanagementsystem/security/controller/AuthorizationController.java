@@ -12,7 +12,7 @@ import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.TokenIsNotValidException;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.TokenIsTooOldException;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.UserCannotBeCreatedException;
-import pl.kamilnowak.flatrentalmanagementsystem.mail.annotation.MailActionService;
+import pl.kamilnowak.flatrentalmanagementsystem.mail.service.MailActionService;
 import pl.kamilnowak.flatrentalmanagementsystem.mail.exception.EmailSendException;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
 import pl.kamilnowak.flatrentalmanagementsystem.security.model.ActiveModel;

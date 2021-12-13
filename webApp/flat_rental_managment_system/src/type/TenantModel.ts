@@ -22,5 +22,6 @@ export interface TenantModel {
     },
     apartment?: {
         id: number | string;
-    }
+    };
+    dayToPay?: number;
 }

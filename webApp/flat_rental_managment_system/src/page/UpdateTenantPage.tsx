@@ -1,4 +1,4 @@
-import { CircularProgress, DialogActions, TextareaAutosize, TextField, Theme } from '@mui/material';
+import { Button, CircularProgress, DialogActions, FormControlLabel, FormGroup, TextareaAutosize, TextField, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
 import { useFormik } from 'formik';
@@ -22,9 +22,9 @@ import { TenantModel } from '../type/TenantModel';
 import { useParams } from 'react-router';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import CustomSelect from '../component/CustomSelect';
-import { string } from 'yup/lib/locale';
 import DocumentInputController from '../component/documentInput/DocumentInputController';
 import ExtraCostInputController from '../component/ExtraCostInput/ExtraCostInputController';
+import Switch from '@mui/material/Switch';
 
 interface IMapDispatcherToProps {}
 
@@ -42,24 +42,34 @@ const connector = connect(mapStateToProps, mapDispatcherToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const CreateTenantPage: React.FC<PropsFromRedux> = ({
+const UpdateTenantPage: React.FC<PropsFromRedux> = ({
     loginModel
 }): JSX.Element => {
-    const {apartmentId} = useParams();
+    const {tenantId} = useParams();
     const {root, form, input} = useStyles();
     const [fetchingCurrencies, setFetchingCurrencies] = useState<boolean>(false);
+    const [fetchingTenant, setFetchingTenant] = useState<boolean>(false);
+    const [fetchingDocuments, setFetchingDocuments] = useState<boolean>(false);
+    const [fetchingExtraCosts, setFetchingExtraCosts] = useState<boolean>(false);
     const [fetching, setFetching] = useState<boolean>(false);
     const [isSuccessMessage, setIsSuccessMessage] = useState<boolean>(false);
     const [error, setError] = useState<ErrorModel>({message: ''});
     const [errorCurrencies, setErrorCurrencies] = useState<ErrorModel>({message: ''});
+    const [errorTenant, setErrorTenant] = useState<ErrorModel>({message: ''});
+    const [errorDocuments, setErrorDocuments] = useState<ErrorModel>({message: ''});
+    const [errorExtraCosts, setErrorExtraCosts] = useState<ErrorModel>({message: ''});
     const [documents, setDocuments] = useState<Document[]>([]);
     const [extraCosts, setExtraCosts] = useState<ExtraCost[]>([]);
     const [curriencies, setCurriencies] = useState<Currency[]>([]);
     const [currency, setCurrency] = useState<string>('')
     const [startDate, setStartDate] = useState<Date>(new Date(Date.now()));
+    const [endDate, setEndDate] = useState<Date | null | undefined>(null);
+    const [paidDate, setPaidDate] = useState<Date | null | undefined>(null);
+    const [isActive, setIsActive] = useState<boolean | undefined>(false);
+    const [isPaid, setIsPaid] = useState<boolean | undefined>(false);
     const [description, setDescription] = useState<string>('');
 
-    const createTenant = async (Tenant: TenantModel) => {
+    const updateTenant = async (Tenant: TenantModel) => {
         const { backendURL, tenant } = setting.url;
         setFetching(true);
         try {
@@ -69,7 +79,7 @@ const CreateTenantPage: React.FC<PropsFromRedux> = ({
                         Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
                     }
                   }
-                await Axios.post(backendURL + tenant, Tenant, config);
+                await Axios.put(backendURL + tenant + '/' + tenantId, Tenant, config);
                 setIsSuccessMessage(true);
             }
         } catch (e) {
@@ -78,6 +88,73 @@ const CreateTenantPage: React.FC<PropsFromRedux> = ({
             setFetching(false);
         }
         
+    }
+
+    const getTenant = async() => {
+        const { backendURL, tenant } = setting.url;
+        setFetchingTenant(true);
+        try {
+            if (loginModel.id !== -1) {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
+                    }
+                  }
+                const response = await Axios.get(backendURL + tenant + '/' + tenantId, config);
+                const tenantModel: TenantModel = response.data as TenantModel;                
+                setValues({...tenantModel});
+                setIsActive(tenantModel.isActive);
+                setPaidDate(tenantModel.paidDate ? new Date(tenantModel.paidDate) : null);
+                setStartDate(tenantModel.startDate ? new Date(tenantModel.startDate) : new Date(Date.now()));
+                setEndDate(tenantModel.endDate ? new Date(tenantModel.endDate) : null);
+                setDescription(tenantModel.description);
+                setCurrency(tenantModel.currency.id+'');
+            }
+        } catch (e) {
+            setErrorTenant({message: (e as Error).message});
+        } finally {
+            setFetchingTenant(false);
+        } 
+    }
+
+    const getDocuments = async () => {
+        const { backendURL, documentForTenant } = setting.url;
+        setFetchingDocuments(true);
+        try {
+            if (loginModel.id !== -1) {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
+                    }
+                  }
+                const response = await Axios.get(backendURL + documentForTenant + '/' + tenantId + '/all', config);
+                setDocuments(response.data);
+            }
+        } catch (e) {
+            setErrorDocuments({message: (e as Error).message});
+        } finally {
+            setFetchingDocuments(false);
+        }
+    }
+
+    const getExtraCosts = async () => {
+        const { backendURL, extraCostsByTenant } = setting.url;
+        setFetchingExtraCosts(true);
+        try {
+            if (loginModel.id !== -1) {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
+                    }
+                  }
+                const response = await Axios.get(backendURL + extraCostsByTenant + '/' + tenantId + '/all', config);
+                setExtraCosts(response.data);
+            }
+        } catch (e) {
+            setErrorExtraCosts({message: (e as Error).message});
+        } finally {
+            setFetchingExtraCosts(false);
+        }
     }
 
     const getCurrencies = async () => {
@@ -98,12 +175,14 @@ const CreateTenantPage: React.FC<PropsFromRedux> = ({
         } finally {
             setFetchingCurrencies(false);
         }
-        
     }
 
     useEffect(() => {
         getCurrencies();
-    }, [loginModel, apartmentId]);
+        getTenant();
+        getExtraCosts();
+        getDocuments();
+    }, [loginModel, tenantId]);
     
 
     const initialValues: TenantModel = {
@@ -217,30 +296,31 @@ const CreateTenantPage: React.FC<PropsFromRedux> = ({
                     id: currency
                 },
                 startDate: startDate.toISOString(),
-                apartment: {
-                    id: apartmentId ? apartmentId : '0'
-                }
+                paidDate: paidDate?.toISOString(),
+                endDate: endDate?.toISOString(),
+                isActive: isActive,
+                isPaid: isPaid
             }
-            createTenant(tenantToSend);   
+            updateTenant(tenantToSend);  
         }    
       });
 
 
       return (
         <>
-        {!!apartmentId 
+        {!!tenantId 
         ?  
         isSuccessMessage ?
             <SuccessMessage
-            title='Congratulation! create new tenant!'
-            path={'/apartment/' + apartmentId}
-            linkText='go back to apartment page'
+            title='Congratulation! Update tenant!'
+            path={'/tenant/' + tenantId}
+            linkText='go back to tenant page'
             />
             :
             <Box
             component='div'
             className={root}>
-                {fetchingCurrencies 
+                {fetchingCurrencies || fetchingTenant
                 ?
                 <CircularProgress color='secondary' size={80} />
                 :
@@ -311,15 +391,6 @@ const CreateTenantPage: React.FC<PropsFromRedux> = ({
                 type='number'
                 helperText={ errors.fee }
                 />
-                <CustomSelect
-                title='currency'
-                label='currency'
-                defaultValue='None'
-                helperText='required'
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                collection={curriencies.map(currency => ({key: currency.name, value: currency.id}))}
-                />
                 <TextField
                 id='dayToPay'
                 name='dayToPay'
@@ -333,6 +404,62 @@ const CreateTenantPage: React.FC<PropsFromRedux> = ({
                 type='number'
                 helperText={ errors.dayToPay }
                 />
+                <FormGroup>
+                    <FormControlLabel control={<Switch
+                checked={isActive}
+                size='medium'
+                color='secondary'
+                onChange={(e) => setIsActive(e.target.checked)}
+                inputProps={{ 'aria-label': 'controlled' }}
+                />}
+                label={isActive ? 'tenant active' : 'tenant inactive'}/>
+                </FormGroup>
+                <FormGroup>
+                <FormControlLabel control={<Switch
+                checked={isPaid}
+                size='medium'
+                color='secondary'
+                onChange={(e) => setIsPaid(e.target.checked)}
+                inputProps={{ 'aria-label': 'controlled' }}
+                />}
+                label={isPaid ? 'is paid' : 'is not paid'}/>
+                </FormGroup>
+                <TextareaAutosize
+                id='description'
+                name='description'
+                aria-label='description'
+                minRows={3}
+                value={description}
+                style={{marginTop: 10, marginBottom: 10}}
+                onChange={(e)=>setDescription(e.target.value)}
+                placeholder="description"
+                />
+                <MobileDatePicker
+                label="end date"
+                inputFormat="MM/dd/yyyy"
+                value={endDate}
+                onChange={(value) => setEndDate(value)}
+                renderInput={(params) => <TextField {...params} />}
+                />
+                <Button
+                color='secondary'
+                onClick={() => setEndDate(null)}
+                >
+                    unset end date
+                </Button>
+                <MobileDatePicker
+                label="paid date"
+                inputFormat="MM/dd/yyyy"
+                value={paidDate}
+                onChange={(value) => setPaidDate(value)}
+                renderInput={(params) => <TextField {...params} />}
+                />
+                <Button
+                color='secondary'
+                onClick={() => setPaidDate(null)}
+                >
+                    unset paid date
+                </Button>
                 <MobileDatePicker
                 label="start date"
                 inputFormat="MM/dd/yyyy"
@@ -340,14 +467,14 @@ const CreateTenantPage: React.FC<PropsFromRedux> = ({
                 onChange={(value) => setStartDate(value ? value : new Date(Date.now()))}
                 renderInput={(params) => <TextField {...params} />}
                 />
-                <TextareaAutosize
-                id='description'
-                name='description'
-                aria-label='description'
-                minRows={3}
-                value={description}
-                onChange={(e)=>setDescription(e.target.value)}
-                placeholder="description"
+                <CustomSelect
+                title='currency'
+                label='currency'
+                defaultValue='None'
+                helperText='required'
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                collection={curriencies.map(currency => ({key: currency.name, value: currency.id}))}
                 />
                 <DocumentInputController
                 documents={documents}
@@ -414,5 +541,4 @@ const useStyles = makeStyles((theme: Theme) =>({
 ));
 
 
-export default connector(CreateTenantPage);
-
+export default connector(UpdateTenantPage);

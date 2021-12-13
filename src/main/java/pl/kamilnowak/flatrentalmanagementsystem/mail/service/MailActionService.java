@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.mail.annotation;
+package pl.kamilnowak.flatrentalmanagementsystem.mail.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +69,19 @@ public class MailActionService {
                     configInfo.getPageURL() + "/" + configInfo.getChangePassword() + "?token=" + verificationToken.getToken());
         } catch (MessagingException e) {
             verificationTokenService.deleteById(verificationToken.getId());
+            throw new EmailSendException("problem with sending email");
+        }
+    }
+
+    public void sendMail(String mail, String title, String text) throws EmailSendException {
+        log.debug("send mail");
+        try {
+            mailService.sendMail(
+                    mail,
+                    title,
+                    text
+            );
+        } catch (MessagingException e) {
             throw new EmailSendException("problem with sending email");
         }
     }

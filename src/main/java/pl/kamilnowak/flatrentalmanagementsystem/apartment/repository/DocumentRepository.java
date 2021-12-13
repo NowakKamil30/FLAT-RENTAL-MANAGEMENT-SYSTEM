@@ -12,4 +12,5 @@ import java.util.List;
 public interface DocumentRepository extends JpaRepository<Document, Long> {
     Page<Document> getDocumentsByTenant_Id(Long id, Pageable pageable);
     List<Document> getDocumentsByTenant_Id(Long id);
+    void deleteAllByTenant_Id(Long id);
 }

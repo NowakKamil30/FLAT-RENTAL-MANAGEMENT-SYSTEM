@@ -3,10 +3,7 @@ package pl.kamilnowak.flatrentalmanagementsystem.apartment.entity;
 import lombok.Builder;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -47,6 +44,11 @@ public class Tenant {
     private LocalDate startDate;
     @Column(name = "paid_date")
     private LocalDate paidDate;
+    @NotNull
+    @Column(name = "day_to_pay")
+    @Min(0)
+    @Max(31)
+    private Integer dayToPay;
     @ManyToOne
     private Apartment apartment;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tenant")
@@ -60,7 +62,7 @@ public class Tenant {
     }
 
     @Builder
-    public Tenant(Long id, String firstName, String lastName, String phoneNumber, String mail, BigDecimal fee, boolean isPaid, boolean isActive, String description, LocalDate endDate, LocalDate startDate, LocalDate paidDate, Apartment apartment, List<Document> documents, Currency currency, List<ExtraCost> extraCosts) {
+    public Tenant(Long id, String firstName, String lastName, String phoneNumber, String mail, BigDecimal fee, boolean isPaid, boolean isActive, String description, LocalDate endDate, LocalDate startDate, LocalDate paidDate, Apartment apartment, List<Document> documents, Currency currency, List<ExtraCost> extraCosts, Integer dayToPay) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -77,6 +79,7 @@ public class Tenant {
         this.documents = documents;
         this.currency = currency;
         this.extraCosts = extraCosts;
+        this.dayToPay = dayToPay;
     }
 
     public Long getId() {
@@ -205,5 +208,13 @@ public class Tenant {
 
     public void setExtraCosts(List<ExtraCost> extraCosts) {
         this.extraCosts = extraCosts;
+    }
+
+    public Integer getDayToPay() {
+        return dayToPay;
+    }
+
+    public void setDayToPay(Integer dayToPay) {
+        this.dayToPay = dayToPay;
     }
 }
