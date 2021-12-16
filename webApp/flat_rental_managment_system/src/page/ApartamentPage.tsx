@@ -18,11 +18,10 @@ import { TenantModel } from '../type/TenantModel';
 import PersonIcon from '@mui/icons-material/Person';
 import { createTenantLabel } from '../util/createTenantLabel';
 import { ListType } from '../component/List/ListType';
-import { title } from 'process';
-import CustomList from '../component/List/CustomList';
 import CustomListComponent from '../component/List/CustomListComponent';
 import { ImageModel } from '../type/ImageModel';
 import ImageGallery from '../component/ImagesGallery';
+import DeleteModal, { DeleteModalProps } from '../component/modal/DeleteModal';
 
 interface IMapDispatcherToProps {}
 
@@ -46,6 +45,16 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
     const {root} = useStyles();
     const navigate = useNavigate();
     const {apartmentId} = useParams();
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [modal, setModal] = useState<DeleteModalProps>({
+        fetching: false,
+        onClose: () => setShowModal(false),
+        onConfirm: () => {},
+        title: '',
+        confirmButtonTitle: 'delete',
+        cancelButtonTitle: 'cancel',
+        showConfirmButton: true, 
+    });
     const [maxPage, setMaxPage] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
     const [maxPageForImages, setMaxPageForImages] = useState<number>(0);
@@ -54,6 +63,9 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
     const [errorForImages, setErrorForImages] = useState<ErrorModel>({message: ''});
     const [fetchingApartment, setFetchingApartment] = useState<boolean>(false);
     const [fetchingForImages, setFetchingForImages] = useState<boolean>(false);
+    const [sendReminderInfo, setSendReminder] = useState<ErrorModel>({message: ''});
+    const [fetchingSendReminder, setFetchingSendReminder] = useState<boolean>(false);
+    const [errorReminder, setErrorReminder] = useState<ErrorModel>({message: ''});
     const [apartment, setApartment] = useState<Apartment>({
         name: '',
         description: '',
@@ -89,6 +101,26 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
         }
     };
 
+    const sendReminder = async (): Promise<void> => {
+        const { backendURL, sendReminder } = setting.url;
+        setFetchingSendReminder(true);
+        try {
+            if (!!apartmentId) {
+                let config = {
+                    headers: {
+                        Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
+                    }
+                  }
+                await Axios.get(backendURL + sendReminder + '/' + apartmentId, config);
+                setSendReminder({message: 'send reminder!!'});
+            }
+        } catch (e) {
+            setErrorReminder({message: (e as Error).message});
+        } finally {
+            setFetchingSendReminder(false);
+        }
+    };
+
     const getTenents = async (): Promise<void> => {
         const { backendURL, tenantByApartment } = setting.url;
         setFetchingTenants(true);
@@ -111,6 +143,27 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
             setFetchingTenants(false);
         }
     };
+
+    const deleteTenant = async(id: number) => {
+        const { backendURL, tenant } = setting.url;
+        setModal({...modal, fetching: true});
+        let response;
+        try {
+            if (loginModel.id !== -1) {
+                let config = {
+                    headers: {
+                        Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
+                    }
+                  }
+                response = await Axios.delete(backendURL + tenant + '/' + id, config);
+                getTenents();
+            }
+        } catch (e) {
+            setErrorTenants({message: (e as Error).message});
+        } finally {
+            setModal({...modal, fetching: false, showConfirmButton: false, title: response?.status == 200 ? 'tenant was deleted' : 'error :/'});
+        }
+    }
 
     const getImages = async (): Promise<void> => {
         const { backendURL, imageByApartment } = setting.url;
@@ -159,8 +212,11 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
                 <ApartmentCard
                 title='APARTMENT'
                 buttonTitle='edit'
+                fetching={fetchingSendReminder}
                 onButtonClick={() => navigate('/update-apartment/' + apartmentId)}
                 apartment={apartment}
+                secondButtonTitle='send reminder'
+                onSecondButtonClick={() => sendReminder()}
                 />
                 }
                 {fetchingTenants ? 
@@ -170,6 +226,16 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
                 listTypes={tenants.map((tenant: TenantModel) => ({
                     title: createTenantLabel(tenant),
                     path: '/tenant/' + tenant.id,
+                    onDeleteAction: () => {
+                        setShowModal(true);
+                        setModal({
+                        ...modal,
+                        showConfirmButton: true,
+                        fetching: false,
+                        title: `Do you want to delete tenant ${tenant.firstName + ' '  + tenant.lastName}?`,
+                        onConfirm: () => {
+                            deleteTenant(tenant.id);
+                        }})},
                     icon: <PersonIcon color="primary" />
                 })) as ListType[]}
                 title='my tenents'
@@ -212,6 +278,20 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
             title={errorForImages.message}
             onClose={() => {setErrorForImages({...errorForImages, message: ''})}}
             />
+            <Snackbar
+            open={ errorReminder.message.length > 0 }
+            autoHideDuration={ 5000 }
+            severity='error'
+            title={errorReminder.message}
+            onClose={() => {setErrorReminder({...errorReminder, message: ''})}}
+            />
+            <Snackbar
+            open={ sendReminderInfo.message.length > 0 }
+            autoHideDuration={ 8000 }
+            severity='success'
+            title={sendReminderInfo.message}
+            onClose={() => {setSendReminder({...sendReminderInfo, message: ''})}}
+            />
             </Box>
             :
             <SuccessMessage
@@ -220,6 +300,14 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
             linkText='go to user page'
             />
             }
+            {
+            showModal
+            ?
+            <DeleteModal
+            {...modal}/>
+            :
+            null
+        }
         </>
     );
 };

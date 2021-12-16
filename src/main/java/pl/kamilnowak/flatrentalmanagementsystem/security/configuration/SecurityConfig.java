@@ -109,7 +109,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         TypeAccount.ADMIN.toString())
                 .antMatchers(HttpMethod.DELETE, "/v1/tenant/**").hasAnyRole(
                         TypeAccount.USER.toString(),
-                        TypeAccount.ADMIN.toString());
+                        TypeAccount.ADMIN.toString())
+                .antMatchers(HttpMethod.GET, "/v1/mail/**").hasAnyRole(
+                        TypeAccount.USER.toString());
         http.csrf().disable();
     }
 }

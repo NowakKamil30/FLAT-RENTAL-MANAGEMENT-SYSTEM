@@ -57,6 +57,9 @@ const TenantPage: React.FC<PropsFromRedux> = ({
     const [fetchingTenant, setFetchingTenant] = useState<boolean>(false);
     const [fetchingDocuments, setFetchingDocuments] = useState<boolean>(false);
     const [fetchingExtraCosts, setFetchingExtraCosts] = useState<boolean>(false);
+    const [sendReminderInfo, setSendReminder] = useState<ErrorModel>({message: ''});
+    const [fetchingSendReminder, setFetchingSendReminder] = useState<boolean>(false);
+    const [errorReminder, setErrorReminder] = useState<ErrorModel>({message: ''});
     const [tenant, setTenant] = useState<TenantModel>({
         id: -1,
         firstName: '',
@@ -143,6 +146,26 @@ const TenantPage: React.FC<PropsFromRedux> = ({
         }
     };
 
+    const sendReminder = async () => {
+        const { backendURL, sendReminderToTenant } = setting.url;
+        setFetchingSendReminder(true);
+        try {
+            if (!!tenantId) {
+                let config = {
+                    headers: {
+                        Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
+                    }
+                  }
+                await Axios.get(backendURL + sendReminderToTenant + '/' + tenantId, config);
+                setSendReminder({message: 'send reminder!!'});
+            }
+        } catch (e) {
+            setErrorReminder({message: (e as Error).message});
+        } finally {
+            setFetchingSendReminder(false);
+        }
+    };
+
     const getExtraCostSum = async (): Promise<void> => {
         const { backendURL, extraCostsByTenant } = setting.url;
         if (!!tenantId) {
@@ -184,6 +207,9 @@ const TenantPage: React.FC<PropsFromRedux> = ({
                 onButtonClick={() => navigate('/update-tenant/' + tenantId)}
                 tenant={tenant}
                 extraCostSum={extraCostSum.price}
+                secondButtonTitle='send reminder'
+                onSecondButtonClick={() => sendReminder()}
+                fetching={fetchingSendReminder}
                 />
                 }
                 {fetchingDocuments ? 
@@ -237,6 +263,20 @@ const TenantPage: React.FC<PropsFromRedux> = ({
             severity='error'
             title={errorExtraCosts.message}
             onClose={() => {setErrorExtraCosts({...errorExtraCosts, message: ''})}}
+            />
+            <Snackbar
+            open={ errorReminder.message.length > 0 }
+            autoHideDuration={ 5000 }
+            severity='error'
+            title={errorReminder.message}
+            onClose={() => {setErrorReminder({...errorReminder, message: ''})}}
+            />
+            <Snackbar
+            open={ sendReminderInfo.message.length > 0 }
+            autoHideDuration={ 8000 }
+            severity='success'
+            title={sendReminderInfo.message}
+            onClose={() => {setSendReminder({...sendReminderInfo, message: ''})}}
             />
             </Box>
             :

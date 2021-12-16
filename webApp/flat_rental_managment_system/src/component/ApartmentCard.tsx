@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CircularProgress, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Apartment } from '../type/Apartment';
@@ -8,14 +8,20 @@ interface ApartmentCardProps {
     apartment: Apartment
     title: string;
     buttonTitle: string;
+    secondButtonTitle: string;
+    fetching: boolean;
     onButtonClick: () => void;
+    onSecondButtonClick: () => void;
 }
 
 const ApartmentCard: React.FC<ApartmentCardProps> = ({
     apartment,
     title,
     buttonTitle,
-    onButtonClick
+    secondButtonTitle,
+    fetching,
+    onButtonClick,
+    onSecondButtonClick
 }): JSX.Element => {
   const classes = useStyles();
 
@@ -53,6 +59,16 @@ const ApartmentCard: React.FC<ApartmentCardProps> = ({
           color='secondary'
           onClick={onButtonClick}
           >{buttonTitle}</Button>
+          {!fetching 
+          ?
+          <Button 
+          size="small"
+          color='secondary'
+          onClick={onSecondButtonClick}
+          >{secondButtonTitle}</Button>
+          :
+          <CircularProgress color='secondary' size={10} />
+          }
       </CardActions>
       </CardContent>
     </Card>

@@ -19,7 +19,6 @@ import { createAdress } from '../util/createAdress';
 import { useNavigate } from 'react-router';
 import CustomListComponent from '../component/List/CustomListComponent';
 import DeleteModal, { DeleteModalProps } from '../component/modal/DeleteModal';
-import { Role } from '../type/Role';
 
 interface IMapDispatcherToProps {}
 
@@ -37,7 +36,7 @@ const connector = connect(mapStateToProps, mapDispatcherToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const UserMainPage: React.FC<PropsFromRedux> = ({
+const AdminPage: React.FC<PropsFromRedux> = ({
     loginModel
 }): JSX.Element => {
     const {root} = useStyles();
@@ -151,18 +150,6 @@ const UserMainPage: React.FC<PropsFromRedux> = ({
         <Box
         component='div'
         className={root}>
-            {fetchingUserData ?
-            <CircularProgress color='secondary' size={80} />
-            :
-            <UserCard
-            onButtonClick={() => navigate('/edit-user')}
-            user={user}
-            buttonTitle='Edit'
-            title='Account'
-            adminButtonText='admin panel'
-            isAdmin={loginModel.role === Role.ADMIN || localStorage.getItem('role') === Role.ADMIN}
-            onClickAdminButton={() => navigate('/admin-panel')}
-            />}
             {
                 fetchingApartments ?
                 <CircularProgress color='secondary' size={80} />
@@ -216,4 +203,4 @@ const useStyles = makeStyles((theme: Theme) =>({
     })
   );
 
-export default connector(UserMainPage);
+export default connector(AdminPage);

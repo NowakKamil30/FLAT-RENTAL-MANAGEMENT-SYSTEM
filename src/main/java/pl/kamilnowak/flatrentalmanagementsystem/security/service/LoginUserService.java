@@ -13,6 +13,7 @@ import pl.kamilnowak.flatrentalmanagementsystem.exception.TokenIsTooOldException
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.VerificationToken;
 import pl.kamilnowak.flatrentalmanagementsystem.security.repository.LoginUserRepository;
+import pl.kamilnowak.flatrentalmanagementsystem.security.type.TypeAccount;
 import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
 import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
 
@@ -120,5 +121,23 @@ public class LoginUserService implements UserDetailsService, CRUDOperation<Login
             throw new TokenIsTooOldException("verification token");
         }
         return verificationToken;
+    }
+
+    public LoginUser setIsEnable(Long id, boolean isEnable) {
+        LoginUser loginUser = loginUserRepository.getById(id);
+        if (loginUser != null) {
+           loginUser.setEnable(isEnable);
+           return loginUserRepository.save(loginUser);
+        }
+        throw new NotFoundException("login user doesn't exist");
+    }
+
+    public LoginUser setRole(Long id, TypeAccount typeAccount) {
+        LoginUser loginUser = loginUserRepository.getById(id);
+        if (loginUser != null) {
+            loginUser.setRole(typeAccount);
+            return loginUserRepository.save(loginUser);
+        }
+        throw new NotFoundException("login user doesn't exist");
     }
 }

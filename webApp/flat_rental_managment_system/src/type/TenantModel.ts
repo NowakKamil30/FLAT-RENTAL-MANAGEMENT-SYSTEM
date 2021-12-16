@@ -14,6 +14,7 @@ export interface TenantModel {
     endDate?: string;
     startDate: string;
     paidDate?: string;
+    apartmentId?: number;
     documents?: Document[];
     extraCosts?: ExtraCost[];
     currency: {

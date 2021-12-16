@@ -134,7 +134,7 @@ public class Tenant {
         return isPaid;
     }
 
-    public void setPaid(boolean paid) {
+    public void setIsPaid(boolean paid) {
         isPaid = paid;
     }
 
@@ -142,7 +142,7 @@ public class Tenant {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void setIsActive(boolean active) {
         isActive = active;
     }
 

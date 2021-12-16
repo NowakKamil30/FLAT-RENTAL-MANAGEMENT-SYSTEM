@@ -40,7 +40,7 @@ const ExtraCostInputController: React.FC<ExtraCostInputControllerProps> = ({
                         }
                     }
                     onChangeExtraPrice={(e) => {
-                            extraCosts[extraCosts.findIndex(extraCostItem => extraCostItem.id === extraCost.id)] = {extraCost: e.target.value, name: extraCost.name, id: extraCost.id}
+                            extraCosts[extraCosts.findIndex(extraCostItem => extraCostItem.id === extraCost.id)] = {extraCost: Math.abs(e.target.value), name: extraCost.name, id: extraCost.id}
                             setExtraCosts([...extraCosts]);
                         }
                     }

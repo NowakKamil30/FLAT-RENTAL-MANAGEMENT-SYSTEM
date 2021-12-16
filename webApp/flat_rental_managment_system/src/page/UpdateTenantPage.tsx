@@ -66,10 +66,9 @@ const UpdateTenantPage: React.FC<PropsFromRedux> = ({
     const [endDate, setEndDate] = useState<Date | null | undefined>(null);
     const [paidDate, setPaidDate] = useState<Date | null | undefined>(null);
     const [isActive, setIsActive] = useState<boolean | undefined>(false);
-    const [isPaid, setIsPaid] = useState<boolean | undefined>(false);
     const [description, setDescription] = useState<string>('');
 
-    const updateTenant = async (Tenant: TenantModel) => {
+    const updateTenant = async (tenantModel: TenantModel) => {
         const { backendURL, tenant } = setting.url;
         setFetching(true);
         try {
@@ -79,7 +78,8 @@ const UpdateTenantPage: React.FC<PropsFromRedux> = ({
                         Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
                     }
                   }
-                await Axios.put(backendURL + tenant + '/' + tenantId, Tenant, config);
+                  console.log(tenantModel);
+                await Axios.put(backendURL + tenant + '/' + tenantId, tenantModel, config);
                 setIsSuccessMessage(true);
             }
         } catch (e) {
@@ -101,8 +101,9 @@ const UpdateTenantPage: React.FC<PropsFromRedux> = ({
                     }
                   }
                 const response = await Axios.get(backendURL + tenant + '/' + tenantId, config);
-                const tenantModel: TenantModel = response.data as TenantModel;                
-                setValues({...tenantModel});
+                const tenantModel: TenantModel = response.data as TenantModel;
+                console.log(tenantModel);
+                setValues({...tenantModel, });
                 setIsActive(tenantModel.isActive);
                 setPaidDate(tenantModel.paidDate ? new Date(tenantModel.paidDate) : null);
                 setStartDate(tenantModel.startDate ? new Date(tenantModel.startDate) : new Date(Date.now()));
@@ -295,11 +296,13 @@ const UpdateTenantPage: React.FC<PropsFromRedux> = ({
                 currency: {
                     id: currency
                 },
+                apartment: {
+                  id: values.apartmentId!  
+                },
                 startDate: startDate.toISOString(),
                 paidDate: paidDate?.toISOString(),
                 endDate: endDate?.toISOString(),
-                isActive: isActive,
-                isPaid: isPaid
+                isActive: isActive
             }
             updateTenant(tenantToSend);  
         }    
@@ -320,7 +323,7 @@ const UpdateTenantPage: React.FC<PropsFromRedux> = ({
             <Box
             component='div'
             className={root}>
-                {fetchingCurrencies || fetchingTenant
+                {fetchingCurrencies || fetchingTenant || fetchingDocuments || fetchingExtraCosts
                 ?
                 <CircularProgress color='secondary' size={80} />
                 :
@@ -414,16 +417,6 @@ const UpdateTenantPage: React.FC<PropsFromRedux> = ({
                 />}
                 label={isActive ? 'tenant active' : 'tenant inactive'}/>
                 </FormGroup>
-                <FormGroup>
-                <FormControlLabel control={<Switch
-                checked={isPaid}
-                size='medium'
-                color='secondary'
-                onChange={(e) => setIsPaid(e.target.checked)}
-                inputProps={{ 'aria-label': 'controlled' }}
-                />}
-                label={isPaid ? 'is paid' : 'is not paid'}/>
-                </FormGroup>
                 <TextareaAutosize
                 id='description'
                 name='description'
@@ -489,7 +482,7 @@ const UpdateTenantPage: React.FC<PropsFromRedux> = ({
                     type='submit'
                     disabled = { !isValid || touched === {} || !dirty }
                     color='secondary'
-                    title='create'
+                    title='update'
                     isFetching={ fetching }
                 />
                 </DialogActions>
@@ -508,6 +501,27 @@ const UpdateTenantPage: React.FC<PropsFromRedux> = ({
             severity='error'
             title={errorCurrencies.message}
             onClose={() => setErrorCurrencies({...errorCurrencies, message: ''})}
+            />
+            <Snackbar
+            open={ errorTenant.message.length > 0 }
+            autoHideDuration={ 5000 }
+            severity='error'
+            title={errorTenant.message}
+            onClose={() => setErrorTenant({...errorTenant, message: ''})}
+            />
+            <Snackbar
+            open={ errorExtraCosts.message.length > 0 }
+            autoHideDuration={ 5000 }
+            severity='error'
+            title={errorExtraCosts.message}
+            onClose={() => setErrorExtraCosts({...errorExtraCosts, message: ''})}
+            />
+            <Snackbar
+            open={ errorDocuments.message.length > 0 }
+            autoHideDuration={ 5000 }
+            severity='error'
+            title={errorDocuments.message}
+            onClose={() => setErrorDocuments({...errorDocuments, message: ''})}
             />
             </Box>
         :

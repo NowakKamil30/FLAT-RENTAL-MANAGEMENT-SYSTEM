@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CircularProgress, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { TenantModel } from '../type/TenantModel';
@@ -7,7 +7,10 @@ interface TenantCardProps {
     tenant: TenantModel;
     title: string;
     buttonTitle: string;
+    secondButtonTitle: string;
+    fetching: boolean;
     onButtonClick: () => void;
+    onSecondButtonClick: () => void;
     extraCostSum: number;
 }
 
@@ -16,6 +19,9 @@ const TenantCard: React.FC<TenantCardProps> = ({
     title,
     buttonTitle,
     extraCostSum,
+    secondButtonTitle,
+    fetching,
+    onSecondButtonClick,
     onButtonClick
 }): JSX.Element => {
   const classes = useStyles();
@@ -79,6 +85,16 @@ const TenantCard: React.FC<TenantCardProps> = ({
           color='secondary'
           onClick={onButtonClick}
           >{buttonTitle}</Button>
+          {!fetching 
+          ?
+          <Button 
+          size="small"
+          color='secondary'
+          onClick={onSecondButtonClick}
+          >{secondButtonTitle}</Button>
+          :
+          <CircularProgress color='secondary' size={10} />
+          }
       </CardActions>
       </CardContent>
     </Card>

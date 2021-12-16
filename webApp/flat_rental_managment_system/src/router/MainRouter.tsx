@@ -21,6 +21,7 @@ import UpdateApartmentPage from '../page/UpdateApartmentPage';
 import TenantPage from '../page/TenantPage';
 import CreateTenantPage from '../page/CreateTenantPage';
 import UpdateTenantPage from '../page/UpdateTenantPage';
+import AdminPage from '../page/AdminPage';
 
 interface IMapStateToProps {
     role: Role;
@@ -233,6 +234,15 @@ const MainRouter: React.FC<PropsFromRedux> = ({
                     }
                 />
             </Route>
+            <Route path='/admin-panel' element={
+                <PrivateRoute
+                redirectPath='/home'
+                isAuth={(!!role && role === Role.ADMIN) || (!!localStorage.getItem('role') && localStorage.getItem('role') === Role.ADMIN)}
+                >
+                    <AdminPage/>
+                </PrivateRoute>
+                }
+            /> 
             <Route path='/statute' element = {<StatutePage/>}/>
             <Route path='*' element={<NotFoundRoutePage/>}/>
         </Routes>

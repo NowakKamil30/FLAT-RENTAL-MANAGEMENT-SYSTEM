@@ -1,6 +1,7 @@
 package pl.kamilnowak.flatrentalmanagementsystem.apartment.service;
 
 import lombok.extern.log4j.Log4j2;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,10 @@ import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -44,8 +49,9 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
     public Tenant createObject(Tenant tenant) {
         log.debug("create tenant");
         tenant.setId(null);
-        tenant.setActive(true);
-        tenant.setPaid(false);
+        tenant.setIsActive(true);
+        tenant.setIsPaid(false);
+        tenant.setPaidDate(null);
         tenant.getDocuments()
                 .stream()
                 .forEach(document -> document.setTenant(tenant));
@@ -96,7 +102,8 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
     @Transactional
     public Tenant updateObject(Tenant tenant, Long aLong) {
         log.debug("update tenant id: " + aLong);
-        if(tenantRepository.findById(aLong).isEmpty()) {
+        Optional<Tenant> optionalTenant = tenantRepository.findById(aLong);
+        if(optionalTenant.isEmpty()) {
             return createObject(tenant);
         }
         documentService.deleteAllByTenantId(aLong);
@@ -112,6 +119,19 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
                     extraCost.setExtraCost(extraCost.getExtraCost().setScale(2, RoundingMode.HALF_UP));
                 });
         tenant.setFee(tenant.getFee().setScale(2, RoundingMode.HALF_UP));
+        LocalDate date = LocalDate.now();
+        date = date.withDayOfMonth(tenant.getDayToPay());
+        if (tenant.getPaidDate() == null) {
+            tenant.setIsPaid(false);
+        } else if (tenant.getPaidDate().plusMonths(1).getYear() > date.getYear()) {
+            tenant.setIsPaid(true);
+        } else if (tenant.getPaidDate().plusMonths(1).getMonth().getValue() > date.getMonth().getValue()){
+            tenant.setIsPaid(true);
+        } else if (tenant.getPaidDate().plusMonths(1).getMonth().getValue() == date.getMonth().getValue() && tenant.getPaidDate().plusMonths(1).getDayOfMonth() < tenant.getDayToPay()) {
+            tenant.setIsPaid(true);
+        } else {
+            tenant.setIsPaid(false);
+        }
         Tenant tenantSaved = tenantRepository.save(tenant);
         BigDecimal extraCostSum = BigDecimal.ZERO;
         for (ExtraCost extraCost: tenant.getExtraCosts()) {
@@ -121,8 +141,10 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
         try {
             mailActionService.sendMail(
                     tenant.getMail(),
-                    "welcome(change fee value)" + tenant.getFirstName() + "!",
-                    "your new fee (Basic: " + tenant.getFee() + ") (Extra costs: " + extraCostSum +")" + currency.getName()
+                    "Welcome(change fee value)" + tenant.getFirstName() + "!",
+                    "your new fee (Basic: " + tenant.getFee() + ") (Extra costs: " + extraCostSum +")" + currency.getName() + "\n"
+                        + "Start date: " + tenant.getStartDate() + "\n"
+                        + "pay up to the day of the month:" + tenant.getDayToPay()
             );
         } catch (EmailSendException e) {
             throw new NotFoundException("");
@@ -133,5 +155,46 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
     public Page<Tenant> getObjectsByApartmentId(Long aLong, int page) {
         log.debug("gets all tenants by apartment id: " + aLong);
         return tenantRepository.getTenantsByApartment_Id(aLong, pageableHelper.countPageable(page));
+    }
+
+    public void checkIsPaidAll() {
+        int numberOfPages = getAllObject(1).getTotalPages();
+        for (int i = 1; i < numberOfPages; i++) {
+            List<Tenant> tenants = getAllObject(i)
+                    .stream().map(tenant -> {
+                        LocalDate date = LocalDate.now();
+                        date = date.withDayOfMonth(tenant.getDayToPay());
+                        if (tenant.getPaidDate() == null) {
+                            tenant.setIsPaid(false);
+                        } else if (tenant.getPaidDate().plusMonths(1).getYear() > date.getYear()) {
+                            tenant.setIsPaid(true);
+                        } else if (tenant.getPaidDate().plusMonths(1).getMonth().getValue() > date.getMonth().getValue()){
+                            tenant.setIsPaid(true);
+                        } else if (tenant.getPaidDate().plusMonths(1).getMonth().getValue() == date.getMonth().getValue() && tenant.getPaidDate().plusMonths(1).getDayOfMonth() < tenant.getDayToPay()) {
+                            tenant.setIsPaid(true);
+                        } else {
+                            tenant.setIsPaid(false);
+                        }
+                        return tenant;
+                    }).collect(Collectors.toList());
+            tenantRepository.saveAll(tenants);
+        }
+    }
+
+    public void checkIsEndDate() {
+        int numberOfPages = getAllObject(1).getTotalPages();
+        for (int i = 1; i < numberOfPages; i++) {
+            List<Tenant> tenants = getAllObject(i)
+                    .stream().map(tenant -> {
+                        LocalDate date = LocalDate.now();
+                        if (tenant.getEndDate().isAfter(date)) {
+                            tenant.setIsActive(false);
+                        } else {
+                            tenant.setIsActive(true);
+                        }
+                        return tenant;
+                    }).collect(Collectors.toList());
+            tenantRepository.saveAll(tenants);
+        }
     }
 }

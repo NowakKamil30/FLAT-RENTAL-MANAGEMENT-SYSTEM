@@ -15,7 +15,9 @@
             "tenant": "/tenant",
             "documentForTenant": "/document/tenant",
             "extraCostsByTenant": "/extraCost/tenant",
-            "getAllCurrency": "/currency/all"
+            "getAllCurrency": "/currency/all",
+            "sendReminder": "/mail/apartment",
+            "sendReminderToTenant": "/mail/tenant"
         },
 
         "layout": {

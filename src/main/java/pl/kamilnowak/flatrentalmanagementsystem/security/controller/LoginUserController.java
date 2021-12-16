@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import pl.kamilnowak.flatrentalmanagementsystem.security.dho.LoginUserDHO;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.LoginUserService;
+import pl.kamilnowak.flatrentalmanagementsystem.security.type.TypeAccount;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/loginUser")
@@ -42,6 +45,17 @@ public class LoginUserController {
     @PutMapping("/{id}")
     public ResponseEntity<LoginUserDHO> updateLoginUser(@PathVariable Long id, @RequestBody LoginUser loginUser) {
         return ResponseEntity.ok(modelMapper.map(loginUserService.updateObject(loginUser, id), LoginUserDHO.class));
+    }
+
+    @PostMapping("/isEnable/{id}")
+    public ResponseEntity<LoginUserDHO> setEnable(@PathVariable Long id, @RequestBody Map<String, Boolean> argMap) {
+        Boolean isEnable = argMap.get("isEnable");
+        return ResponseEntity.ok(modelMapper.map(loginUserService.setIsEnable(id, isEnable), LoginUserDHO.class));
+    }
+
+    @PostMapping("/role/{id}")
+    public ResponseEntity<LoginUserDHO> setRole(@PathVariable Long id, @RequestBody Map<String, String> argMap) {
+        return ResponseEntity.ok(modelMapper.map(loginUserService.setRole(id, TypeAccount.valueOf(argMap.get("role"))), LoginUserDHO.class));
     }
 
 }

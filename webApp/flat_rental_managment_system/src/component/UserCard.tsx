@@ -8,12 +8,18 @@ interface UserCardProps {
     title: string;
     buttonTitle: string;
     onButtonClick: () => void;
+    isAdmin: boolean;
+    onClickAdminButton: () => void;
+    adminButtonText: string;
 }
 
 const UserCard: React.FC<UserCardProps> = ({
     user,
     title,
     buttonTitle,
+    isAdmin,
+    adminButtonText,
+    onClickAdminButton,
     onButtonClick
 }): JSX.Element => {
   const classes = useStyles();
@@ -46,6 +52,15 @@ const UserCard: React.FC<UserCardProps> = ({
           color='secondary'
           onClick={onButtonClick}
           >{buttonTitle}</Button>
+          {isAdmin
+          ?
+          <Button 
+          size="small"
+          color='secondary'
+          onClick={onClickAdminButton}
+          >{adminButtonText}</Button>
+          :
+          null}
       </CardActions>
       </CardContent>
     </Card>
