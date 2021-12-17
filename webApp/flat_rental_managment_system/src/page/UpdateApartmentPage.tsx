@@ -118,7 +118,6 @@ const UpdateApartmentPage: React.FC<PropsFromRedux> = ({
               }
             const response = await Axios.get(backendURL + imageByApartment + '/' + apartmentId + "/all", config);
             const images = response.data as ImageModel[];
-            console.log(images);
             setImages(images);
         }
     } catch (e) {

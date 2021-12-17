@@ -73,4 +73,9 @@ public class ImageService implements CRUDOperation<Image, Long> {
         log.debug("delete all photo for: " + id);
         imageRepository.deleteAllByApartment_Id(id);
     }
+
+    public Image getImageByLoginUserMailAndId(String mail, Long id) {
+        log.debug("get image by login user mail: " + mail + " id: " + id);
+        return imageRepository.getImageByApartment_UserData_LoginUser_MailAndId(mail, id);
+    }
 }

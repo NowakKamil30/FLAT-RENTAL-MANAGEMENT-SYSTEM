@@ -1,13 +1,19 @@
 package pl.kamilnowak.flatrentalmanagementsystem.security.controller;
 
+import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.NotAuthorizationException;
 import pl.kamilnowak.flatrentalmanagementsystem.security.dho.UserDataDHO;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.UserData;
 import pl.kamilnowak.flatrentalmanagementsystem.security.model.UserInfoModel;
+import pl.kamilnowak.flatrentalmanagementsystem.security.service.LoginUserService;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.UserDataService;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/v1/userData")
@@ -15,24 +21,32 @@ public class UserDataController {
 
     private final ModelMapper modelMapper;
     private final UserDataService userDataService;
+    private final LoginUserService loginUserService;
 
-    public UserDataController(ModelMapper modelMapper, UserDataService userDataService) {
+    public UserDataController(ModelMapper modelMapper, UserDataService userDataService, LoginUserService loginUserService) {
         this.modelMapper = modelMapper;
         this.userDataService = userDataService;
+        this.loginUserService = loginUserService;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDataDHO> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(modelMapper.map(userDataService.getObjectById(id), UserDataDHO.class));
+    public ResponseEntity<UserDataDHO> getUserById(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
+        UserData userData = userDataService.getObjectById(id);
+        if (!userData.getLoginUser().getMail().equals(principal.getName())) {
+            throw new NotAuthorizationException();
+        }
+        return ResponseEntity.ok().body(modelMapper.map(userData, UserDataDHO.class));
     }
 
     @GetMapping()
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<Page<UserDataDHO>> getUsers (@RequestParam(defaultValue = "1") int page) {
         return ResponseEntity.ok(userDataService.getAllObject(page)
                 .map(userData -> modelMapper.map(userData, UserDataDHO.class)));
     }
 
     @GetMapping("/info")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<Page<UserInfoModel>> getUserInfos (@RequestParam(defaultValue = "1") int page) {
         return ResponseEntity.ok(userDataService.getAllObject(page)
                 .map(userData -> UserInfoModel
@@ -45,7 +59,11 @@ public class UserDataController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDataDHO> updateUserData(@PathVariable Long id, @RequestBody UserData userData) {
+    public ResponseEntity<UserDataDHO> updateUserData(@PathVariable Long id, @RequestBody UserData userData, Principal principal) throws NotAuthorizationException {
+        UserData userDataToCheck = userDataService.getObjectById(id);
+        if (!userDataToCheck.getLoginUser().getMail().equals(principal.getName())) {
+            throw new NotAuthorizationException();
+        }
         return ResponseEntity.ok(modelMapper.map(userDataService.updateObject(userData, id), UserDataDHO.class));
     }
 }

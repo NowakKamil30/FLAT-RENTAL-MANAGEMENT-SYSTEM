@@ -30,6 +30,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
             </Box>
             {images.map((image) => (
                 <Card
+                key={image.id}
                 className={styles.box}>
                     <Box
                     component='h4'

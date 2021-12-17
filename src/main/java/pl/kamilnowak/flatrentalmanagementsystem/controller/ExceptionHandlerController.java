@@ -71,4 +71,12 @@ public class ExceptionHandlerController {
                 .message(entityExistException.getMessage())
                 .build(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = {NotAuthorizationException.class})
+    public ResponseEntity<JsonError> entityExistErrorHandler(NotAuthorizationException notAuthorizationException) {
+        log.error(notAuthorizationException.getMessage());
+        return new ResponseEntity<>(JsonError.builder()
+                .message(notAuthorizationException.getMessage())
+                .build(), HttpStatus.FORBIDDEN);
+    }
 }

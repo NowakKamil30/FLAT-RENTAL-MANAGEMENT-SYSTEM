@@ -13,4 +13,5 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     Page<Image> getImagesByApartment_Id(Long id, Pageable pageable);
     List<Image> getImagesByApartment_Id(Long id);
     void deleteAllByApartment_Id(Long id);
+    Image getImageByApartment_UserData_LoginUser_MailAndId(String mail, Long id);
 }

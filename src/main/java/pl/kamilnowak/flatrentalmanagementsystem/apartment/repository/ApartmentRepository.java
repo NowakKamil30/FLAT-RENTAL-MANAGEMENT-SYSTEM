@@ -9,4 +9,5 @@ import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Apartment;
 @Repository
 public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
     Page<Apartment> getApartmentsByUserData_Id(Long id, Pageable pageable);
+    Apartment getApartmentByUserData_LoginUser_MailAndId(String mail, Long id);
 }

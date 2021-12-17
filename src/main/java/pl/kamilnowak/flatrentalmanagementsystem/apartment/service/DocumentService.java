@@ -72,4 +72,9 @@ public class DocumentService implements CRUDOperation<Document, Long> {
         log.debug("delete all document by tenant: " + aLong);
         documentRepository.deleteAllByTenant_Id(aLong);
     }
+
+    public Document getDocumentByLoginUserMailAndId(String mail, Long id) {
+        log.debug("get document by login user mail: " + mail + " and document id: " + id);
+        return documentRepository.getDocumentByTenant_Apartment_UserData_LoginUser_MailAndId(mail, id);
+    }
 }

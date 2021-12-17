@@ -158,6 +158,7 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
     }
 
     public void checkIsPaidAll() {
+        log.debug("check is all paid");
         int numberOfPages = getAllObject(1).getTotalPages();
         for (int i = 1; i < numberOfPages; i++) {
             List<Tenant> tenants = getAllObject(i)
@@ -182,6 +183,7 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
     }
 
     public void checkIsEndDate() {
+        log.debug("check si end date");
         int numberOfPages = getAllObject(1).getTotalPages();
         for (int i = 1; i < numberOfPages; i++) {
             List<Tenant> tenants = getAllObject(i)
@@ -196,5 +198,10 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
                     }).collect(Collectors.toList());
             tenantRepository.saveAll(tenants);
         }
+    }
+
+    public Tenant getTenantByLoginUserMailAndId(String mail, Long id) {
+        log.debug("get tenant by id: " + id + " and login user mail: " + mail);
+        return tenantRepository.getTenantByApartment_UserData_LoginUser_MailAndId(mail, id);
     }
 }

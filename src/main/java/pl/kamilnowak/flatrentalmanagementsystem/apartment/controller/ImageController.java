@@ -7,10 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.ImageDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Apartment;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Image;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.ApartmentService;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.ImageService;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.NotAuthorizationException;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,25 +24,20 @@ public class ImageController {
 
     private final ImageService imageService;
     private final ModelMapper modelMapper;
+    private final ApartmentService apartmentService;
 
     @Autowired
-    public ImageController(ImageService imageService, ModelMapper modelMapper) {
+    public ImageController(ImageService imageService, ModelMapper modelMapper, ApartmentService apartmentService) {
         this.imageService = imageService;
         this.modelMapper = modelMapper;
-    }
-
-    @GetMapping("")
-    public ResponseEntity<Page<ImageDHO>> getImages(@RequestParam(defaultValue = "1") int page) {
-        Page<ImageDHO> imageDHOPage = imageService.getAllObject(page)
-                .map(image -> modelMapper.map(image, ImageDHO.class));
-        return ResponseEntity.ok(imageDHOPage);
+        this.apartmentService = apartmentService;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ImageDHO> getImage(@PathVariable Long id) {
-        Image image = imageService.getObjectById(id);
+    public ResponseEntity<ImageDHO> getImage(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
+        Image image = imageService.getImageByLoginUserMailAndId(principal.getName(), id);
         if (image == null) {
-            throw new NotFoundException(id.toString());
+            throw new NotAuthorizationException();
         }
         return ResponseEntity.ok(modelMapper.map(image, ImageDHO.class));
     }
@@ -52,27 +51,40 @@ public class ImageController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteImage(@PathVariable Long id) {
-        if (imageService.getObjectById(id) == null) {
-            throw new NotFoundException(id.toString());
+    public ResponseEntity<Void> deleteImage(@PathVariable Long id, Principal principal) throws NotAuthorizationException  {
+        Image image = imageService.getImageByLoginUserMailAndId(principal.getName(), id);
+        if (image == null) {
+            throw new NotAuthorizationException();
         }
         imageService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ImageDHO> updateImage(@PathVariable Long id, @RequestBody Image image) {
+    public ResponseEntity<ImageDHO> updateImage(@PathVariable Long id, @RequestBody Image image, Principal principal) throws NotAuthorizationException  {
+        Image imageToCheck = imageService.getImageByLoginUserMailAndId(principal.getName(), id);
+        if (imageToCheck == null) {
+            throw new NotAuthorizationException();
+        }
         return ResponseEntity.ok(modelMapper.map(imageService.updateObject(image, id), ImageDHO.class));
     }
 
     @GetMapping("/apartment/{id}")
-    public ResponseEntity<Page<ImageDHO>> getImagesByApartment(@PathVariable Long id, @RequestParam(defaultValue = "1") int page) {
+    public ResponseEntity<Page<ImageDHO>> getImagesByApartment(@PathVariable Long id, @RequestParam(defaultValue = "1") int page, Principal principal) throws NotAuthorizationException  {
+        Apartment apartment = apartmentService.getApartmentByLoginUserMailAndId(principal.getName(), id);
+        if (apartment == null) {
+            throw new NotAuthorizationException();
+        }
         return  ResponseEntity.ok(imageService.getObjectsByApartmentId(id, page)
                 .map(image -> modelMapper.map(image, ImageDHO.class)));
     }
 
     @GetMapping("/apartment/{id}/all")
-    public ResponseEntity<List<ImageDHO>> getImagesByApartment(@PathVariable Long id) {
+    public ResponseEntity<List<ImageDHO>> getImagesByApartment(@PathVariable Long id, Principal principal) throws NotAuthorizationException  {
+        Apartment apartment = apartmentService.getApartmentByLoginUserMailAndId(principal.getName(), id);
+        if (apartment == null) {
+            throw new NotAuthorizationException();
+        }
         return  ResponseEntity.ok(imageService.getObjectsByApartmentId(id).stream()
                 .map(image -> modelMapper.map(image, ImageDHO.class))
                 .collect(Collectors.toList()));

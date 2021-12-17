@@ -79,4 +79,9 @@ public class ApartmentService implements CRUDOperation<Apartment, Long> {
         log.debug("read apartments by user id: " + aLong);
         return apartmentRepository.getApartmentsByUserData_Id(aLong, pageableHelper.countPageable(page));
     }
+
+    public Apartment getApartmentByLoginUserMailAndId(String mail, Long id) {
+        log.debug("get apartment by id: " + id + " login user mail: " + mail);
+        return apartmentRepository.getApartmentByUserData_LoginUser_MailAndId(mail, id);
+    }
 }
