@@ -91,6 +91,7 @@ public class MapperConfig {
                     protected void configure() {
                         map().setId(source.getId());
                         map().setMail(source.getMail());
+                        map().setEnable(source.isEnable());
                     }
                 });
         modelMapper.createTypeMap(UserData.class, UserDataDHO.class)

@@ -8,6 +8,7 @@
             "changePassword": "/authorization/changePassword",
             "resetPassword": "/authorization/resetPassword",
             "userData": "/userData",
+            "userDataInfo": "/userData/info",
             "apartmentsByUserData": "/apartment/userData",
             "apartment": "/apartment",
             "tenantByApartment": "/tenant/apartment",
@@ -17,7 +18,10 @@
             "extraCostsByTenant": "/extraCost/tenant",
             "getAllCurrency": "/currency/all",
             "sendReminder": "/mail/apartment",
-            "sendReminderToTenant": "/mail/tenant"
+            "sendReminderToTenant": "/mail/tenant",
+            "currency": "/currency",
+            "loginUser": "/loginUser",
+            "loginUserEnable": "/loginUser/isEnable"
         },
 
         "layout": {

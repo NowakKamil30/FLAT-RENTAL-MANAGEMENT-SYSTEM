@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.CurrencyDHO;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Currency;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.CurrencyService;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.EntityExistException;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
 
 import java.util.List;
@@ -53,7 +54,12 @@ public class CurrencyController {
 
     @PostMapping("")
     public ResponseEntity<CurrencyDHO> createCurrency(@RequestBody Currency currency) {
-        Currency createdCurrency = currencyService.createObject(currency);
+        Currency createdCurrency = null;
+        try {
+            createdCurrency = currencyService.createObject(currency);
+        } catch(EntityExistException e) {
+            throw new EntityExistException();
+        }
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(modelMapper.map(createdCurrency, CurrencyDHO.class));

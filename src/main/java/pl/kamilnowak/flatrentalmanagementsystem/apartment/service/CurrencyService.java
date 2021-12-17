@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Currency;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.repository.CurrencyRepository;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.EntityExistException;
 import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
 import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
 
@@ -28,6 +29,9 @@ public class CurrencyService implements CRUDOperation<Currency, Long> {
     @Override
     public Currency createObject(Currency currency) {
         log.debug("create currency");
+        if (currencyRepository.findCurrencyByName(currency.getName()) != null) {
+            throw new EntityExistException();
+        }
         return currencyRepository.save(currency);
     }
 

@@ -22,6 +22,9 @@ import TenantPage from '../page/TenantPage';
 import CreateTenantPage from '../page/CreateTenantPage';
 import UpdateTenantPage from '../page/UpdateTenantPage';
 import AdminPage from '../page/AdminPage';
+import CreateCurrencyPage from '../page/CreateCurrencyPage';
+import ManageUserInfoPage from '../page/ManageUserInfoPage';
+import ChangeEnablePage from '../page/ChangeEnablePage';
 
 interface IMapStateToProps {
     role: Role;
@@ -242,7 +245,54 @@ const MainRouter: React.FC<PropsFromRedux> = ({
                     <AdminPage/>
                 </PrivateRoute>
                 }
-            /> 
+            />
+            <Route path='/create-currency' element={
+                <PrivateRoute
+                redirectPath='/home'
+                isAuth={(!!role && role === Role.ADMIN) || (!!localStorage.getItem('role') && localStorage.getItem('role') === Role.ADMIN)}
+                >
+                    <CreateCurrencyPage/>
+                </PrivateRoute>
+                }
+            />
+            <Route path='/user-info-managment' element={
+                <PrivateRoute
+                redirectPath='/login'
+                isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                >
+                    <ManageUserInfoPage/>
+                </PrivateRoute>
+            }
+            > 
+                <Route path=':loginUserId' element={
+                    <PrivateRoute
+                    redirectPath='/login'
+                    isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                    >
+                        <ManageUserInfoPage/>
+                    </PrivateRoute>
+                    }
+                />
+            </Route>
+            <Route path='/change-enable' element={
+                <PrivateRoute
+                redirectPath='/login'
+                isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                >
+                    <ChangeEnablePage/>
+                </PrivateRoute>
+            }
+            > 
+                <Route path=':loginUserId' element={
+                    <PrivateRoute
+                    redirectPath='/login'
+                    isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                    >
+                        <ChangeEnablePage/>
+                    </PrivateRoute>
+                    }
+                />
+            </Route>
             <Route path='/statute' element = {<StatutePage/>}/>
             <Route path='*' element={<NotFoundRoutePage/>}/>
         </Routes>

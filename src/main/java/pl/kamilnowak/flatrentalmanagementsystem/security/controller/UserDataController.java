@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.kamilnowak.flatrentalmanagementsystem.security.dho.UserDataDHO;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.UserData;
+import pl.kamilnowak.flatrentalmanagementsystem.security.model.UserInfoModel;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.UserDataService;
 
 @RestController
@@ -29,6 +30,18 @@ public class UserDataController {
     public ResponseEntity<Page<UserDataDHO>> getUsers (@RequestParam(defaultValue = "1") int page) {
         return ResponseEntity.ok(userDataService.getAllObject(page)
                 .map(userData -> modelMapper.map(userData, UserDataDHO.class)));
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<Page<UserInfoModel>> getUserInfos (@RequestParam(defaultValue = "1") int page) {
+        return ResponseEntity.ok(userDataService.getAllObject(page)
+                .map(userData -> UserInfoModel
+                        .builder()
+                        .firstName(userData.getFirstName())
+                        .lastName(userData.getLastName())
+                        .loginUserId(userData.getLoginUser().getId())
+                        .mail(userData.getLoginUser().getMail())
+                        .build()));
     }
 
     @PutMapping("/{id}")

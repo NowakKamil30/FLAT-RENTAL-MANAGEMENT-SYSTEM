@@ -63,4 +63,12 @@ public class ExceptionHandlerController {
                 .message(userCannotBeCreatedException.getMessage())
                 .build(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = {EntityExistException.class})
+    public ResponseEntity<JsonError> entityExistErrorHandler(EntityExistException entityExistException) {
+        log.error(entityExistException.getMessage());
+        return new ResponseEntity<>(JsonError.builder()
+                .message(entityExistException.getMessage())
+                .build(), HttpStatus.BAD_REQUEST);
+    }
 }

@@ -6,4 +6,5 @@ import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Currency;
 
 @Repository
 public interface CurrencyRepository extends JpaRepository<Currency, Long> {
+    Currency findCurrencyByName(String name);
 }

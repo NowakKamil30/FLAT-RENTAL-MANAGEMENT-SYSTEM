@@ -3,22 +3,18 @@ import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import { setting } from '../setting/setting.json';
 import { ErrorModel } from '../type/ErrorModel';
-import { User } from '../type/User';
 import { makeStyles } from '@mui/styles';
-import HomeIcon from '@mui/icons-material/Home';
-import UserCard from '../component/UserCard';
 import { connect, ConnectedProps } from 'react-redux';
 import { ReduceType } from '../store/reducer';
 import { LoginModel } from '../type/LoginModel';
 import { ThunkDispatch } from 'redux-thunk';
 import Snackbar from '../component/Snackbar';
-import { CircularProgress } from '@mui/material';
-import { ListType } from '../component/List/ListType';
-import { Apartment } from '../type/Apartment';
-import { createAdress } from '../util/createAdress';
+import { Button, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router';
+import PersonIcon from '@mui/icons-material/Person';
 import CustomListComponent from '../component/List/CustomListComponent';
-import DeleteModal, { DeleteModalProps } from '../component/modal/DeleteModal';
+import { UserInfo } from '../type/UserInfo';
+import { createUserInfoLabel } from '../util/createUserInfoLabel';
 
 interface IMapDispatcherToProps {}
 
@@ -41,48 +37,15 @@ const AdminPage: React.FC<PropsFromRedux> = ({
 }): JSX.Element => {
     const {root} = useStyles();
     const navigate = useNavigate();
-    const [showModal, setShowModal] = useState<boolean>(false);
-    const [modal, setModal] = useState<DeleteModalProps>({
-        fetching: false,
-        onClose: () => setShowModal(false),
-        onConfirm: () => {},
-        title: '',
-        confirmButtonTitle: 'delete',
-        cancelButtonTitle: 'cancel',
-        showConfirmButton: true, 
-    });
     const [maxPage, setMaxPage] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
-    const [fetchingUserData, setFetchingUserData] = useState<boolean>(false);
-    const [fetchingApartments, setFetchingApartments] = useState<boolean>(false);
-    const [error, setError] = useState<ErrorModel>({message: ''});
-    const [errorFromApartments, setErrorFromApartments] = useState<ErrorModel>({message: ''});
-    const [listTypes, setListTypes] = useState<ListType[]>([]);
-    const [user, setUser] = useState<User>({firstName: '', lastName: '', createUserData: '', activeAccountData: ''});
-    const getUserData = async (): Promise<void> => {
-        const { backendURL, userData } = setting.url;
-        setFetchingUserData(true);
-        try {
-            if (loginModel.id !== -1) {
-                let config = {
-                    headers: {
-                        Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
-                    }
-                  }
-                const response = await Axios.get(backendURL + userData + '/' + loginModel.id, config);
-                setUser(response.data);
-            }
-        } catch (e) {
-            setError({message: (e as Error).message});
-        } finally {
-            setFetchingUserData(false);
-        }
-    };
+    const [fetchingUserInfos, setFetchingUserInfos] = useState<boolean>(false);
+    const [errorUserInfos, setErrorUserInfos] = useState<ErrorModel>({message: ''});
+    const [userInfos, setUserInfos] = useState<UserInfo[]>([]);
 
-    const deleteApartment = async(id: number) => {
-        const { backendURL, apartment } = setting.url;
-        setModal({...modal, fetching: true});
-        let response;
+    const getUserInfos = async (): Promise<void> => {
+        const { backendURL, userDataInfo } = setting.url;
+        setFetchingUserInfos(true);
         try {
             if (loginModel.id !== -1) {
                 let config = {
@@ -90,105 +53,57 @@ const AdminPage: React.FC<PropsFromRedux> = ({
                         Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
                     }
                   }
-                response = await Axios.delete(backendURL + apartment + '/' + id, config);
-                getApartments();
-            }
-        } catch (e) {
-            setError({message: (e as Error).message});
-        } finally {
-            setModal({...modal, fetching: false, showConfirmButton: false, title: response?.status == 200 ? 'apartament was deleted' : 'error :/'});
-        }
-    }
-
-    const getApartments = async (): Promise<void> => {
-        const { backendURL, apartmentsByUserData } = setting.url;
-        setFetchingApartments(true);
-        try {
-            if (loginModel.id !== -1) {
-                let config = {
-                    headers: {
-                        Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
-                    }
-                  }
-                const response = await Axios.get(backendURL + apartmentsByUserData + '/' + loginModel.id + "?page=" + page, config);
-                const apartments = response.data.content as Apartment[];
+                const response = await Axios.get(backendURL + userDataInfo + '?page=' + page, config);
+                const userInfos = response.data.content as UserInfo[];
                 setMaxPage(response.data.totalPages);
                 setPage(response.data.pageable.pageNumber + 1);
-                
-                setListTypes(apartments.map((apartment: Apartment) => ({
-                    title: apartment.name + ' ' + createAdress(apartment),
-                    path: '/apartment/' + apartment.id,
-                    icon: <HomeIcon color="primary" />,
-                    onDeleteAction: () => {
-                        setShowModal(true);
-                        setModal({
-                        ...modal,
-                        showConfirmButton: true,
-                        fetching: false,
-                        title: `Do you want to delete apartment ${apartment.name}?`,
-                        onConfirm: () => {
-                            deleteApartment(apartment.id);
-                        }})}
-                })) as ListType[]);
+                setUserInfos(userInfos);
             }
         } catch (e) {
-            setErrorFromApartments({message: (e as Error).message});
+            setErrorUserInfos({message: (e as Error).message});
         } finally {
-            setFetchingApartments(false);
+            setFetchingUserInfos(false);
         }
     };
 
-    useEffect(() => {
-        getUserData();
-    }, [loginModel]);
-
     useEffect(() =>{
-        getApartments();
+        getUserInfos();
     }, [loginModel, page]);
+
     return (
-        <>
         <Box
         component='div'
         className={root}>
+            <Button
+            variant="outlined"
+            color='secondary'
+            onClick={() => navigate('/create-currency')}>
+                create new currency
+            </Button>
             {
-                fetchingApartments ?
+                fetchingUserInfos ?
                 <CircularProgress color='secondary' size={80} />
                 :
                 <CustomListComponent
-                title='Your apartments'
-                listTypes={listTypes}
+                title='Users'
+                listTypes={userInfos.map(userInfo => ({
+                    title: createUserInfoLabel(userInfo),
+                    path: '/user-info-managment/' + userInfo.loginUserId,
+                    icon: <PersonIcon color="primary" />,
+                }))}
                 maxPage={maxPage}
                 page={page}
-                onCreactItemClick={() => navigate('/create-apartment')}
                 onPageChange={(event, value) => setPage(value)}
                 />
-
             }
-
             <Snackbar
-            open={ error.message.length > 0 }
+            open={ errorUserInfos.message.length > 0 }
             autoHideDuration={ 5000 }
             severity='error'
-            title={error.message}
-            onClose={() => {setError({...error, message: ''})}}
-            />
-            <Snackbar
-            open={ errorFromApartments.message.length > 0 }
-            autoHideDuration={ 5000 }
-            severity='error'
-            title={errorFromApartments.message}
-            onClose={() => {setErrorFromApartments({...errorFromApartments, message: ''})}}
+            title={errorUserInfos.message}
+            onClose={() => {setErrorUserInfos({...errorUserInfos, message: ''})}}
             />
         </Box>
-        {
-            showModal
-            ?
-            <DeleteModal
-            {...modal}/>
-            :
-            null
-        }
-        </>
     )
 }
 

@@ -10,7 +10,6 @@ import { LoginModel } from '../type/LoginModel';
 import Axios from 'axios';
 import * as Yup from 'yup';
 import { setting } from '../setting/setting.json';
-import { ApartmentToServer } from '../type/ApartmentToServer';
 import { ErrorModel } from '../type/ErrorModel';
 import SuccessMessage from '../component/SuccessMessage';
 import HandlerButton from '../component/HandlerButton';
@@ -22,7 +21,6 @@ import { TenantModel } from '../type/TenantModel';
 import { useParams } from 'react-router';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import CustomSelect from '../component/CustomSelect';
-import { string } from 'yup/lib/locale';
 import DocumentInputController from '../component/documentInput/DocumentInputController';
 import ExtraCostInputController from '../component/ExtraCostInput/ExtraCostInputController';
 
@@ -130,7 +128,6 @@ const CreateTenantPage: React.FC<PropsFromRedux> = ({
         handleBlur,
         handleChange,
         handleSubmit,
-        setValues,
       } = useFormik<TenantModel>({
         initialValues,
         validationSchema: Yup.object().shape({

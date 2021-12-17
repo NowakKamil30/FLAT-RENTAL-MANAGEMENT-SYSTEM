@@ -13,13 +13,16 @@ public class LoginUserDHO {
     private Long id;
     @JsonView(Views.Public.class)
     private String mail;
+    @JsonView(Views.Private.class)
+    private boolean isEnable;
 
     public LoginUserDHO() {
     }
 
     @Builder
-    public LoginUserDHO(Long id, String mail) {
+    public LoginUserDHO(Long id, String mail, boolean isEnable) {
         this.id = id;
         this.mail = mail;
+        this.isEnable = isEnable;
     }
 }
