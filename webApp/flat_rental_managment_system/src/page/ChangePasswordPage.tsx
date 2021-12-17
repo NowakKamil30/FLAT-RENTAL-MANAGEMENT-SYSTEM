@@ -30,7 +30,7 @@ const ChangePasswordPage = (): JSX.Element => {
             await Axios.post(backendURL + resetPassword + '?token=' + token, changePassword);
             setIsShowSuccessPage(true);
         } catch(e) {
-            setError({message: (e as Error).message});
+            setError({message: 'something goes wrong, try again!'});
             resetForm();
         } finally {
             setFetching(false);

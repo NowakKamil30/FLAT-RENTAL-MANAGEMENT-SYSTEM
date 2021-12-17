@@ -66,7 +66,7 @@ const UpdateApartmentPage: React.FC<PropsFromRedux> = ({
                 setIsSuccessMessage(true);
             }
         } catch (e) {
-            setError({message: (e as Error).message});
+            setError({message: 'something goes wrong, try again!'});
         } finally {
             setFetching(false);
         }   
@@ -100,7 +100,7 @@ const UpdateApartmentPage: React.FC<PropsFromRedux> = ({
               });
           }
       } catch (e) {
-          setErrorApartment({message: (e as Error).message});
+          setErrorApartment({message: 'cannot download data'});
       } finally {
           setFetchingApartment(false);
       }
@@ -122,7 +122,7 @@ const UpdateApartmentPage: React.FC<PropsFromRedux> = ({
             setImages(images);
         }
     } catch (e) {
-        setErrorForImages({message: (e as Error).message});
+        setErrorForImages({message: 'cannot download data'});
     } finally {
         setFetchingForImages(false);
     }

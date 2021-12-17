@@ -54,7 +54,7 @@ export const  signIn = (
             successAction && successAction();
         } catch (e) {
             dispatch(signInMessage({
-                message: (e as Error).message
+                message: 'something goes wrong, try again!'
             }));
             errorAction && errorAction();
         } finally {
@@ -75,7 +75,7 @@ export const register = (
                 successAction && successAction();
             } catch(e) {
                 dispatch(registerMessage({
-                    message: (e as Error).message
+                    message: 'something goes wrong, try again!'
                 }));
                 errorAction && errorAction();
             } finally {

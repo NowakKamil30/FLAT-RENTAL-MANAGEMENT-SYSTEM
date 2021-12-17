@@ -14,6 +14,7 @@ import Snackbar from '../component/Snackbar';
 import { useParams } from 'react-router';
 import Switch from '@mui/material/Switch';
 import { LoginUserData } from '../type/LoginUserData';
+import CustomSelect from '../component/CustomSelect';
 
 interface IMapDispatcherToProps {}
 
@@ -31,22 +32,25 @@ const connector = connect(mapStateToProps, mapDispatcherToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const ChangeEnablePage: React.FC<PropsFromRedux> = ({
+const UpdateRolePage: React.FC<PropsFromRedux> = ({
     loginModel
 }): JSX.Element => {
     const {loginUserId} = useParams();
     const {root} = useStyles();
     const [fetching, setFetching] = useState<boolean>(false);
-    const [fetchingEnable, setFetchingEnable] = useState<boolean>(false);
+    const [fetchingRole, setFetchingRole] = useState<boolean>(false);
+    const [fetchingRoles, setFetchingRoles] = useState<boolean>(false);
     const [isSuccessMessage, setIsSuccessMessage] = useState<boolean>(false);
-    const [isEnable, setIsEnable] = useState<boolean>(false);
     const [error, setError] = useState<ErrorModel>({message: ''});
-    const [errorEnable, setErrorEnable] = useState<ErrorModel>({message: ''});
+    const [errorRoles, setErrorRoles] = useState<ErrorModel>({message: ''});
+    const [errorRole, setErrorRole] = useState<ErrorModel>({message: ''});
+    const [roles, setRoles] = useState<string[]>([]);
+    const [role, setRole] = useState<string>('');
 
 
-    const getUserEnableInfo = async () => {
+    const getRole = async () => {
       const { backendURL, loginUser } = setting.url;
-      setFetchingEnable(true);
+      setFetchingRole(true);
       try {
           if (loginModel.id !== -1) {
               const config = {
@@ -56,17 +60,37 @@ const ChangeEnablePage: React.FC<PropsFromRedux> = ({
                 }
               const response = await Axios.get(backendURL + loginUser + '/' + loginUserId, config);
               const loginUserData = response.data as LoginUserData;
-              setIsEnable(loginUserData.isEnable);
+              setRole(loginUserData.role);
           }
       } catch (e) {
-        setErrorEnable({message: 'error when try download user information'});
+        setErrorRole({message: 'error when try download user information'});
       } finally {
-        setFetchingEnable(false);
+        setFetchingRole(false);
       }
     }
 
-    const updateUserEnable = async () => {
-      const { backendURL, loginUserEnable } = setting.url;
+    const getRoles = async () => {
+        const { backendURL, role } = setting.url;
+        setFetchingRoles(true);
+        try {
+            if (loginModel.id !== -1) {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
+                    }
+                  }
+                const response = await Axios.get(backendURL + role, config);
+                setRoles(response.data);
+            }
+        } catch (e) {
+            setErrorRoles({message: 'error when try download user information'});
+        } finally {
+            setFetchingRoles(false);
+        }
+      }
+
+    const updateRole = async () => {
+      const { backendURL, loginUserRole } = setting.url;
       setFetching(true);
       try {
           if (loginModel.id !== -1) {
@@ -75,10 +99,14 @@ const ChangeEnablePage: React.FC<PropsFromRedux> = ({
                       Authorization: `Bearer ${loginModel.token ? loginModel.token : localStorage.getItem('token')}`,
                   }
                 }
-              const response = await Axios.post(backendURL + loginUserEnable + '/' + loginUserId, {
-                isEnable: isEnable
-              }, config);
-              setIsSuccessMessage(true);
+                if (role.length > 0) {
+                      await Axios.post(backendURL + loginUserRole + '/' + loginUserId, {
+                        role: role
+                      }, config);
+                      setIsSuccessMessage(true);
+                } else {
+                    setError({message: 'please choose correct type'});
+                }
           }
       } catch (e) {
         setError({message: 'error when try update, check your internet!'});
@@ -89,7 +117,8 @@ const ChangeEnablePage: React.FC<PropsFromRedux> = ({
    
 
     useEffect(() => {
-      getUserEnableInfo();
+        getRole();
+        getRoles();
     }, [loginModel, loginUserId]);
     
 
@@ -108,26 +137,25 @@ const ChangeEnablePage: React.FC<PropsFromRedux> = ({
             <Box
             component='div'
             className={root}>
-                {fetching || fetchingEnable
+                {fetching || fetchingRole || fetchingRoles
                 ?
                 <CircularProgress color='secondary' size={80} />
                 :
                 <>
-                  <FormGroup>
-                      <FormControlLabel control={<Switch
-                  checked={isEnable}
-                  size='medium'
-                  color='secondary'
-                  onChange={(e) => setIsEnable(e.target.checked)}
-                  inputProps={{ 'aria-label': 'controlled' }}
-                  />}
-                  label={isEnable ? 'active account' : 'inactive account'}/>
-                  </FormGroup>
-                  <Button
-                  color='secondary'
-                  onClick={updateUserEnable}>
-                      update
-                  </Button>
+                    <CustomSelect
+                    title='role'
+                    label='role'
+                    defaultValue='None'
+                    helperText='required'
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    collection={roles.map(role => ({key: role, value: role}))}
+                    />
+                    <Button
+                    color='secondary'
+                    onClick={updateRole}>
+                        update
+                    </Button>
                 </>
                  }
             <Snackbar
@@ -138,11 +166,18 @@ const ChangeEnablePage: React.FC<PropsFromRedux> = ({
             onClose={() => setError({...error, message: ''})}
             />
             <Snackbar
-            open={ errorEnable.message.length > 0 }
+            open={ errorRole.message.length > 0 }
             autoHideDuration={ 5000 }
             severity='error'
-            title={errorEnable.message}
-            onClose={() => setErrorEnable({...errorEnable, message: ''})}
+            title={errorRole.message}
+            onClose={() => setErrorRole({...errorRole, message: ''})}
+            />
+            <Snackbar
+            open={ errorRoles.message.length > 0 }
+            autoHideDuration={ 5000 }
+            severity='error'
+            title={errorRoles.message}
+            onClose={() => setErrorRoles({...errorRoles, message: ''})}
             />
             </Box>
         :
@@ -176,4 +211,4 @@ const useStyles = makeStyles((theme: Theme) =>({
 ));
 
 
-export default connector(ChangeEnablePage);
+export default connector(UpdateRolePage);

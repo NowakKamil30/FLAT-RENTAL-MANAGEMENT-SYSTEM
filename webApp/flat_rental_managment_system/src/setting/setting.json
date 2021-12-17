@@ -21,7 +21,9 @@
             "sendReminderToTenant": "/mail/tenant",
             "currency": "/currency",
             "loginUser": "/loginUser",
-            "loginUserEnable": "/loginUser/isEnable"
+            "loginUserEnable": "/loginUser/isEnable",
+            "loginUserRole": "/loginUser/role",
+            "role": "/role"
         },
 
         "layout": {

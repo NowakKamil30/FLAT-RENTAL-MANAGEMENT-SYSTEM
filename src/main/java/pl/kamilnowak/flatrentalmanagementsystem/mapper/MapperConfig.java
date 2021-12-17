@@ -92,6 +92,7 @@ public class MapperConfig {
                         map().setId(source.getId());
                         map().setMail(source.getMail());
                         map().setEnable(source.isEnable());
+                        map().setRole(source.getRole());
                     }
                 });
         modelMapper.createTypeMap(UserData.class, UserDataDHO.class)

@@ -71,7 +71,7 @@ const CreateTenantPage: React.FC<PropsFromRedux> = ({
                 setIsSuccessMessage(true);
             }
         } catch (e) {
-            setError({message: (e as Error).message});
+            setError({message: 'something goes wrong, try again!'});
         } finally {
             setFetching(false);
         }
@@ -92,7 +92,7 @@ const CreateTenantPage: React.FC<PropsFromRedux> = ({
                 setCurriencies(response.data);
             }
         } catch (e) {
-            setErrorCurrencies({message: (e as Error).message});
+            setErrorCurrencies({message: 'cannot download list of currencies'});
         } finally {
             setFetchingCurrencies(false);
         }

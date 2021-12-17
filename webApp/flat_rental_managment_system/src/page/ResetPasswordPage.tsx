@@ -25,7 +25,7 @@ const ResetPasswordPage = (): JSX.Element => {
             await Axios.post(backendURL + changePassword, resetPassword);
             seiIsMailSend(true);
         } catch (e) {
-            setError({message: (e as Error).message});
+            setError({message: 'something goes wrong, try again!'});
             resetForm();
         } finally {
             setFetching(false);

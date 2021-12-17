@@ -95,7 +95,7 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
                 setApartment(response.data as Apartment);
             }
         } catch (e) {
-            setErrorApartment({message: (e as Error).message});
+            setErrorApartment({message: 'something goes wrong, try again!'});
         } finally {
             setFetchingApartment(false);
         }
@@ -115,7 +115,7 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
                 setSendReminder({message: 'send reminder!!'});
             }
         } catch (e) {
-            setErrorReminder({message: (e as Error).message});
+            setErrorReminder({message: 'something goes wrong, try again!'});
         } finally {
             setFetchingSendReminder(false);
         }
@@ -138,7 +138,7 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
                 setPage(response.data.pageable.pageNumber + 1);
             }
         } catch (e) {
-            setErrorTenants({message: (e as Error).message});
+            setErrorTenants({message: 'something goes wrong, try again!'});
         } finally {
             setFetchingTenants(false);
         }
@@ -182,7 +182,7 @@ const ApartamentPage: React.FC<PropsFromRedux> = ({
                 setPageForImages(response.data.pageable.pageNumber + 1);
             }
         } catch (e) {
-            setErrorForImages({message: (e as Error).message});
+            setErrorForImages({message: 'something goes wrong, try again!'});
         } finally {
             setFetchingForImages(false);
         }

@@ -74,7 +74,7 @@ const UserMainPage: React.FC<PropsFromRedux> = ({
                 setUser(response.data);
             }
         } catch (e) {
-            setError({message: (e as Error).message});
+            setError({message: 'cannot download data'});
         } finally {
             setFetchingUserData(false);
         }
@@ -95,7 +95,7 @@ const UserMainPage: React.FC<PropsFromRedux> = ({
                 getApartments();
             }
         } catch (e) {
-            setError({message: (e as Error).message});
+            setError({message: 'cannot download data'});
         } finally {
             setModal({...modal, fetching: false, showConfirmButton: false, title: response?.status == 200 ? 'apartament was deleted' : 'error :/'});
         }
@@ -133,7 +133,7 @@ const UserMainPage: React.FC<PropsFromRedux> = ({
                 })) as ListType[]);
             }
         } catch (e) {
-            setErrorFromApartments({message: (e as Error).message});
+            setErrorFromApartments({message: 'cannot download data'});
         } finally {
             setFetchingApartments(false);
         }

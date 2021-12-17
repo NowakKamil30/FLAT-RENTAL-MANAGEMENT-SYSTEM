@@ -25,6 +25,7 @@ import AdminPage from '../page/AdminPage';
 import CreateCurrencyPage from '../page/CreateCurrencyPage';
 import ManageUserInfoPage from '../page/ManageUserInfoPage';
 import ChangeEnablePage from '../page/ChangeEnablePage';
+import UpdateRolePage from '../page/UpdateRolePage';
 
 interface IMapStateToProps {
     role: Role;
@@ -289,6 +290,25 @@ const MainRouter: React.FC<PropsFromRedux> = ({
                     isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
                     >
                         <ChangeEnablePage/>
+                    </PrivateRoute>
+                    }
+                />
+            </Route>
+            <Route path='/update-role' element={
+                <PrivateRoute
+                redirectPath='/login'
+                isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                >
+                    <UpdateRolePage/>
+                </PrivateRoute>
+            }
+            > 
+                <Route path=':loginUserId' element={
+                    <PrivateRoute
+                    redirectPath='/login'
+                    isAuth={(!!role && (role === Role.ADMIN || role === Role.USER)) || (!!localStorage.getItem('role') && (localStorage.getItem('role') === Role.USER || localStorage.getItem('role') === Role.ADMIN))}
+                    >
+                        <UpdateRolePage/>
                     </PrivateRoute>
                     }
                 />

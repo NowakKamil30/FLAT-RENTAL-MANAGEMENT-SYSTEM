@@ -23,7 +23,7 @@ const VerificationAccountPage= (): JSX.Element => {
         try {
             await Axios.get(backendURL + verifyToken + '?token=' + token);
         } catch(e) {
-            setError({message: (e as Error).message});
+            setError({message: 'something goes wrong, try again!'});
         } finally {
             setFetching(false);
         }

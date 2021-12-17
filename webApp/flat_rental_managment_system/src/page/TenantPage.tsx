@@ -96,7 +96,7 @@ const TenantPage: React.FC<PropsFromRedux> = ({
                 setTenant(response.data as TenantModel);
             }
         } catch (e) {
-            setErrorTenant({message: (e as Error).message});
+            setErrorTenant({message: 'cannot donwload data'});
         } finally {
             setFetchingTenant(false);
         }
@@ -118,7 +118,7 @@ const TenantPage: React.FC<PropsFromRedux> = ({
                 setPageDocuments(response.data.pageable.pageNumber + 1);
             }
         } catch (e) {
-            setErrorDocuments({message: (e as Error).message});
+            setErrorDocuments({message: 'cannot download data'});
         } finally {
             setFetchingDocuments(false);
         }
@@ -140,7 +140,7 @@ const TenantPage: React.FC<PropsFromRedux> = ({
                 setPageExtraCost(response.data.pageable.pageNumber + 1);
             }
         } catch (e) {
-            setErrorExtraCosts({message: (e as Error).message});
+            setErrorExtraCosts({message: 'cannot download data'});
         } finally {
             setFetchingExtraCosts(false);
         }
@@ -160,7 +160,7 @@ const TenantPage: React.FC<PropsFromRedux> = ({
                 setSendReminder({message: 'send reminder!!'});
             }
         } catch (e) {
-            setErrorReminder({message: (e as Error).message});
+            setErrorReminder({message: 'something goes wrong, try again!'});
         } finally {
             setFetchingSendReminder(false);
         }

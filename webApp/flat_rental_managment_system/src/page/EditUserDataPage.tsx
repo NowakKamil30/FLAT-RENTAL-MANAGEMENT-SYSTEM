@@ -54,7 +54,7 @@ const EditUserDataPage: React.FC<PropsFromRedux> = ({
                 setValues({firstName: user.firstName, lastName: user.lastName});
             }
         } catch (e) {
-            setError({message: (e as Error).message});
+            setError({message: 'cannot download data'});
         } finally {
             setGetFetchingUserData(false);
         }
@@ -76,7 +76,7 @@ const EditUserDataPage: React.FC<PropsFromRedux> = ({
                 setIsSuccessMessage(true);
             }
         } catch (e) {
-            setError({message: (e as Error).message});
+            setError({message: 'something goes wrong, try again!'});
         } finally {
             setFetchingUserData(false);
         }

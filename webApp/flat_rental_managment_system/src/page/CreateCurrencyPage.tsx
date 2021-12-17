@@ -56,7 +56,7 @@ const CreateCurrencyPage: React.FC<PropsFromRedux> = ({
                 setIsSuccessMessage(true);
             }
         } catch (e) {
-            setError({message: (e as Error).message});
+            setError({message: 'something goes wrong, try again!'});
         } finally {
             setFetching(false);
         }

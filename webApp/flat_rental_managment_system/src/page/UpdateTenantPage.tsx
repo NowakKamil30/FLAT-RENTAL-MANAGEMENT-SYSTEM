@@ -83,7 +83,7 @@ const UpdateTenantPage: React.FC<PropsFromRedux> = ({
                 setIsSuccessMessage(true);
             }
         } catch (e) {
-            setError({message: (e as Error).message});
+            setError({message: 'something goes wrong, try again!'});
         } finally {
             setFetching(false);
         }
@@ -112,7 +112,7 @@ const UpdateTenantPage: React.FC<PropsFromRedux> = ({
                 setCurrency(tenantModel.currency.id+'');
             }
         } catch (e) {
-            setErrorTenant({message: (e as Error).message});
+            setErrorTenant({message: 'cannot download data'});
         } finally {
             setFetchingTenant(false);
         } 
@@ -132,7 +132,7 @@ const UpdateTenantPage: React.FC<PropsFromRedux> = ({
                 setDocuments(response.data);
             }
         } catch (e) {
-            setErrorDocuments({message: (e as Error).message});
+            setErrorDocuments({message: 'cannot download data'});
         } finally {
             setFetchingDocuments(false);
         }
@@ -152,7 +152,7 @@ const UpdateTenantPage: React.FC<PropsFromRedux> = ({
                 setExtraCosts(response.data);
             }
         } catch (e) {
-            setErrorExtraCosts({message: (e as Error).message});
+            setErrorExtraCosts({message: 'cannot download data'});
         } finally {
             setFetchingExtraCosts(false);
         }
@@ -172,7 +172,7 @@ const UpdateTenantPage: React.FC<PropsFromRedux> = ({
                 setCurriencies(response.data);
             }
         } catch (e) {
-            setErrorCurrencies({message: (e as Error).message});
+            setErrorCurrencies({message: 'create download data'});
         } finally {
             setFetchingCurrencies(false);
         }
