@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.exception.Entity;
+package pl.kamilnowak.flatrentalmanagementsystem.exception.model;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 public class JsonError {
     private String message;
-    private String errorCode;
 
     public JsonError() {
     }
@@ -16,6 +15,5 @@ public class JsonError {
     @Builder
     public JsonError(String message, String errorCode) {
         this.message = message;
-        this.errorCode = errorCode;
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.*;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.Entity.JsonError;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.model.JsonError;
 import pl.kamilnowak.flatrentalmanagementsystem.mail.exception.EmailSendException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
