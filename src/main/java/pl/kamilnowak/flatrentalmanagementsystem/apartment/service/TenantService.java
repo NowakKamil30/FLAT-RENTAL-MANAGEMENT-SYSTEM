@@ -160,7 +160,7 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
     public void checkIsPaidAll() {
         log.debug("check is all paid");
         int numberOfPages = getAllObject(1).getTotalPages();
-        for (int i = 1; i < numberOfPages; i++) {
+        for (int i = 1; i <= numberOfPages; i++) {
             List<Tenant> tenants = getAllObject(i)
                     .stream().map(tenant -> {
                         LocalDate date = LocalDate.now();
@@ -183,13 +183,15 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
     }
 
     public void checkIsEndDate() {
-        log.debug("check si end date");
+        log.debug("check is end date");
         int numberOfPages = getAllObject(1).getTotalPages();
-        for (int i = 1; i < numberOfPages; i++) {
+        for (int i = 1; i <= numberOfPages; i++) {
             List<Tenant> tenants = getAllObject(i)
                     .stream().map(tenant -> {
                         LocalDate date = LocalDate.now();
-                        if (tenant.getEndDate().isAfter(date)) {
+                        if (tenant.getEndDate() == null) {
+                            tenant.setIsActive(false);
+                        } else if (tenant.getEndDate().isBefore(date)) {
                             tenant.setIsActive(false);
                         } else {
                             tenant.setIsActive(true);
