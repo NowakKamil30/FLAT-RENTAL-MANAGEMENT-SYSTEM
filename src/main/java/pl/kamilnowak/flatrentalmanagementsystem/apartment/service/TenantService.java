@@ -120,7 +120,18 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
                 });
         tenant.setFee(tenant.getFee().setScale(2, RoundingMode.HALF_UP));
         LocalDate date = LocalDate.now();
-        date = date.withDayOfMonth(tenant.getDayToPay());
+        int dayOfMonth = tenant.getDayToPay();
+        if (dayOfMonth > 28 && date.getMonth().getValue() == 2) {
+            date = date.withDayOfMonth(28);
+        } else if ((date.getMonth().getValue() == 4 ||
+                date.getMonth().getValue() == 6 ||
+                date.getMonth().getValue() == 9 ||
+                date.getMonth().getValue() == 11) &&
+                dayOfMonth > 30) {
+            date =  date.withDayOfMonth(30);
+        } else {
+            date = date.withDayOfMonth(tenant.getDayToPay());
+        }
         if (tenant.getPaidDate() == null) {
             tenant.setIsPaid(false);
         } else if (tenant.getPaidDate().plusMonths(1).getYear() > date.getYear()) {
@@ -144,7 +155,7 @@ public class TenantService implements CRUDOperation<Tenant, Long> {
                     "Welcome(change fee value)" + tenant.getFirstName() + "!",
                     "your new fee (Basic: " + tenant.getFee() + ") (Extra costs: " + extraCostSum +")" + currency.getName() + "\n"
                         + "Start date: " + tenant.getStartDate() + "\n"
-                        + "pay up to the day of the month:" + tenant.getDayToPay()
+                        + "pay up to the day of the month:" + date.getDayOfMonth()
             );
         } catch (EmailSendException e) {
             throw new NotFoundException("");

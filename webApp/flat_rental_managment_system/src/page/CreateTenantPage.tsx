@@ -172,7 +172,7 @@ const CreateTenantPage: React.FC<PropsFromRedux> = ({
                     .strict(true)
                     .required('this field is required')
                     .moreThan(0, 'it must be positive number')
-                    .lessThan(25, 'it is not valid day')
+                    .lessThan(32, 'it is not valid day')
         }),
         onSubmit: (values: TenantModel) => {
             console.log(documents);
