@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.service;
+package pl.kamilnowak.flatrentalmanagementsystem.util.service;
 
 public interface CreateOperation<T> {
     T createObject(T t);

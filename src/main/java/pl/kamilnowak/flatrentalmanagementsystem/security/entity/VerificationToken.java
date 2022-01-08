@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = VerificationToken.TABLE_NAME)
 public class VerificationToken {
-    public static final String TABLE_NAME =  "verification_token";
+    public static final String TABLE_NAME =  "verification_tokens";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

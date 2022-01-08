@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.exception;
+package pl.kamilnowak.flatrentalmanagementsystem.exception.type;
 
 public class TokenIsTooOldException extends Exception{
     public TokenIsTooOldException(String tokenName) {

@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Currency;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.ExtraCost;
-import pl.kamilnowak.flatrentalmanagementsystem.view.Views;
+import pl.kamilnowak.flatrentalmanagementsystem.util.view.Views;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -1,7 +1,6 @@
 package pl.kamilnowak.flatrentalmanagementsystem.apartment.service;
 
 import lombok.extern.log4j.Log4j2;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -9,11 +8,11 @@ import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Currency;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.ExtraCost;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Tenant;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.repository.TenantRepository;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.NotFoundException;
 import pl.kamilnowak.flatrentalmanagementsystem.mail.exception.EmailSendException;
 import pl.kamilnowak.flatrentalmanagementsystem.mail.service.MailActionService;
-import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
-import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
+import pl.kamilnowak.flatrentalmanagementsystem.util.service.CRUDOperation;
+import pl.kamilnowak.flatrentalmanagementsystem.util.service.PageableHelper;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;

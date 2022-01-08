@@ -6,8 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.UserData;
 import pl.kamilnowak.flatrentalmanagementsystem.security.repository.UserDataRepository;
-import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
-import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
+import pl.kamilnowak.flatrentalmanagementsystem.util.service.CRUDOperation;
+import pl.kamilnowak.flatrentalmanagementsystem.util.service.PageableHelper;
 
 import java.util.Optional;
 

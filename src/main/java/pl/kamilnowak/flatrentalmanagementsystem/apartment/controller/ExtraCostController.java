@@ -10,7 +10,7 @@ import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Tenant;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.model.ExtraCostSum;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.ExtraCostService;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.TenantService;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.NotAuthorizationException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.NotAuthorizationException;
 
 import java.security.Principal;
 import java.util.List;

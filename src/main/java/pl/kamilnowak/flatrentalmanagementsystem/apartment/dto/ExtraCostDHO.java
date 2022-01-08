@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Tenant;
-import pl.kamilnowak.flatrentalmanagementsystem.view.Views;
+import pl.kamilnowak.flatrentalmanagementsystem.util.view.Views;
 
 import java.math.BigDecimal;
 

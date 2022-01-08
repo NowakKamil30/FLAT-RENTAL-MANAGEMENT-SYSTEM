@@ -11,7 +11,7 @@ import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.ExtraCost;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Tenant;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.ApartmentService;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.TenantService;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.NotAuthorizationException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.NotAuthorizationException;
 import pl.kamilnowak.flatrentalmanagementsystem.mail.exception.EmailSendException;
 import pl.kamilnowak.flatrentalmanagementsystem.mail.service.MailActionService;
 

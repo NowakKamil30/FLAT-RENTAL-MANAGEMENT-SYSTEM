@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.controller;
+package pl.kamilnowak.flatrentalmanagementsystem.exception.controller;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.Ordered;
@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.*;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.model.JsonError;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.*;
 import pl.kamilnowak.flatrentalmanagementsystem.mail.exception.EmailSendException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)

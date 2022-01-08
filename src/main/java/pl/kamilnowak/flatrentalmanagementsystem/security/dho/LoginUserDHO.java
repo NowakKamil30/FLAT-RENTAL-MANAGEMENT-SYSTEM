@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import pl.kamilnowak.flatrentalmanagementsystem.security.type.TypeAccount;
-import pl.kamilnowak.flatrentalmanagementsystem.view.Views;
+import pl.kamilnowak.flatrentalmanagementsystem.util.view.Views;
 
 @Getter
 @Setter

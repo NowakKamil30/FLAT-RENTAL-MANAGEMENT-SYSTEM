@@ -10,15 +10,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import pl.kamilnowak.flatrentalmanagementsystem.security.filter.JWTFilter;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.LoginUserService;
 import pl.kamilnowak.flatrentalmanagementsystem.security.type.TypeAccount;
+import pl.kamilnowak.flatrentalmanagementsystem.util.info.ConfigInfo;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final LoginUserService loginUserService;
+    private final ConfigInfo configInfo;
 
     @Autowired
-    public SecurityConfig(LoginUserService loginUserService) {
+    public SecurityConfig(LoginUserService loginUserService, ConfigInfo configInfo) {
         this.loginUserService = loginUserService;
+        this.configInfo = configInfo;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/v1/authorization/**").permitAll()
                 .and()
-                .addFilterBefore(new JWTFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTFilter(configInfo.getSecretKey()), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/v1/loginUser/**").hasAnyRole(
                         TypeAccount.USER.toString(),

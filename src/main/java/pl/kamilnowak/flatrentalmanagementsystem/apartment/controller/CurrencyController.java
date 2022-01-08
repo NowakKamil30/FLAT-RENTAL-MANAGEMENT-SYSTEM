@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.CurrencyDHO;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Currency;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.CurrencyService;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.EntityExistException;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.EntityExistException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;

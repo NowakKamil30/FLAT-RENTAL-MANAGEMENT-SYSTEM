@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.exception;
+package pl.kamilnowak.flatrentalmanagementsystem.exception.type;
 
 public class TokenIsNotValidException extends Exception {
     public TokenIsNotValidException() {

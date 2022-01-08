@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.util;
+package pl.kamilnowak.flatrentalmanagementsystem.util.info;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.VerificationToken;
 import pl.kamilnowak.flatrentalmanagementsystem.security.repository.VerificationTokenRepository;
-import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
-import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
+import pl.kamilnowak.flatrentalmanagementsystem.util.service.CRUDOperation;
+import pl.kamilnowak.flatrentalmanagementsystem.util.service.PageableHelper;
 
 import java.time.LocalDateTime;
 
