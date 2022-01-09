@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.CurrencyDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.CurrencyDTO;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Currency;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.CurrencyService;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.type.EntityExistException;
@@ -29,31 +29,31 @@ public class CurrencyController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<CurrencyDHO>> getCurrencies(@RequestParam(defaultValue = "1") int page) {
-        Page<CurrencyDHO> currencyDHOPage = currencyService.getAllObject(page)
-                .map(currency -> modelMapper.map(currency, CurrencyDHO.class));
+    public ResponseEntity<Page<CurrencyDTO>> getCurrencies(@RequestParam(defaultValue = "1") int page) {
+        Page<CurrencyDTO> currencyDHOPage = currencyService.getAllObject(page)
+                .map(currency -> modelMapper.map(currency, CurrencyDTO.class));
         return ResponseEntity.ok(currencyDHOPage);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<CurrencyDHO>> getCurrencies() {
-        List<CurrencyDHO> currencyDHOList = currencyService.getAllObject().stream()
-                .map(currency -> modelMapper.map(currency, CurrencyDHO.class))
+    public ResponseEntity<List<CurrencyDTO>> getCurrencies() {
+        List<CurrencyDTO> currencyDHOList = currencyService.getAllObject().stream()
+                .map(currency -> modelMapper.map(currency, CurrencyDTO.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(currencyDHOList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CurrencyDHO> getCurrency(@PathVariable Long id) {
+    public ResponseEntity<CurrencyDTO> getCurrency(@PathVariable Long id) {
         Currency currency = currencyService.getObjectById(id);
         if (currency == null) {
             throw new NotFoundException(id.toString());
         }
-        return ResponseEntity.ok(modelMapper.map(currency, CurrencyDHO.class));
+        return ResponseEntity.ok(modelMapper.map(currency, CurrencyDTO.class));
     }
 
     @PostMapping("")
-    public ResponseEntity<CurrencyDHO> createCurrency(@RequestBody Currency currency) {
+    public ResponseEntity<CurrencyDTO> createCurrency(@RequestBody Currency currency) {
         Currency createdCurrency = null;
         try {
             createdCurrency = currencyService.createObject(currency);
@@ -62,7 +62,7 @@ public class CurrencyController {
         }
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(modelMapper.map(createdCurrency, CurrencyDHO.class));
+                .body(modelMapper.map(createdCurrency, CurrencyDTO.class));
     }
 
     @DeleteMapping("/{id}")
@@ -75,7 +75,7 @@ public class CurrencyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CurrencyDHO> updateCurrency(@PathVariable Long id, @RequestBody Currency currency) {
-        return ResponseEntity.ok(modelMapper.map(currencyService.updateObject(currency, id), CurrencyDHO.class));
+    public ResponseEntity<CurrencyDTO> updateCurrency(@PathVariable Long id, @RequestBody Currency currency) {
+        return ResponseEntity.ok(modelMapper.map(currencyService.updateObject(currency, id), CurrencyDTO.class));
     }
 }

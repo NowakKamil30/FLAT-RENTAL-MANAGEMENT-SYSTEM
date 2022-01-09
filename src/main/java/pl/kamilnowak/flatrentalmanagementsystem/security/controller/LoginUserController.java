@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.kamilnowak.flatrentalmanagementsystem.security.dho.LoginUserDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.security.dto.LoginUserDTO;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.LoginUserService;
 import pl.kamilnowak.flatrentalmanagementsystem.security.type.TypeAccount;
@@ -26,8 +26,8 @@ public class LoginUserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LoginUserDHO> getLoginUser(@PathVariable Long id) {
-        return ResponseEntity.ok(modelMapper.map(loginUserService.getObjectById(id), LoginUserDHO.class));
+    public ResponseEntity<LoginUserDTO> getLoginUser(@PathVariable Long id) {
+        return ResponseEntity.ok(modelMapper.map(loginUserService.getObjectById(id), LoginUserDTO.class));
     }
 
     @DeleteMapping("/{id}")
@@ -37,25 +37,25 @@ public class LoginUserController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<LoginUserDHO>> getLoginUsers(@RequestParam(defaultValue = "1") int page) {
+    public ResponseEntity<Page<LoginUserDTO>> getLoginUsers(@RequestParam(defaultValue = "1") int page) {
         return ResponseEntity.ok( loginUserService.getAllObject(page)
-                .map(loginUser -> modelMapper.map(loginUser, LoginUserDHO.class)));
+                .map(loginUser -> modelMapper.map(loginUser, LoginUserDTO.class)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LoginUserDHO> updateLoginUser(@PathVariable Long id, @RequestBody LoginUser loginUser) {
-        return ResponseEntity.ok(modelMapper.map(loginUserService.updateObject(loginUser, id), LoginUserDHO.class));
+    public ResponseEntity<LoginUserDTO> updateLoginUser(@PathVariable Long id, @RequestBody LoginUser loginUser) {
+        return ResponseEntity.ok(modelMapper.map(loginUserService.updateObject(loginUser, id), LoginUserDTO.class));
     }
 
     @PostMapping("/isEnable/{id}")
-    public ResponseEntity<LoginUserDHO> setEnable(@PathVariable Long id, @RequestBody Map<String, Boolean> argMap) {
+    public ResponseEntity<LoginUserDTO> setEnable(@PathVariable Long id, @RequestBody Map<String, Boolean> argMap) {
         Boolean isEnable = argMap.get("isEnable");
-        return ResponseEntity.ok(modelMapper.map(loginUserService.setIsEnable(id, isEnable), LoginUserDHO.class));
+        return ResponseEntity.ok(modelMapper.map(loginUserService.setIsEnable(id, isEnable), LoginUserDTO.class));
     }
 
     @PostMapping("/role/{id}")
-    public ResponseEntity<LoginUserDHO> setRole(@PathVariable Long id, @RequestBody Map<String, String> argMap) {
-        return ResponseEntity.ok(modelMapper.map(loginUserService.setRole(id, TypeAccount.valueOf(argMap.get("role"))), LoginUserDHO.class));
+    public ResponseEntity<LoginUserDTO> setRole(@PathVariable Long id, @RequestBody Map<String, String> argMap) {
+        return ResponseEntity.ok(modelMapper.map(loginUserService.setRole(id, TypeAccount.valueOf(argMap.get("role"))), LoginUserDTO.class));
     }
 
 }

@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.security.dho;
+package pl.kamilnowak.flatrentalmanagementsystem.security.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class VerificationTokenDHO {
+public class VerificationTokenDTO {
     @JsonView(Views.Public.class)
     private Long id;
     @JsonView(Views.Public.class)
@@ -20,11 +20,11 @@ public class VerificationTokenDHO {
     @JsonView(Views.Public.class)
     private LocalDateTime createTime;
 
-    public VerificationTokenDHO() {
+    public VerificationTokenDTO() {
     }
 
     @Builder
-    public VerificationTokenDHO(Long id, String token, Long loginUserId, LocalDateTime createTime) {
+    public VerificationTokenDTO(Long id, String token, Long loginUserId, LocalDateTime createTime) {
         this.id = id;
         this.token = token;
         this.loginUserId = loginUserId;

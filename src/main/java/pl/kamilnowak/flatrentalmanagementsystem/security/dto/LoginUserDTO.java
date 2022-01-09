@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.security.dho;
+package pl.kamilnowak.flatrentalmanagementsystem.security.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import pl.kamilnowak.flatrentalmanagementsystem.util.view.Views;
 
 @Getter
 @Setter
-public class LoginUserDHO {
+public class LoginUserDTO {
     @JsonView(Views.Public.class)
     private Long id;
     @JsonView(Views.Public.class)
@@ -19,11 +19,11 @@ public class LoginUserDHO {
     @JsonView(Views.Private.class)
     private TypeAccount role;
 
-    public LoginUserDHO() {
+    public LoginUserDTO() {
     }
 
     @Builder
-    public LoginUserDHO(Long id, String mail, boolean isEnable, TypeAccount role) {
+    public LoginUserDTO(Long id, String mail, boolean isEnable, TypeAccount role) {
         this.id = id;
         this.mail = mail;
         this.isEnable = isEnable;

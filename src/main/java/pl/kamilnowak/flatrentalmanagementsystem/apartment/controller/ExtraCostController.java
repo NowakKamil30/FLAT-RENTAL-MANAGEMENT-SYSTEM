@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.ExtraCostDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.ExtraCostDTO;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Tenant;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.model.ExtraCostSum;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.ExtraCostService;
@@ -32,24 +32,24 @@ public class ExtraCostController {
     }
 
     @GetMapping("/tenant/{id}/all")
-    public ResponseEntity<List<ExtraCostDHO>> getAllExtraCostForTenant(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
+    public ResponseEntity<List<ExtraCostDTO>> getAllExtraCostForTenant(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
         Tenant tenantSaved = tenantService.getTenantByLoginUserMailAndId(principal.getName(), id);
         if (tenantSaved == null) {
             throw new NotAuthorizationException();
         }
         return ResponseEntity.ok(extraCostService.getAllByTenantId(id).stream()
-                .map(extraCost -> modelMapper.map(extraCost, ExtraCostDHO.class))
+                .map(extraCost -> modelMapper.map(extraCost, ExtraCostDTO.class))
                 .collect(Collectors.toList()));
     }
 
     @GetMapping("/tenant/{id}")
-    public ResponseEntity<Page<ExtraCostDHO>> getAllExtraCostForTenant(@PathVariable Long id, @RequestParam(defaultValue = "1") int page, Principal principal) throws NotAuthorizationException  {
+    public ResponseEntity<Page<ExtraCostDTO>> getAllExtraCostForTenant(@PathVariable Long id, @RequestParam(defaultValue = "1") int page, Principal principal) throws NotAuthorizationException  {
         Tenant tenantSaved = tenantService.getTenantByLoginUserMailAndId(principal.getName(), id);
         if (tenantSaved == null) {
             throw new NotAuthorizationException();
         }
         return ResponseEntity.ok(extraCostService.getAllByTenantId(id, page)
-                .map(extraCost -> modelMapper.map(extraCost, ExtraCostDHO.class)));
+                .map(extraCost -> modelMapper.map(extraCost, ExtraCostDTO.class)));
     }
 
     @GetMapping("/tenant/{id}/cost")

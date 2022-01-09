@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.TenantDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.TenantDTO;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Apartment;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Tenant;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.ApartmentService;
@@ -31,20 +31,20 @@ public class TenantController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TenantDHO> getTenant(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
+    public ResponseEntity<TenantDTO> getTenant(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
         Tenant tenant = tenantService.getTenantByLoginUserMailAndId(principal.getName(), id);
         if (tenant == null) {
             throw new NotAuthorizationException();
         }
-        return ResponseEntity.ok(modelMapper.map(tenant, TenantDHO.class));
+        return ResponseEntity.ok(modelMapper.map(tenant, TenantDTO.class));
     }
 
     @PostMapping("")
-    public ResponseEntity<TenantDHO> createTenant(@RequestBody Tenant tenant) {
+    public ResponseEntity<TenantDTO> createTenant(@RequestBody Tenant tenant) {
         Tenant createdTenant = tenantService.createObject(tenant);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(modelMapper.map(createdTenant, TenantDHO.class));
+                .body(modelMapper.map(createdTenant, TenantDTO.class));
     }
 
     @DeleteMapping("/{id}")
@@ -58,21 +58,21 @@ public class TenantController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TenantDHO> updateTenant(@PathVariable Long id, @RequestBody Tenant tenant, Principal principal) throws NotAuthorizationException  {
+    public ResponseEntity<TenantDTO> updateTenant(@PathVariable Long id, @RequestBody Tenant tenant, Principal principal) throws NotAuthorizationException  {
         Tenant tenantSaved = tenantService.getTenantByLoginUserMailAndId(principal.getName(), id);
         if (tenantSaved == null) {
             throw new NotAuthorizationException();
         }
-        return ResponseEntity.ok(modelMapper.map(tenantService.updateObject(tenant, id), TenantDHO.class));
+        return ResponseEntity.ok(modelMapper.map(tenantService.updateObject(tenant, id), TenantDTO.class));
     }
 
     @GetMapping("/apartment/{id}")
-    public ResponseEntity<Page<TenantDHO>> getTenantsByApartment(@PathVariable Long id, @RequestParam(defaultValue = "1") int page, Principal principal) throws NotAuthorizationException {
+    public ResponseEntity<Page<TenantDTO>> getTenantsByApartment(@PathVariable Long id, @RequestParam(defaultValue = "1") int page, Principal principal) throws NotAuthorizationException {
         Apartment apartment = apartmentService.getObjectById(id);
         if (!apartment.getUserData().getLoginUser().getMail().equals(principal.getName())) {
             throw new NotAuthorizationException();
         }
         return ResponseEntity.ok(tenantService.getObjectsByApartmentId(id, page)
-                .map(tenant -> modelMapper.map(tenant, TenantDHO.class)));
+                .map(tenant -> modelMapper.map(tenant, TenantDTO.class)));
     }
 }

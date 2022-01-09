@@ -43,17 +43,17 @@ public class JWTFilter extends OncePerRequestFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthenticationToken(String authorization) {
-        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC512(key)).build();
+        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC512("a8e3ff9bbb091fd856302903cfc1b9f5fcb3f87cca03df816f05b60c242a086d")).build();
         DecodedJWT verify;
         try {
             verify = jwtVerifier.verify(authorization.substring(7));
         } catch (Exception e) {
             return null;
         }
-        String name = verify.getClaim("mail").asString();
+        String name = verify.getClaim("sub").asString();
         String role = verify.getClaim("role").asString();
-        long validDate = verify.getClaim("validTo").asLong();
-        long createDate = verify.getClaim("createDate").asLong();
+        long validDate = verify.getClaim("exp").asLong();
+        long createDate = verify.getClaim("iat").asLong();
 
         if (validDate < LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) {
             return null;

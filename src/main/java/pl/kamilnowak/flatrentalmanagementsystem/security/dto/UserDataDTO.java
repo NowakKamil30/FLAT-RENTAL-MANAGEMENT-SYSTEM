@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.security.dho;
+package pl.kamilnowak.flatrentalmanagementsystem.security.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class UserDataDHO {
+public class UserDataDTO {
     @JsonView(Views.Public.class)
     private Long id;
     @JsonView(Views.Public.class)
@@ -24,11 +24,11 @@ public class UserDataDHO {
     @JsonView(Views.Private.class)
     private Long loginUserId;
 
-    public UserDataDHO() {
+    public UserDataDTO() {
     }
 
     @Builder
-    public UserDataDHO(Long id, String firstName, String lastName, LocalDateTime activeAccountData, LocalDateTime createUserData, Long loginUserId) {
+    public UserDataDTO(Long id, String firstName, String lastName, LocalDateTime activeAccountData, LocalDateTime createUserData, Long loginUserId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

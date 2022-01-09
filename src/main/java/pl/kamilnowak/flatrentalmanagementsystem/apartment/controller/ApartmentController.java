@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.ApartmentDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.ApartmentDTO;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Apartment;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.ApartmentService;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.type.NotAuthorizationException;
@@ -33,7 +33,7 @@ public class ApartmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApartmentDHO> getApartment(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
+    public ResponseEntity<ApartmentDTO> getApartment(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
         LoginUser loginUser = loginUserService.loadUserByUsername(principal.getName());
         if (loginUser.getUserData().getApartments().stream()
                 .filter(apartment -> Objects.equals(apartment.getId(), id))
@@ -45,18 +45,18 @@ public class ApartmentController {
             if (apartment == null) {
                 throw new NotFoundException(id.toString());
             }
-            return ResponseEntity.ok(modelMapper.map(apartment, ApartmentDHO.class));
+            return ResponseEntity.ok(modelMapper.map(apartment, ApartmentDTO.class));
         } catch (Exception e) {
             throw new NotFoundException(id.toString());
         }
     }
 
     @PostMapping("")
-    public ResponseEntity<ApartmentDHO> createApartment(@RequestBody Apartment apartment) {
+    public ResponseEntity<ApartmentDTO> createApartment(@RequestBody Apartment apartment) {
         Apartment createdApartment = apartmentService.createObject(apartment);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(modelMapper.map(createdApartment, ApartmentDHO.class));
+                .body(modelMapper.map(createdApartment, ApartmentDTO.class));
     }
 
     @DeleteMapping("/{id}")
@@ -73,22 +73,22 @@ public class ApartmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApartmentDHO> updateApartment(@PathVariable Long id, @RequestBody Apartment apartment, Principal principal) throws NotAuthorizationException {
+    public ResponseEntity<ApartmentDTO> updateApartment(@PathVariable Long id, @RequestBody Apartment apartment, Principal principal) throws NotAuthorizationException {
         LoginUser loginUser = loginUserService.loadUserByUsername(principal.getName());
         if (loginUser.getUserData().getApartments().stream()
                 .filter(apartmentItem -> Objects.equals(apartmentItem.getId(), id))
                 .findAny().isEmpty()) {
             throw new NotAuthorizationException();
         }
-        return ResponseEntity.ok(modelMapper.map(apartmentService.updateObject(apartment, id), ApartmentDHO.class));
+        return ResponseEntity.ok(modelMapper.map(apartmentService.updateObject(apartment, id), ApartmentDTO.class));
     }
 
     @GetMapping("/userData/{id}")
-    public ResponseEntity<Page<ApartmentDHO>> getApartmentsByUserDataId(@PathVariable Long id, @RequestParam(defaultValue = "1") int page, Principal principal) throws NotAuthorizationException {
+    public ResponseEntity<Page<ApartmentDTO>> getApartmentsByUserDataId(@PathVariable Long id, @RequestParam(defaultValue = "1") int page, Principal principal) throws NotAuthorizationException {
         if (!Objects.equals(loginUserService.loadUserByUsername(principal.getName()).getUserData().getId(), id)) {
             throw new NotAuthorizationException();
         }
         return ResponseEntity.ok(apartmentService.getApartmentsByUserDataId(id, page)
-                .map(apartment -> modelMapper.map(apartment, ApartmentDHO.class)));
+                .map(apartment -> modelMapper.map(apartment, ApartmentDTO.class)));
     }
 }

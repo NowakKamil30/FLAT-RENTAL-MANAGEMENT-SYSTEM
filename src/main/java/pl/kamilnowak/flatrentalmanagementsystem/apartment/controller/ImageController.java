@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.ImageDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.ImageDTO;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Apartment;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Image;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.ApartmentService;
@@ -33,20 +33,20 @@ public class ImageController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ImageDHO> getImage(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
+    public ResponseEntity<ImageDTO> getImage(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
         Image image = imageService.getImageByLoginUserMailAndId(principal.getName(), id);
         if (image == null) {
             throw new NotAuthorizationException();
         }
-        return ResponseEntity.ok(modelMapper.map(image, ImageDHO.class));
+        return ResponseEntity.ok(modelMapper.map(image, ImageDTO.class));
     }
 
     @PostMapping("")
-    public ResponseEntity<ImageDHO> createImage(@RequestBody Image image) {
+    public ResponseEntity<ImageDTO> createImage(@RequestBody Image image) {
         Image createdImage = imageService.createObject(image);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(modelMapper.map(createdImage, ImageDHO.class));
+                .body(modelMapper.map(createdImage, ImageDTO.class));
     }
 
     @DeleteMapping("/{id}")
@@ -60,32 +60,32 @@ public class ImageController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ImageDHO> updateImage(@PathVariable Long id, @RequestBody Image image, Principal principal) throws NotAuthorizationException  {
+    public ResponseEntity<ImageDTO> updateImage(@PathVariable Long id, @RequestBody Image image, Principal principal) throws NotAuthorizationException  {
         Image imageToCheck = imageService.getImageByLoginUserMailAndId(principal.getName(), id);
         if (imageToCheck == null) {
             throw new NotAuthorizationException();
         }
-        return ResponseEntity.ok(modelMapper.map(imageService.updateObject(image, id), ImageDHO.class));
+        return ResponseEntity.ok(modelMapper.map(imageService.updateObject(image, id), ImageDTO.class));
     }
 
     @GetMapping("/apartment/{id}")
-    public ResponseEntity<Page<ImageDHO>> getImagesByApartment(@PathVariable Long id, @RequestParam(defaultValue = "1") int page, Principal principal) throws NotAuthorizationException  {
+    public ResponseEntity<Page<ImageDTO>> getImagesByApartment(@PathVariable Long id, @RequestParam(defaultValue = "1") int page, Principal principal) throws NotAuthorizationException  {
         Apartment apartment = apartmentService.getApartmentByLoginUserMailAndId(principal.getName(), id);
         if (apartment == null) {
             throw new NotAuthorizationException();
         }
         return  ResponseEntity.ok(imageService.getObjectsByApartmentId(id, page)
-                .map(image -> modelMapper.map(image, ImageDHO.class)));
+                .map(image -> modelMapper.map(image, ImageDTO.class)));
     }
 
     @GetMapping("/apartment/{id}/all")
-    public ResponseEntity<List<ImageDHO>> getImagesByApartment(@PathVariable Long id, Principal principal) throws NotAuthorizationException  {
+    public ResponseEntity<List<ImageDTO>> getImagesByApartment(@PathVariable Long id, Principal principal) throws NotAuthorizationException  {
         Apartment apartment = apartmentService.getApartmentByLoginUserMailAndId(principal.getName(), id);
         if (apartment == null) {
             throw new NotAuthorizationException();
         }
         return  ResponseEntity.ok(imageService.getObjectsByApartmentId(id).stream()
-                .map(image -> modelMapper.map(image, ImageDHO.class))
+                .map(image -> modelMapper.map(image, ImageDTO.class))
                 .collect(Collectors.toList()));
     }
 }

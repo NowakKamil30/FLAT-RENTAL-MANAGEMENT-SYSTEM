@@ -6,7 +6,7 @@ import pl.kamilnowak.flatrentalmanagementsystem.util.view.Views;
 
 @Getter
 @Setter
-public class ApartmentDHO {
+public class ApartmentDTO {
     @JsonView(Views.Public.class)
     private Long id;
     @JsonView(Views.Public.class)
@@ -26,11 +26,11 @@ public class ApartmentDHO {
     @JsonView(Views.Public.class)
     private Long userId;
 
-    public ApartmentDHO() {
+    public ApartmentDTO() {
     }
 
     @Builder
-    public ApartmentDHO(Long id, String name, String description, String country, String postcode, String city, String street, String houseNumber, Long userId) {
+    public ApartmentDTO(Long id, String name, String description, String country, String postcode, String city, String street, String houseNumber, Long userId) {
         this.id = id;
         this.name = name;
         this.description = description;

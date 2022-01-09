@@ -6,26 +6,25 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.kamilnowak.flatrentalmanagementsystem.util.view.Views;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
-public class DocumentDHO {
+public class ExtraCostDTO {
     @JsonView(Views.Public.class)
     private Long id;
     @JsonView(Views.Public.class)
+    private BigDecimal extraCost;
+    @JsonView(Views.Public.class)
     private String name;
-    @JsonView(Views.Private.class)
-    private String document;
-    @JsonView(Views.Private.class)
-    private Long tenantId;
 
-    public DocumentDHO() {
+    public ExtraCostDTO() {
     }
 
     @Builder
-    public DocumentDHO(Long id, String name, String document, Long tenantId) {
+    public ExtraCostDTO(Long id, BigDecimal extraCost, String name) {
         this.id = id;
+        this.extraCost = extraCost;
         this.name = name;
-        this.document = document;
-        this.tenantId = tenantId;
     }
 }
