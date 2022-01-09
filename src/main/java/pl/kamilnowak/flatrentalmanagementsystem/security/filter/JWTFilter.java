@@ -43,7 +43,7 @@ public class JWTFilter extends OncePerRequestFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthenticationToken(String authorization) {
-        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC512("a8e3ff9bbb091fd856302903cfc1b9f5fcb3f87cca03df816f05b60c242a086d")).build();
+        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC512(key)).build();
         DecodedJWT verify;
         try {
             verify = jwtVerifier.verify(authorization.substring(7));
