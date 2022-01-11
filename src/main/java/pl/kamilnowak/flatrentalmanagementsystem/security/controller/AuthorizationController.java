@@ -54,9 +54,8 @@ public class AuthorizationController {
 
         if (loginUser != null && BCrypt.checkpw(loginUserFrom.getPassword(),(loginUser.getPassword())) && loginUser.isEnable()) {
             String jwt = JWT.create()
-                    .withClaim("mail", loginUser.getMail())
-                    .withClaim("createDate", LocalDateTime.now().toEpochSecond(ZoneOffset.UTC))
-                    .withClaim("validTo", LocalDateTime.now().plusDays(7).toEpochSecond(ZoneOffset.UTC))
+                    .withClaim("sub", loginUser.getMail())
+                    .withClaim("exp", LocalDateTime.now().plusDays(7).toEpochSecond(ZoneOffset.UTC))
                     .withClaim("role", "ROLE_" + loginUser.getRole().toString())
                     .sign(Algorithm.HMAC512(configInfo.getSecretKey()));
 

@@ -14,7 +14,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class TenantDHO {
+public class TenantDTO {
     @JsonView(Views.Public.class)
     private Long id;
     @JsonView(Views.Public.class)
@@ -48,11 +48,11 @@ public class TenantDHO {
     @JsonView(Views.Private.class)
     private Integer dayToPay;
 
-    public TenantDHO() {
+    public TenantDTO() {
     }
 
     @Builder
-    public TenantDHO(Long id, String firstName, String lastName, String phoneNumber, String mail, BigDecimal fee, boolean isPaid, boolean isActive, String description, LocalDate endDate, LocalDate startDate, LocalDate paidDate, Long apartmentId, Currency currency, List<ExtraCost> extraCosts, Integer dayToPay) {
+    public TenantDTO(Long id, String firstName, String lastName, String phoneNumber, String mail, BigDecimal fee, boolean isPaid, boolean isActive, String description, LocalDate endDate, LocalDate startDate, LocalDate paidDate, Long apartmentId, Currency currency, List<ExtraCost> extraCosts, Integer dayToPay) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

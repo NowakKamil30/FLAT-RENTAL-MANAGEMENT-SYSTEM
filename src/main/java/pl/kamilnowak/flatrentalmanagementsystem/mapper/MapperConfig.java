@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.*;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.*;
-import pl.kamilnowak.flatrentalmanagementsystem.security.dho.LoginUserDHO;
-import pl.kamilnowak.flatrentalmanagementsystem.security.dho.UserDataDHO;
-import pl.kamilnowak.flatrentalmanagementsystem.security.dho.VerificationTokenDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.security.dto.LoginUserDTO;
+import pl.kamilnowak.flatrentalmanagementsystem.security.dto.UserDataDTO;
+import pl.kamilnowak.flatrentalmanagementsystem.security.dto.VerificationTokenDTO;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.UserData;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.VerificationToken;
@@ -19,8 +19,8 @@ public class MapperConfig {
     @Bean
     public ModelMapper getModelMapper() {
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.createTypeMap(Document.class, DocumentDHO.class)
-                .addMappings(new PropertyMap<Document, DocumentDHO>() {
+        modelMapper.createTypeMap(Document.class, DocumentDTO.class)
+                .addMappings(new PropertyMap<Document, DocumentDTO>() {
             @Override
             protected void configure() {
                 map().setId(source.getId());
@@ -29,16 +29,16 @@ public class MapperConfig {
                 map().setTenantId(source.getTenant().getId());
             }
         });
-        modelMapper.createTypeMap(Currency.class, CurrencyDHO.class)
-                .addMappings(new PropertyMap<Currency, CurrencyDHO>() {
+        modelMapper.createTypeMap(Currency.class, CurrencyDTO.class)
+                .addMappings(new PropertyMap<Currency, CurrencyDTO>() {
                     @Override
                     protected void configure() {
                         map().setId(source.getId());
                         map().setName(source.getName());
                     }
                 });
-        modelMapper.createTypeMap(Image.class, ImageDHO.class)
-                .addMappings(new PropertyMap<Image, ImageDHO>() {
+        modelMapper.createTypeMap(Image.class, ImageDTO.class)
+                .addMappings(new PropertyMap<Image, ImageDTO>() {
                     @Override
                     protected void configure() {
                         map().setPhoto(source.getPhoto());
@@ -48,8 +48,8 @@ public class MapperConfig {
                         map().setApartmentId(source.getApartment().getId());
                     }
                 });
-        modelMapper.createTypeMap(Apartment.class, ApartmentDHO.class)
-                .addMappings(new PropertyMap<Apartment, ApartmentDHO>() {
+        modelMapper.createTypeMap(Apartment.class, ApartmentDTO.class)
+                .addMappings(new PropertyMap<Apartment, ApartmentDTO>() {
                     @Override
                     protected void configure() {
                         map().setId(source.getId());
@@ -63,8 +63,8 @@ public class MapperConfig {
                         map().setUserId(source.getUserData().getId());
                     }
                 });
-        modelMapper.createTypeMap(Tenant.class, TenantDHO.class)
-                .addMappings(new PropertyMap<Tenant, TenantDHO>() {
+        modelMapper.createTypeMap(Tenant.class, TenantDTO.class)
+                .addMappings(new PropertyMap<Tenant, TenantDTO>() {
                     @Override
                     protected void configure() {
                         map().setId(source.getId());
@@ -85,8 +85,8 @@ public class MapperConfig {
                         map().setDayToPay(source.getDayToPay());
                     }
                 });
-        modelMapper.createTypeMap(LoginUser.class, LoginUserDHO.class)
-                .addMappings(new PropertyMap<LoginUser, LoginUserDHO>() {
+        modelMapper.createTypeMap(LoginUser.class, LoginUserDTO.class)
+                .addMappings(new PropertyMap<LoginUser, LoginUserDTO>() {
                     @Override
                     protected void configure() {
                         map().setId(source.getId());
@@ -95,8 +95,8 @@ public class MapperConfig {
                         map().setRole(source.getRole());
                     }
                 });
-        modelMapper.createTypeMap(UserData.class, UserDataDHO.class)
-                .addMappings(new PropertyMap<UserData, UserDataDHO>() {
+        modelMapper.createTypeMap(UserData.class, UserDataDTO.class)
+                .addMappings(new PropertyMap<UserData, UserDataDTO>() {
                     @Override
                     protected void configure() {
                         map().setId(source.getId());
@@ -107,8 +107,8 @@ public class MapperConfig {
                         map().setLoginUserId(source.getLoginUser().getId());
                     }
                 });
-        modelMapper.createTypeMap(VerificationToken.class, VerificationTokenDHO.class)
-                .addMappings(new PropertyMap<VerificationToken, VerificationTokenDHO>() {
+        modelMapper.createTypeMap(VerificationToken.class, VerificationTokenDTO.class)
+                .addMappings(new PropertyMap<VerificationToken, VerificationTokenDTO>() {
                     @Override
                     protected void configure() {
                         map().setId(source.getId());
@@ -117,8 +117,8 @@ public class MapperConfig {
                         map().setCreateTime(source.getCreateTime());
                     }
                 });
-        modelMapper.createTypeMap(ExtraCost.class, ExtraCostDHO.class)
-                .addMappings(new PropertyMap<ExtraCost, ExtraCostDHO>() {
+        modelMapper.createTypeMap(ExtraCost.class, ExtraCostDTO.class)
+                .addMappings(new PropertyMap<ExtraCost, ExtraCostDTO>() {
                     @Override
                     protected void configure() {
                         map().setId(source.getId());

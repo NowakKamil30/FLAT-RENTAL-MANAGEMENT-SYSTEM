@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class ImageDHO {
+public class ImageDTO {
     @JsonView(Views.Public.class)
     private Long id;
     @JsonView(Views.Private.class)
@@ -22,11 +22,11 @@ public class ImageDHO {
     @JsonView(Views.Private.class)
     private Long apartmentId;
 
-    public ImageDHO() {
+    public ImageDTO() {
     }
 
     @Builder
-    public ImageDHO(Long id, String photo, String title, LocalDate uploadDate, Long apartmentId) {
+    public ImageDTO(Long id, String photo, String title, LocalDate uploadDate, Long apartmentId) {
         this.id = id;
         this.photo = photo;
         this.title = title;

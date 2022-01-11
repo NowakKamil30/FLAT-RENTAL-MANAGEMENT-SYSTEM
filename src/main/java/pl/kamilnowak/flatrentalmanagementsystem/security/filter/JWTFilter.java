@@ -4,6 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +22,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Collections;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class JWTFilter extends OncePerRequestFilter {
+    private String key;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -45,10 +55,9 @@ public class JWTFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             return null;
         }
-        String name = verify.getClaim("mail").asString();
+        String name = verify.getClaim("sub").asString();
         String role = verify.getClaim("role").asString();
-        long validDate = verify.getClaim("validTo").asLong();
-        long createDate = verify.getClaim("createDate").asLong();
+        long validDate = verify.getClaim("exp").asLong();
 
         if (validDate < LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) {
             return null;

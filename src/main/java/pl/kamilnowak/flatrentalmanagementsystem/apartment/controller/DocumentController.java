@@ -6,13 +6,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.DocumentDHO;
+import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.DocumentDTO;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Document;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Tenant;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.DocumentService;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.TenantService;
 import pl.kamilnowak.flatrentalmanagementsystem.exception.NotAuthorizationException;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
 
 import java.security.Principal;
 import java.util.List;
@@ -34,20 +33,20 @@ public class DocumentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DocumentDHO> getDocument(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
+    public ResponseEntity<DocumentDTO> getDocument(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
         Document document = documentService.getDocumentByLoginUserMailAndId(principal.getName(), id);
         if (document == null) {
             throw new NotAuthorizationException();
         }
-        return ResponseEntity.ok(modelMapper.map(document, DocumentDHO.class));
+        return ResponseEntity.ok(modelMapper.map(document, DocumentDTO.class));
     }
 
     @PostMapping("")
-    public ResponseEntity<DocumentDHO> createDocument(@RequestBody Document document) {
+    public ResponseEntity<DocumentDTO> createDocument(@RequestBody Document document) {
         Document createdDocument = documentService.createObject(document);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(modelMapper.map(createdDocument, DocumentDHO.class));
+                .body(modelMapper.map(createdDocument, DocumentDTO.class));
     }
 
     @DeleteMapping("/{id}")
@@ -60,32 +59,32 @@ public class DocumentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DocumentDHO> updateDocument(@PathVariable Long id, @RequestBody Document document, Principal principal) throws NotAuthorizationException  {
+    public ResponseEntity<DocumentDTO> updateDocument(@PathVariable Long id, @RequestBody Document document, Principal principal) throws NotAuthorizationException  {
         Document documentToCheck = documentService.getDocumentByLoginUserMailAndId(principal.getName(), id);
         if (documentToCheck == null) {
             throw new NotAuthorizationException();
         }
-        return ResponseEntity.ok(modelMapper.map(documentService.updateObject(document, id), DocumentDHO.class));
+        return ResponseEntity.ok(modelMapper.map(documentService.updateObject(document, id), DocumentDTO.class));
     }
 
     @GetMapping("/tenant/{id}")
-    public ResponseEntity<Page<DocumentDHO>> getDocumentsByTenant(@PathVariable Long id, @RequestParam(defaultValue = "1") int page, Principal principal) throws NotAuthorizationException  {
+    public ResponseEntity<Page<DocumentDTO>> getDocumentsByTenant(@PathVariable Long id, @RequestParam(defaultValue = "1") int page, Principal principal) throws NotAuthorizationException  {
         Tenant tenant = tenantService.getTenantByLoginUserMailAndId(principal.getName(), id);
         if (tenant == null) {
             throw new NotAuthorizationException();
         }
         return ResponseEntity.ok(documentService.getObjectsByTenantId(id, page)
-                .map(document -> modelMapper.map(document, DocumentDHO.class)));
+                .map(document -> modelMapper.map(document, DocumentDTO.class)));
     }
 
     @GetMapping("/tenant/{id}/all")
-    public ResponseEntity<List<DocumentDHO>> getDocumentsByTenant(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
+    public ResponseEntity<List<DocumentDTO>> getDocumentsByTenant(@PathVariable Long id, Principal principal) throws NotAuthorizationException {
         Tenant tenant = tenantService.getTenantByLoginUserMailAndId(principal.getName(), id);
         if (tenant == null) {
             throw new NotAuthorizationException();
         }
         return ResponseEntity.ok(documentService.getObjectsByTenantId(id).stream()
-                .map(document -> modelMapper.map(document, DocumentDHO.class))
+                .map(document -> modelMapper.map(document, DocumentDTO.class))
                 .collect(Collectors.toList()));
     }
 }

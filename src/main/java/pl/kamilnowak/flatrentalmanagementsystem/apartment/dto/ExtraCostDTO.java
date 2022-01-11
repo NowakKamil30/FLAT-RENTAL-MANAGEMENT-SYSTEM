@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class ExtraCostDHO {
+public class ExtraCostDTO {
     @JsonView(Views.Public.class)
     private Long id;
     @JsonView(Views.Public.class)
@@ -19,11 +19,11 @@ public class ExtraCostDHO {
     @JsonView(Views.Public.class)
     private String name;
 
-    public ExtraCostDHO() {
+    public ExtraCostDTO() {
     }
 
     @Builder
-    public ExtraCostDHO(Long id, BigDecimal extraCost, String name) {
+    public ExtraCostDTO(Long id, BigDecimal extraCost, String name) {
         this.id = id;
         this.extraCost = extraCost;
         this.name = name;
