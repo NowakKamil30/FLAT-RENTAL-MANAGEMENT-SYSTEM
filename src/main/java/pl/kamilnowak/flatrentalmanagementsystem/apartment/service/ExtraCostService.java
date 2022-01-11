@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.ExtraCost;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.model.ExtraCostSum;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.repository.ExtraCostRepository;
-import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
-import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
+import pl.kamilnowak.flatrentalmanagementsystem.util.service.CRUDOperation;
+import pl.kamilnowak.flatrentalmanagementsystem.util.service.PageableHelper;
 
 import java.math.BigDecimal;
 import java.util.List;

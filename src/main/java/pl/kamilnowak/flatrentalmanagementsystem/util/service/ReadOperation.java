@@ -1,8 +1,6 @@
-package pl.kamilnowak.flatrentalmanagementsystem.service;
+package pl.kamilnowak.flatrentalmanagementsystem.util.service;
 
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 public interface ReadOperation<T, ID> {
     T getObjectById(ID id);

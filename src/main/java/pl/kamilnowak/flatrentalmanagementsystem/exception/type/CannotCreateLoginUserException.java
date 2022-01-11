@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.exception;
+package pl.kamilnowak.flatrentalmanagementsystem.exception.type;
 
 public class CannotCreateLoginUserException extends RuntimeException {
     public CannotCreateLoginUserException(String reasone) {

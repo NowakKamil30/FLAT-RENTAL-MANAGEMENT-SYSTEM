@@ -5,16 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Apartment;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.ExtraCost;
-import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Tenant;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.ApartmentService;
-import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.TenantService;
 import pl.kamilnowak.flatrentalmanagementsystem.mail.exception.EmailSendException;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.VerificationToken;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.LoginUserService;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.VerificationTokenService;
 import pl.kamilnowak.flatrentalmanagementsystem.security.util.TokenGenerationHelper;
-import pl.kamilnowak.flatrentalmanagementsystem.util.ConfigInfo;
+import pl.kamilnowak.flatrentalmanagementsystem.util.info.ConfigInfo;
 
 import javax.mail.MessagingException;
 import java.math.BigDecimal;

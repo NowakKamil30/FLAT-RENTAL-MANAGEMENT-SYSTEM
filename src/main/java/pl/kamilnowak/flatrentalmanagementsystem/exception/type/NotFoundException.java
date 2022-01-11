@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.exception;
+package pl.kamilnowak.flatrentalmanagementsystem.exception.type;
 
 import org.springframework.web.bind.annotation.ResponseStatus;
 

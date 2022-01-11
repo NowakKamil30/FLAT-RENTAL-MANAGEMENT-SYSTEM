@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import pl.kamilnowak.flatrentalmanagementsystem.security.filter.JWTFilter;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.LoginUserService;
 import pl.kamilnowak.flatrentalmanagementsystem.security.type.TypeAccount;
-import pl.kamilnowak.flatrentalmanagementsystem.util.ConfigInfo;
+import pl.kamilnowak.flatrentalmanagementsystem.util.info.ConfigInfo;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {

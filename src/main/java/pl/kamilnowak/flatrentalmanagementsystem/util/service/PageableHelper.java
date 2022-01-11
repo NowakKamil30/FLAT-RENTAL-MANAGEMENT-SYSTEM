@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.service;
+package pl.kamilnowak.flatrentalmanagementsystem.util.service;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

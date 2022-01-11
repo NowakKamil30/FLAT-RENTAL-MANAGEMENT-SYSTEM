@@ -2,7 +2,7 @@ package pl.kamilnowak.flatrentalmanagementsystem.apartment.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.*;
-import pl.kamilnowak.flatrentalmanagementsystem.view.Views;
+import pl.kamilnowak.flatrentalmanagementsystem.util.view.Views;
 
 @Getter
 @Setter

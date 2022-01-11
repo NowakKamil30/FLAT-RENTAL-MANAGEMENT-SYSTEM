@@ -6,9 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Currency;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.repository.CurrencyRepository;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.EntityExistException;
-import pl.kamilnowak.flatrentalmanagementsystem.service.CRUDOperation;
-import pl.kamilnowak.flatrentalmanagementsystem.service.PageableHelper;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.EntityExistException;
+import pl.kamilnowak.flatrentalmanagementsystem.util.service.CRUDOperation;
+import pl.kamilnowak.flatrentalmanagementsystem.util.service.PageableHelper;
 
 import java.util.List;
 

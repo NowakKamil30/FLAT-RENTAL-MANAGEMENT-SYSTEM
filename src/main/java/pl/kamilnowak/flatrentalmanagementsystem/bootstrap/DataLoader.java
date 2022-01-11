@@ -47,7 +47,7 @@ public class DataLoader implements CommandLineRunner {
 
             LoginUser loginUser = LoginUser.builder()
                 .userData(userData)
-                .mail("admin@admin.com")
+                .mail("98897@g.elearn.uz.zgora.pl")
                 .password("TestTest1")
                 .isEnable(true)
                 .role(TypeAccount.ADMIN)

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.dto.ApartmentDTO;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.entity.Apartment;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.ApartmentService;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.NotAuthorizationException;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.NotAuthorizationException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.NotFoundException;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.LoginUserService;
 

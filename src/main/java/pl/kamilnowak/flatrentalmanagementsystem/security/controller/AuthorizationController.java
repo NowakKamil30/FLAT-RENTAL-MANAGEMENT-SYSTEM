@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.TokenIsNotValidException;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.TokenIsTooOldException;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.UserCannotBeCreatedException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.NotFoundException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.TokenIsNotValidException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.TokenIsTooOldException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.UserCannotBeCreatedException;
 import pl.kamilnowak.flatrentalmanagementsystem.mail.service.MailActionService;
 import pl.kamilnowak.flatrentalmanagementsystem.mail.exception.EmailSendException;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.LoginUser;
@@ -20,7 +20,7 @@ import pl.kamilnowak.flatrentalmanagementsystem.security.model.ChangePasswordMod
 import pl.kamilnowak.flatrentalmanagementsystem.security.model.LoginModel;
 import pl.kamilnowak.flatrentalmanagementsystem.security.model.MailSendModel;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.LoginUserService;
-import pl.kamilnowak.flatrentalmanagementsystem.util.ConfigInfo;
+import pl.kamilnowak.flatrentalmanagementsystem.util.info.ConfigInfo;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;

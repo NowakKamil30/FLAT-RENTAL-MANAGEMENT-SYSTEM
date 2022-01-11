@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.mapper;
+package pl.kamilnowak.flatrentalmanagementsystem.util.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;

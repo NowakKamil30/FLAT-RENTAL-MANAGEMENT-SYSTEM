@@ -1,4 +1,4 @@
-package pl.kamilnowak.flatrentalmanagementsystem.security.configuration;
+package pl.kamilnowak.flatrentalmanagementsystem.apartment.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.ExtraCostService;
 import pl.kamilnowak.flatrentalmanagementsystem.apartment.service.TenantService;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.NotFoundException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.NotFoundException;
 import pl.kamilnowak.flatrentalmanagementsystem.mail.exception.EmailSendException;
 import pl.kamilnowak.flatrentalmanagementsystem.mail.service.MailActionService;
 import pl.kamilnowak.flatrentalmanagementsystem.security.service.VerificationTokenService;

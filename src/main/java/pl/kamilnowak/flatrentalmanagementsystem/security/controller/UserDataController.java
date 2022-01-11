@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pl.kamilnowak.flatrentalmanagementsystem.exception.NotAuthorizationException;
+import pl.kamilnowak.flatrentalmanagementsystem.exception.type.NotAuthorizationException;
 import pl.kamilnowak.flatrentalmanagementsystem.security.dto.UserDataDTO;
 import pl.kamilnowak.flatrentalmanagementsystem.security.entity.UserData;
 import pl.kamilnowak.flatrentalmanagementsystem.security.model.UserInfoModel;
